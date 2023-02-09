@@ -1,0 +1,68 @@
+<%- include ('../admin/layout/adminheader.ejs') %>
+
+
+
+                <!-- End of Topbar -->
+                <!-- content -->
+                <nav class="navbar navbar-light  justify-content-between mt-0 ">
+                    <a class="navbar-brand"></a>
+                    
+                    <!-- <form class="form-inline" action="/admin/search" method="get">
+                      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="username">
+                      <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                    </form> -->
+                    
+                
+                  </nav>
+                <div class="container">
+                    <table class="table mt-5">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Fullname</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Action</th>
+                          <th scope="col">Status</th>
+            
+
+    
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <%var i=1 %>
+                        <% user.forEach((element)=> {%>
+                            <tr>
+                                <td><%= i%></td>
+                                <td><%= element.fullname%></td>
+                                <td><%= element.email%></td>
+                                <td>
+                                 <button><a class="text-decoration-none" href="/admin/blockuser/?id=<%= element._id%>">Block</a></button>
+                                 <button><a class="text-decoration-none" href="/admin/unblockuser/?id=<%= element._id%>">Unblock</a></button>
+                                 <button><a class="text-decoration-none" href="/admin/deleteuser/?id=<%= element._id%>" onclick="return confirm ('Do You want to delete <%= element.fullname%>')">Delete</a></button>
+                                </td>
+                                <td>
+                                    <% if( element.unblockuser == true){%>
+                                        <button class="btn-success">Active</button>
+                                    <%}else{%>
+                                        <button class="btn-danger">Blocked</button>
+                                    <%}%>    
+                                </td>
+                    
+                            
+                            
+                            </tr>
+                            <% i++%>
+                            
+                        <%})%>
+
+
+                        </tbody>
+                    </table>
+                    </div>
+
+            
+
+            <!-- Footer -->
+            <%- include('../admin/layout/adminfooter.ejs') %>
+            <%- include('../admin/layout/adminscripts.ejs') %>

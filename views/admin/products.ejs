@@ -1,0 +1,100 @@
+<%- include ('../admin/layout/adminheader.ejs') %>
+
+
+
+
+                <!-- End of Topbar -->
+
+
+
+                <!-- content -->
+                <nav class="navbar navbar-light  justify-content-between mt-0 ">
+                    <a class="navbar-brand"></a>
+                    <a  href="/admin/addproducts" ><button class="btn btn-outline-dark my-2 my-sm-0" >Add-product</button></a>
+                    <!-- <form class="form-inline" action="/admin/search" method="get">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
+                            name="username">
+                        <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
+                    </form> -->
+
+
+                </nav>
+                <div class="container-fluid">
+                    <table class="table mt-5">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Image</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Category</th>
+                                <th scope="col">Sub-Category</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Description</th>
+                                <th scope="col">Price</th>
+                                <th scope="col">Action</th>
+                                <th scope="col">Status</th>
+                                
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% var i=1 %>
+                            <% product.forEach((item)=>{%>
+                                <tr>
+                                    <td><%= i%></td>
+                                    <td><img style="height: 3rem; width: 4rem;" src="/<%= item.image[0]%>" alt=""></td>
+                                    <td><%= item.productname%></td>
+                                    <td><%= item?.category?.categoryname %></td>
+                                    <td><%= item?.subcategory?.subcategoryname %></td>
+                                    <td><%= item.quantity%></td>
+                                    <td><%= item.description%></td>
+                                    <td><%= item.price%></td>
+                                    <td>
+                                        <a class="text-decoration-none" href="/admin/editproduct?id=<%= item._id%>">Edit</a>
+                                        <a class="text-decoration-none" href="/admin/unlistproduct?id=<%= item._id%>" onclick="return confirm ('Do You want to Unlist <%= item.productname%>')">Unlist</a>
+                                        <a class="text-decoration-none" href="/admin/listproduct?id=<%= item._id%>" onclick="return confirm ('Do You want to list <%= item.productname%>')">list</a>
+                                    </td>
+                                    <td>
+                                        <% if( item.unlist == false){%>
+                                            <button class="btn-success">Active</button>
+                                        <%}else{%>
+                                            <button class="btn-danger">Unlisted</button>
+                                        <%}%>    
+                                    </td>
+
+                                </tr>
+
+                                <% i++ %>   
+
+                            <%})%>
+                            
+
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                          ...
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <button type="button" class="btn btn-primary">Understood</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+
+                <!-- Footer -->
+                <%- include('../admin/layout/adminfooter.ejs') %>
+            <%- include('../admin/layout/adminscripts.ejs') %>

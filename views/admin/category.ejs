@@ -1,0 +1,75 @@
+    <%- include ('../admin/layout/adminheader.ejs') %>
+            <!-- End of Topbar -->
+
+ <!-- Button trigger modal -->
+ 
+ 
+    
+    <button type="button" class="btn btn-success m-5"><a class="dropdown text-gray-400 text-decoration-none"  data-toggle="modal" data-target="#categoryModal">Add Category</a></button>
+
+    <div class="form-control text-danger"><%= msg %> </div>
+  
+  
+
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Categories</th>
+                    <th scope="col">Action</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                    <% var i=1 %>
+                    <% category.forEach((element) => {%>
+                       <tr>
+                        <td><%= i%></td>
+                        <td><%= element.categoryname %></td>
+                        <td><button class="btn btn-danger"><a class="text-decoration-none text-gray-400" href="/admin/deletecategory/?id=<%= element._id%>" onclick="return confirm ('Do You want to delete <%= element.categoryname%>')">delete</a></button></td>
+
+
+                       </tr> 
+                       <% i++%>
+                    <%})%>
+                  
+                </tbody>
+              </table>
+
+
+
+
+       
+            
+
+            <!-- Footer -->
+            <%- include('../admin/layout/adminfooter.ejs') %>
+
+            <!-- add category modal -->
+
+<div class="modal fade" id="categoryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Categoy Name</h5>
+        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true"></span>
+        </button>
+    </div>
+<form method="post" action="/admin/categorypost">
+    <div class="modal-body">
+            <input class="form-control" type="text" placeholder="Category name" name="mycategory" required>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+        <button type="submit">save</button>
+    </div>
+</form>
+</div>
+</div>
+</div>
+            
+       
+       
+            <%- include('../admin/layout/adminscripts.ejs') %>
