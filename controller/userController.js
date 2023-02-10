@@ -369,7 +369,7 @@ module.exports = {
                         },
                         { $inc: { "product.$.quantity": 1 } }
                     );
-                    res.redirect('/viewcart')
+                    res.redirect('/')
                 } else {
                     cart
                         .updateOne({ userId: userData._id }, { $push: { product: proObj } })
@@ -457,7 +457,48 @@ module.exports = {
             // countlnWishlist,
 
         });
-    }
+    },
+
+    userProfile:(req,res)=>{
+        let session=req.body.session;
+
+        res.render('users/profile',{session});
+
+    },
+
+    changeQuantity : async (req, res) => {
+        console.log(111);
+        const data = req.body;
+        console.log(data);
+        const objId = data.product;
+        cart
+          .aggregate([
+            {
+              $unwind: "$product",
+            },
+          ])
+          .then((data) => {
+          });
+        cart.updateOne(
+          { _id: data.cart, "product.productId": objId },
+          { $inc: { "product.$.quantity": data.count } }
+        ).then(() => {
+          res.json({ status: true });
+        })
+    
+    
+      },
+
+      deleteCartProd:async(req,res)=>{
+
+        const cartid=req.params._id;
+        const productid=req.params.id;
+        console.log(cartid);
+        console.log(productid);
+        await cart.aggregate([{$match:{_id:cartid}},{$delete:{'productDetail._id':productid}}]);
+        // res.redirect('/viewcart')
+
+      }
 
 
 

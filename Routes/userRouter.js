@@ -31,6 +31,9 @@ route.get('/error',userController.errorPage);
 
 route.get('/addcart/:id',verifyuser,userController.addCart);
 route.get('/viewcart',verifyuser,userController.viewCart);
+route.get('/profile',verifyuser,userController.userProfile);
+route.post('/changequantity',verifyuser,userController.changeQuantity)
+route.get('/removeproduct/:_id/:id',verifyuser,userController.deleteCartProd);
 
 
 
