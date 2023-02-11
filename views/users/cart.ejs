@@ -44,7 +44,7 @@
 
                           <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                             <button type="button"
-                              onclick="changeQuantity('<%= element._id %>','<%= element.productDetail._id %>',-1,'<%= element.productQuantity%>','<%=element.productDetail.price%>')"
+                              onclick="changeQuantity('<%= element._id %>','<%= element.productDetail._id %>',-1)"
                               class="form-control">-
                               <!-- <i class="ion-ios-remove"></i> -->
                             </button>
@@ -54,7 +54,7 @@
                               max="100">
                             <span class="input-group-btn ml-2">
                               <button type="button"
-                                onclick="changeQuantity('<%= element._id %>','<%= element.productDetail._id %>',1,'<%= element.productQuantity%>','<%=element.productDetail.price%>')"
+                                onclick="changeQuantity('<%= element._id %>','<%= element.productDetail._id %>',1)"
                                 class="form-control">+
                                 <!-- <i class="ion-ios-add"></i> -->
                               </button>
@@ -211,9 +211,9 @@
           },
           method: "post",
           success: (response) => {
-            document.getElementById(productId).innerHTML = quantity + count;
+            // document.getElementById(productId).innerHTML = quantity + count;
 
-            document.getElementsByClassName('subtotal').innerText = response.sum
+            // document.getElementsByClassName('subtotal').innerText = response.sum
 
 
             location.reload();

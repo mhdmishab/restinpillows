@@ -13,6 +13,7 @@ const authen = require('../utils/auth');
 const { generate } = require('otp-generator');
 
 var bcrypt = require('bcrypt');
+const { default: mongoose } = require('mongoose');
 
 db.dbConnect();
 function generateOTP() {
@@ -492,11 +493,31 @@ module.exports = {
       deleteCartProd:async(req,res)=>{
 
         const cartid=req.params._id;
+        const cartId=mongoose.Types.ObjectId(cartid);
         const productid=req.params.id;
-        console.log(cartid);
+        console.log(cartId);
         console.log(productid);
-        await cart.aggregate([{$match:{_id:cartid}},{$delete:{'productDetail._id':productid}}]);
-        // res.redirect('/viewcart')
+
+        await cart.aggregate([
+            {
+              $unwind: "$product"
+            }
+          ]);
+          await cart
+            .updateOne(
+              { _id: cartid, "product.productId": productid },
+              { $pull: { product: { productId: productid} } }
+            )
+            .then(() => {
+            //   res.json({ status: true });
+            res.redirect('/viewcart');
+              
+            });
+      
+        
+        
+            
+        
 
       }
 
