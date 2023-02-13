@@ -9,6 +9,7 @@ const auth = require('../utils/auth');
 const newOtp = require('../model/otpmodel');
 const nodemailer = require('nodemailer');
 const authen = require('../utils/auth');
+const profile = require('../model/profile');
 
 const { generate } = require('otp-generator');
 
@@ -243,13 +244,7 @@ module.exports = {
         console.log(userInfo);
         res.render('users/otp', { userInfo });
     },
-    userProfile: (req, res) => {
-        if (req.session.email) {
-            res.render('users/userprofile');
-        } else {
-            res.render('login');
-        }
-    },
+
 
     userLogout: (req, res) => {
         req.session.email = null;
@@ -370,7 +365,7 @@ module.exports = {
                         },
                         { $inc: { "product.$.quantity": 1 } }
                     );
-                    res.redirect('/')
+                    res.redirect('/viewcart')
                 } else {
                     cart
                         .updateOne({ userId: userData._id }, { $push: { product: proObj } })
@@ -453,73 +448,236 @@ module.exports = {
             session,
             productData,
 
-            sum,countCart,
+            sum, countCart,
             // product:product,
             // countlnWishlist,
 
         });
     },
 
-    userProfile:(req,res)=>{
-        let session=req.body.session;
+    userProfile: async (req, res) => {
+        const session = req.session.email;
+        let userData = await myDb.users.findOne({ email: session })
+        let userProfile = await profile.findOne({ email: session });
+        if (userProfile) {
+            res.render('users/profile', { session, userData, userProfile })
+        } else {
+            res.render('users/profile', { session, userData,userProfile });
+        }
 
-        res.render('users/profile',{session});
 
     },
 
-    changeQuantity : async (req, res) => {
+    editProfile: async (req, res) => {
+        const session = req.session.email;
+        let userData = await myDb.users.findOne({ email: session })
+        let userProfile = await profile.findOne({ email: session });
+       
+            res.render('users/editprofile', { session, userData, userProfile });
+        
+    },
+
+    postEditProfile: async (req, res) => {
+        const session = req.session.email;
+        let userProfile = await profile.findOne({ email: session });
+        if(userProfile){
+        await profile.updateOne(
+            { email: session },
+            {
+                $set: {
+                    fullname: req.body.fullname,
+                    phone: req.body.phone,
+                    addressDetails: [
+                        {
+                            housename: req.body.housename,
+                            area: req.body.area,
+                            landmark: req.body.landmark,
+                            district: req.body.district,
+                            state: req.body.state,
+                            postoffice: req.body.postoffice,
+                            pin: req.body.pin
+                        }
+                    ]
+
+                }
+            }
+        );
+        await myDb.users.updateOne(
+            { email: session },
+            {
+                $set: {
+                    fullname: req.body.fullname,
+                    email:req.body.email,
+                    
+
+                }
+            }
+        )
+        }else{
+            const nwprofile=new profile({
+                
+                
+                    
+                        fullname: req.body.fullname,
+                        email:req.body.email,
+                        phone: req.body.phone,
+                        addressDetails: [
+                            {
+                                housename: req.body.housename,
+                                area: req.body.area,
+                                landmark: req.body.landmark,
+                                district: req.body.district,
+                                state: req.body.state,
+                                postoffice: req.body.postoffice,
+                                pin: req.body.pin
+                            }
+                        ]
+    
+                    
+                
+                    });
+                    await myDb.users.updateOne(
+                        { email: session },
+                        {
+                            $set: {
+                                fullname: req.body.fullname,
+                                email:req.body.email,
+                                
+            
+                            }
+                        }
+                    )
+                    nwprofile.save();
+        }
+        res.redirect('/profile')
+    },
+
+    changeQuantity: async (req, res) => {
         console.log(111);
         const data = req.body;
         console.log(data);
         const objId = data.product;
         cart
-          .aggregate([
-            {
-              $unwind: "$product",
-            },
-          ])
-          .then((data) => {
-          });
+            .aggregate([
+                {
+                    $unwind: "$product",
+                },
+            ])
+            .then((data) => {
+            });
         cart.updateOne(
-          { _id: data.cart, "product.productId": objId },
-          { $inc: { "product.$.quantity": data.count } }
+            { _id: data.cart, "product.productId": objId },
+            { $inc: { "product.$.quantity": data.count } }
         ).then(() => {
-          res.json({ status: true });
+            res.json({ status: true });
         })
-    
-    
-      },
 
-      deleteCartProd:async(req,res)=>{
 
-        const cartid=req.params._id;
-        const cartId=mongoose.Types.ObjectId(cartid);
-        const productid=req.params.id;
+    },
+
+    deleteCartProd: async (req, res) => {
+
+        const cartid = req.params._id;
+        const cartId = mongoose.Types.ObjectId(cartid);
+        const productid = req.params.id;
         console.log(cartId);
         console.log(productid);
 
         await cart.aggregate([
             {
-              $unwind: "$product"
+                $unwind: "$product"
             }
-          ]);
-          await cart
+        ]);
+        await cart
             .updateOne(
-              { _id: cartid, "product.productId": productid },
-              { $pull: { product: { productId: productid} } }
+                { _id: cartid, "product.productId": productid },
+                { $pull: { product: { productId: productid } } }
             )
             .then(() => {
-            //   res.json({ status: true });
-            res.redirect('/viewcart');
-              
-            });
-      
-        
-        
-            
-        
+                //   res.json({ status: true });
+                res.redirect('/viewcart');
 
-      }
+            });
+
+
+
+
+
+
+    },
+
+    checkOut: async (req, res) => {
+        let session = req.session.email;
+        const userData = await profile.findOne({ email: session });
+        const userId = userData._id.toString()
+        const productData = await cart
+          .aggregate([
+            {
+              $match: { userId: userId },
+            },
+            {
+              $unwind: "$product",
+            },
+            {
+              $project: {
+                productItem: "$product.productId",
+                productQuantity: "$product.quantity",
+              },
+            },
+            {
+              $lookup: {
+                from: "products",
+                localField: "productItem",
+                foreignField: "_id",
+                as: "productDetail",
+              },
+            },
+            {
+              $project: {
+                productItem: 1,
+                productQuantity: 1,
+                productDetail: { $arrayElemAt: ["$productDetail", 0] },
+              },
+            },
+            {
+              $addFields: {
+                productPrice: {
+                  $multiply: ["$productQuantity", "$productDetail.price"]
+                }
+              }
+            }
+          ])
+          .exec();
+        const sum = productData.reduce((accumulator, object) => {
+          return accumulator + object.productPrice;
+        }, 0);
+    
+        const query = req.query
+        console.log(query);
+        // await order.deleteOne({_id:query.orderId})
+        res.render("users/checkout", {session, productData, userData });
+    
+    
+      },
+
+      addNewAddress: async (req, res) => {
+        const session = req.session.email;
+        const addObj = {
+          housename: req.body.housename,
+          area: req.body.area,
+          landmark: req.body.landmark,
+          district: req.body.district,
+          state: req.body.state,
+          postoffice: req.body.postoffice,
+          pin: req.body.pin
+        }
+        console.log(addObj);
+        await profile.updateOne({ email: session }, { $push: { addressDetails: addObj } });
+        // res.redirect('/checkout')
+      },
+      
+
+
 
 
 
