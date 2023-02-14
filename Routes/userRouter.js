@@ -34,11 +34,12 @@ route.get('/viewcart',verifyuser,userController.viewCart);
 route.post('/changequantity',verifyuser,userController.changeQuantity)
 route.get('/removeproduct/:_id/:id',verifyuser,userController.deleteCartProd);
 route.get('/checkout',verifyuser,userController.checkOut);
-route.get('/addNewAddress',verifyuser,userController.addNewAddress);
+route.post('/addnewaddress',verifyuser,userController.addNewAddress);
 
 route.get('/profile',verifyuser,userController.userProfile);
 route.get('/editprofile',verifyuser,userController.editProfile);
 route.post('/postEditProfile',verifyuser,userController.postEditProfile);
+
 
 
 

@@ -32,6 +32,7 @@ adroute.post('/categorypost',verifyAdmin,adminController.categoryPost);
 
 adroute.get('/subcategory',verifyAdmin,adminController.Subcategory);
 adroute.post('/subcategorypost',verifyAdmin,adminController.subcategoryPost);
+adroute.post('/getsubcategories',verifyAdmin,adminController.getSubcategory)
 
 
 

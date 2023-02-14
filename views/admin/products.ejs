@@ -48,7 +48,7 @@
                                     <td><%= item?.subcategory?.subcategoryname %></td>
                                     <td><%= item.quantity%></td>
                                     <td><%= item.description%></td>
-                                    <td><%= item.price%></td>
+                                    <td>₹<%= item.price%></td>
                                     <td>
                                         <a class="text-decoration-none" href="/admin/editproduct?id=<%= item._id%>">Edit</a>
                                         <a class="text-decoration-none" href="/admin/unlistproduct?id=<%= item._id%>" onclick="return confirm ('Do You want to Unlist <%= item.productname%>')">Unlist</a>

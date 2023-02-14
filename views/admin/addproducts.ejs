@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
 </head>
+
 <body>
     <div class="container mt-5">
 
@@ -15,55 +20,99 @@
         <form method="post" id="registration" action="/admin/addproducts" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="pname">Image <span class="text-danger">*</span></label>
-                <input type="file" class="form-control" id="fname" name="image" multiple placeholder="image " >
+                <input type="file" class="form-control" id="fname" name="image" multiple placeholder="image ">
             </div>
             <div class="form-group">
                 <label for="pname">Product Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="fname" name="pname" placeholder="Product Name " >
-            </div>
-                <div class="form-group">
-                <label for="category">Category<span class="text-danger">*</span></label>
-                <select class="form-control" name="category" aria-placeholder="select"  required>
-                    <option  disabled selected>select</option>
-                    <% category.forEach((item)=>{%>
-                    
-                    
-                    <option value="<%=item._id%>"><%= item.categoryname %></option>
-                    <%})%>
-                </select>
-                    
+                <input type="text" class="form-control" id="fname" name="pname" placeholder="Product Name ">
             </div>
             <div class="form-group">
-                <label for="subcategory">Sub-category</Sub-category><span class="text-danger">*</span></label>
-                <select class="form-control" name="subcategory" aria-placeholder="select"  required>
-                    <option  disabled selected>select</option>
-                    <% subcategory.forEach((item)=>{%>
-                    
-                    
-                    <option value="<%=item._id%>"><%= item.subcategoryname %></option>
-                    <%})%>
+                <label for="category">Category<span class="text-danger">*</span></label>
+                <select id="category-select" class="form-control" name="category">
+                    <option selected>select</option>
+                    <% category.forEach(function(category) { %>
+                        <option  value="<%= category._id %>">
+                            <%= category.categoryname %>
+                        </option>
+                        <% }); %>
                 </select>
             </div>
+            <div class="form-group">
+                <label for="category">Sub-category<span class="text-danger">*</span></label>
+                <select id="subcategory-select" class="form-control" name="subcategory">
+                   
+                </select>
+            </div>
+
             <div class="form-group">
                 <label for="quantity">Quantity<span class="text-danger">*</span></label>
-                <input type="number" class="form-control" name="quantity" id="email" placeholder="Quantity" >
+                <input type="number" class="form-control" name="quantity" id="email" placeholder="Quantity">
             </div>
-            
+
             <div class="form-group">
                 <label for="discription">Description<span class="text-danger">*</span></label>
                 <input type="text" class="form-control" name="description" id="spassword" placeholder="Description">
             </div>
             <div class="form-group">
                 <label for="discription">Price<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="price" id="spassword" placeholder="Price">
+                ₹<input type="text" class="form-control" name="price" id="spassword" placeholder="Price">
             </div>
-           
+
             <div class="form-group">
                 <input type="submit" value="Add Product" class="btn btn-info btn-block">
             </div>
         </form>
-</div>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    </div>
+
+    <script>
+
+
+
+        document.querySelector("#category-select").addEventListener("change", function () {
+            const selectedCategory = this.value;
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        category:selectedCategory,
+                    }
+                )
+            }
+            fetch(window.location.origin+'/admin/getsubcategories',requestOptions).then((res)=>res.json())
+            
+
+                .then(subcategories => {
+                    const subcategoryList = document.querySelector("#subcategory-select");
+                    subcategoryList.innerHTML = "";
+                    console.log(subcategories);
+                    subcategories.forEach(subcategory => {
+                        const option = document.createElement("option");
+                        option.value = subcategory._id;
+                        option.textContent = subcategory.subcategoryname;
+                        subcategoryList.appendChild(option);
+                    });
+                    
+                }).catch((err)=>{
+                    console.log("subcategory management error");
+                    res(window.location.origin+'/admin/error')
+                })
+        });
+
+
+
+
+
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

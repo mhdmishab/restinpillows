@@ -6,6 +6,8 @@ const myCategory=require('../model/categorymodel');
 const mySubcategory=require('../model/subcategory');
 const dotenv=require('dotenv');
 var bcrypt = require('bcrypt');
+const { response } = require('express');
+const { default: mongoose } = require('mongoose');
 dotenv.config();
 db.dbConnect();
 
@@ -124,10 +126,11 @@ module.exports={
         console.log(myProducts);
 
         myProducts.save().then((item)=>{
+            
             res.redirect('/admin/products');
-            console.log('product added succesfully');
+            
         }).catch(err=>{
-            console.log(myProducts.category)
+            console.log(err)
             res.redirect('/admin/addproducts')
             console.log('product addition failed');
         })
@@ -150,7 +153,7 @@ module.exports={
         res.render('admin/editproduct',{item,category,subcategory});
         }catch(err){
             console.log("get product error")
-            res.redirect('/error');
+            res.redirect('/admin/error');
         }
     },
     editProduct:async(req,res)=>{
@@ -265,9 +268,9 @@ Subcategory:async(req,res)=>{
     try{  
         let subcategory=await mySubcategory.find({});
         
-        
+        let category=await myCategory.find({});
         console.log(subcategory);
-        res.render('admin/subcategory',{subcategory,msg});  
+        res.render('admin/subcategory',{subcategory,msg,category});  
         msg="";
       }catch(err){
         res.redirect('/admin/error');
@@ -287,13 +290,23 @@ subcategoryPost:async(req,res)=>{
        
         
         const addSubcategory=new mySubcategory({
+            categoryid:req.body.category,
             subcategoryname:req.body.mysubcategory,
             
         });
-        addSubcategory.save().then((item)=>{
+        const categoryID=addSubcategory.categoryid;
+        const obj=addSubcategory.subcategoryname;
+        addSubcategory.save().then(async(item)=>{
                 console.log("subcategory added");
+                
+                await myCategory.updateOne({_id:categoryID},{$push:{subcategory:obj}});
                 res.redirect('/admin/subcategory');
-            }).catch((err)=>{
+
+            })
+            
+
+
+            .catch((err)=>{
                 res.redirect('/admin/error');
             })
     }
@@ -303,6 +316,18 @@ subcategoryPost:async(req,res)=>{
     }
 
 
+},
+
+getSubcategory:async(req,res)=>{
+    console.log("hehiuhsdfiuhsaikdohasikohdikoj")
+    const categoryID= req.body.category;
+    console.log(categoryID);
+    const categoryId=mongoose.Types.ObjectId(categoryID);
+    console.log(categoryId);
+    const subcategories=await mySubcategory.find({categoryid:categoryId});
+    console.log(subcategories);
+
+    res.json(subcategories);
 },
 
 

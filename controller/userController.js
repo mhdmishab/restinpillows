@@ -608,8 +608,12 @@ module.exports = {
 
     checkOut: async (req, res) => {
         let session = req.session.email;
+        const userdata=await myDb.users.findOne({email: session});
         const userData = await profile.findOne({ email: session });
-        const userId = userData._id.toString()
+        const userId = userdata._id.toString()
+        console.log(userId);
+        // const productData=await cart.findOne({userId: userId});
+        // console.log(productData);
         const productData = await cart
           .aggregate([
             {
@@ -651,17 +655,20 @@ module.exports = {
         const sum = productData.reduce((accumulator, object) => {
           return accumulator + object.productPrice;
         }, 0);
+
+        console.log(sum);
     
         const query = req.query
         console.log(query);
         // await order.deleteOne({_id:query.orderId})
-        res.render("users/checkout", {session, productData, userData });
+        res.render("users/checkout", {session, productData, userData ,sum});
     
     
       },
 
       addNewAddress: async (req, res) => {
-        const session = req.session.email;
+          const session = req.session.email;
+          console.log("hellooooo"+session);
         const addObj = {
           housename: req.body.housename,
           area: req.body.area,
@@ -671,10 +678,12 @@ module.exports = {
           postoffice: req.body.postoffice,
           pin: req.body.pin
         }
-        console.log(addObj);
+        console.log("hellooooo"+addObj);
         await profile.updateOne({ email: session }, { $push: { addressDetails: addObj } });
-        // res.redirect('/checkout')
+        res.redirect('/checkout')
       },
+
+      
       
 
 

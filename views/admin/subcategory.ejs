@@ -5,7 +5,7 @@
  
  
     
-    <button type="button" class="btn btn-success m-5"><a class="dropdown text-gray-400 text-decoration-none"  data-toggle="modal" data-target="#subcategoryModal">Add Category</a></button>
+    <button type="button" class="btn btn-success m-5"><a class="dropdown text-gray-400 text-decoration-none"  data-toggle="modal" data-target="#subcategoryModal">Add Sub-category</a></button>
 
     <div class="form-control text-danger"><%= msg %> </div>
   
@@ -55,6 +55,18 @@
                         </button>
                     </div>
                 <form method="post" action="/admin/subcategorypost">
+                    <div class="form-group">
+                        <label for="category">Category<span class="text-danger">*</span></label>
+                        <select class="form-control" name="category" aria-placeholder="select"  required>
+                            <option  disabled selected>select</option>
+                            <% category.forEach((item)=>{%>
+                            
+                            
+                            <option value="<%=item._id%>"><%= item.categoryname %></option>
+                            <%})%>
+                        </select>
+                            
+                    </div>
                     <div class="modal-body">
                             <input class="form-control" type="text" placeholder="Sub-category name" name="mysubcategory" required>
                     </div>
