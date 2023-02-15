@@ -54,7 +54,7 @@
                               max="100">
                             <span class="input-group-btn ml-2">
                               <button type="button"
-                                onclick="changeQuantity('<%= element._id %>','<%= element.productDetail._id %>',1)"
+                                onclick="changeQuantity('<%= element?._id %>','<%= element?.productDetail._id %>',1)"
                                 class="form-control">+
                                 <!-- <i class="ion-ios-add"></i> -->
                               </button>
@@ -109,14 +109,14 @@
                       </select>
                     </div>
 
-                    <h5 class="text-uppercase mb-3">Give code</h5>
+                    <!-- <h5 class="text-uppercase mb-3">Give code</h5> -->
 
-                    <div class="mb-5">
+                    <!-- <div class="mb-5">
                       <div class="form-outline">
                         <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
                         <label class="form-label" for="form3Examplea2">Enter your code</label>
                       </div>
-                    </div>
+                    </div> -->
 
                     <hr class="my-4">
 

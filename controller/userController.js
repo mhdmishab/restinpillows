@@ -5,11 +5,14 @@ const { findOne } = require('../model/usermodel');
 const myDb = require('../model/usermodel');
 const cart = require('../model/cartmodel');
 const myProduct = require('../model/productmodel');
+const myCategory=require('../model/categorymodel');
+const mySubcategory=require('../model/subcategory');
 const auth = require('../utils/auth');
 const newOtp = require('../model/otpmodel');
 const nodemailer = require('nodemailer');
 const authen = require('../utils/auth');
 const profile = require('../model/profile');
+
 
 const { generate } = require('otp-generator');
 
@@ -21,6 +24,9 @@ function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
 }
 let msg = "";
+
+
+
 
 
 module.exports = {
@@ -682,6 +688,127 @@ module.exports = {
         await profile.updateOne({ email: session }, { $push: { addressDetails: addObj } });
         res.redirect('/checkout')
       },
+
+      getShop:async(req,res)=>{
+        const session=req.session.email;
+        const category=await myCategory.find({});
+        const product=await myProduct.find({unlist:false}).populate('category');
+        let productCount = await myProduct.find({unlist:false}).count();
+        res.render('users/shop',{session,product,category,productCount});
+    
+    },
+
+    getSubcategory:async(req,res)=>{
+    
+        const categoryID= req.body.category;
+        const categoryId=mongoose.Types.ObjectId(categoryID);
+        console.log(categoryId);
+        const subcategories=await mySubcategory.find({categoryid:categoryId});
+        console.log(subcategories);
+        res.json(subcategories);
+    },
+
+    // shop
+
+    sortProducts:async(req,res)=>{
+
+    try{
+        let session=req.session.email;
+        let products=await myProduct.find({unlist:false});
+        const category=await myCategory.find({});
+        let sortedProducts=[];
+        let product;
+
+        let sortby=req.query.sortby;
+
+        if(sortby==="asending"){
+            sortedProducts=products.sort((a, b) => a.productname.localeCompare(b.productname));
+            product=sortedProducts;
+            res.render('users/shop',{session,product,category});
+
+        }else if(sortby==="decending"){
+            sortedProducts=products.sort((a, b) => b.productname.localeCompare(a.productname));
+            product=sortedProducts;
+        }else if(sortby==="price_asc"){
+            sortedProducts=products.sort((a, b) => a.price-b.price);
+            product=sortedProducts;
+        }else if(sortby==="price_des"){
+            sortedProducts=products.sort((a, b) => b.price-a.price);
+            product=sortedProducts;
+        }else{
+           res.redirect('/getshop');
+        }
+        res.render('users/shop',{session,product,category});
+    }catch(err){
+        res.redirect('/error');
+    }
+
+        
+
+
+
+    },
+
+    filterProducts:async(req,res)=>{
+        let session=req.session.email;
+    try{
+        let products=await myProduct.find({unlist:false});
+        const category=await myCategory.find({});
+        let filteredProducts=[];
+        let product;
+        console.log(req.params.name);
+        
+        
+
+        if(req.params.name=="category"){
+            console.log("respod is here");
+
+            let selectedCategories= req.query.categorys || [];
+            
+            
+            console.log(selectedCategories);
+            // filteredProducts=products.filter(product=>{
+            //     console.log(product.category);
+            //     return (product.category.Some(category => selectedCategories.includes(category)))
+
+            // });
+            
+            filteredProducts=products.filter(product=> selectedCategories.includes(product.category));
+
+            product=filteredProducts;
+        }else if(req.params.name=="price"){
+        
+            let min=req.query.min || 0;
+            let max=req.query.max || 10000;
+
+            filteredProducts = products.filter(product => {
+            return product.price >= min && product.price <= max;
+          });
+
+          product=filteredProducts; 
+        }else{
+            res.redirect('/getshop');
+        }
+        res.render('users/shop',{session,product,category});
+    }catch(err){
+        res.redirect('/error');
+    }
+
+      
+
+    },
+
+    doSearch:async(req,res)=>{
+        let session=req.session.email;
+        console.log(req.body.searchtext);
+        const category=await myCategory.find({});
+        let product=await myProduct.find({productname:new RegExp(req.body.searchtext)});
+        console.log(product);
+
+        if(product){
+            res.render('users/shop',{session,product,category});
+        }
+    }
 
       
       

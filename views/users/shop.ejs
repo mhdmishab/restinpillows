@@ -1,0 +1,280 @@
+<%- include ('../users/layout/header.ejs') %>
+    <div style="height: 10rem; width: 100%;"></div>
+
+    <body>
+
+
+
+        <div class="site-section d-flex">
+            <div class=" left-container d-flex flex-column align-items-top  ">
+
+                <div class="m-3" style="background-color: white;">
+
+
+                <article class="filter-group ">
+                    <header class="card-header" style="background-color: #05496c;">
+                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside4"
+                            aria-expanded="false" >Categories<i class="icon-control ms-5 fa fa-chevron-down"></i></a>
+                    </header>
+                    
+                </article>
+
+                <div class="collapse" id="collapse_aside4">
+                    <% var filter="category" %> 
+                    <form action="/filterproducts/<%= filter %>  " method="get">
+                    <div class="card card-body ms-1">
+                        <ul class="">
+                            <% category.forEach(item=>{%>
+                               <input class="form-check-input" type="checkbox" name="categorys" value="<%=item._id %>"><%=item.categoryname  %><br>
+                            <% }) %>
+                        </ul>
+                        <button class="btn btn-light w-100" type="submit">Apply</button>
+                    </div>
+                </form>
+                </div>
+
+
+                <article class="filter-group">
+                    <header class="card-header" style="background-color: #05496c;">
+                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside2"
+                            aria-expanded="false">Subcategory<i class="icon-control ms-5 fa fa-chevron-down"></i></a>
+                    </header>
+                    
+                </article>
+
+                <div class="collapse" id="collapse_aside2">
+                    <div class="card card-body">
+                        <!-- <label class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="checked">
+                            <span class="form-check-label">
+                                <ul class="rating stars">
+                                    <li class="stars-active" style="width: 100%;">
+                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/misc/stars-active.svg" alt="">
+                                    </li>
+                                    <li>
+                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/misc/starts-disable.svg" alt="">
+                                    </li>
+                                </ul>
+                            </span>
+                        </label> -->
+                    
+                        <label class="form-check mb-2">
+                            <input class="form-check-input" type="checkbox" value="checked">
+                        </label>
+                        
+                    </div>
+                </div>
+
+                <article class="filter-group">
+                    <header class="card-header " style="background-color: #05496c;">
+                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside3"
+                            aria-expanded="false">#<i class="icon-control  ms-5 fa fa-chevron-down"></i></a>
+                    </header>
+                    
+                </article>
+
+                <div class="collapse" id="collapse_aside3">
+                    <div class="card card-body">
+                        <a><button class="btn btn-light w-100" type="submit">Reset</button></a>
+                    </div>
+                </div>
+
+
+                <article class="filter-group">
+                    <header class="card-header " style="background-color: #05496c;">
+                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside1"
+                            aria-expanded="false">Price<i class="icon-control ms-5 fa fa-chevron-down"></i></a>
+                    </header>
+                    
+                </article>
+
+                <div class="collapse" id="collapse_aside1">
+                    <div class="card card-body">
+                        <!-- <input type="range" class="form-range" min="0" max="100"> -->
+                        
+                    </div>
+                    <% var filter="price" %> 
+                    <form method="get" action="/filterproducts/<%=filter  %> ">
+                    <div class="row mb-3">
+                        
+                        <div class="col-6">
+                            <label for="min" class="form-label">Min</label>
+                            <input class="form-control" id="min" placeholder="₹0" type="number" name="min">
+                        </div>
+                        <div class="col-6">
+                            <label for="max" class="form-label">Max</label>
+                            <input class="form-control" id="min" placeholder="₹10000" type="number" name="max">
+                        </div>
+                    </div>
+                    <button class="btn btn-light w-100" type="submit">Apply</button>
+                
+                </div>
+            </form>
+            <div>
+                <% var filter="reset" %>
+            <a href="/filterproducts/<%=filter  %> "><button class="btn btn-light w-100" type="submit">Reset</button></a>
+            </div>
+           
+
+                
+
+
+            </div>
+
+                
+
+                
+
+
+
+
+
+
+            </div>
+
+
+
+            <div class="container ">
+
+
+                <div class="row mb-5">
+                    <div class="col-md-9 order-2">
+
+                        <div class="row">
+                            <div class="col-md-12 mb-5">
+                                <div class="float-md-left mb-4">
+                                    <small class="text-black ">Explore Products</small>
+                                </div>
+                                <div class="d-flex">
+                                    <div class="dropdown mr-1 ml-md-auto">
+                                        <div class="btn-group m-2">
+                                            <button type="button" class="btn text-white" style="background-color: #05496c;">Reference</button>
+                                            <button type="button"
+                                                class="text-white  dropdown-toggle dropdown-toggle-split"
+                                                id="dropdownMenuReference" data-bs-toggle="dropdown"
+                                                aria-expanded="false" data-bs-reference="parent" style="background-color: #05496c;border:#05496c;">
+                                                <span class="visually-hidden">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
+                                                <li><a class="dropdown-item" href="sortproducts?sortby=all">All</a></li>
+                                                <li><a class="dropdown-item" href="sortproducts?sortby=asending">Name, A to Z</a></li>
+                                                <li><a class="dropdown-item" href="sortproducts?sortby=decending">Name, Z to A</a></li>
+                                                <li>
+                                                    <hr class="dropdown-divider">
+                                                </li>
+                                                <li><a class="dropdown-item" href="sortproducts?sortby=price_asc">Price,low to high</a></li>
+                                                <li><a class="dropdown-item" href="sortproducts?sortby=price_des">Price,high to low</a></li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mb-5">
+                            <% product?.forEach((products)=>{ %>
+                                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
+                                    <div class="block-4 text-center border">
+                                        <figure class="block-4-image">
+                                            <a href="/productView/<%=products._id%>"><img
+                                                    style="width:300px; height:225px" src="/<%= products.image[0]%>"
+                                                    alt="Image placeholder" class="img-fluid  rounded  p1"></a>
+                                        </figure>
+                                        <div class="block-4-text ">
+                                            <h3><a href="/productView/<%=products._id%>">
+                                                    <%= products.productname %>
+                                                </a></h3>
+                                            <p class="">
+                                                <%= products.category.categoryname %>
+                                            </p>
+                                            <p class="">
+                                                <%= products.description %>
+                                            </p>
+                                            <p class="text-primary font-weight-bold">
+                                                <%= products.price %>₹
+                                            </p>
+                                            <div class="d-flex border-top">
+                                                <small class="w-50 text-center border-end py-2">
+                                                    <a class="text-body" href=""><i
+                                                            class="fa fa-eye text-primary me-2"></i>View
+                                                        detail</a>
+                                                </small>
+                                                <% if(session){%>
+                                                    <small class="w-50 text-center py-2">
+                                                        <a class="text-body" href="/addcart/<%= products._id%>"><i
+                                                                class="fa fa-shopping-bag text-primary me-2"></i>Add to
+                                                            cart</a>
+                                                    </small>
+                                                    <%} else{ %>
+                                                        <small class="w-50 text-center py-2">
+                                                            <a class="text-body" href="/userlogin"><i
+                                                                    class="fa fa-shopping-bag text-primary me-2"></i>Add
+                                                                to cart</a>
+                                                        </small>
+                                                        <% } %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>
+                        </div>
+
+
+                    </div>
+                </div>
+    </body>
+
+    <script>
+
+
+
+        document.querySelector("#category-select").addEventListener("change", function () {
+            const selectedCategory = this.value;
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        category: selectedCategory,
+                    }
+                )
+            }
+            fetch(window.location.origin + '/getsubcategories', requestOptions).then((res) => res.json())
+
+
+                .then(subcategories => {
+                    const subcategoryList = document.querySelector("#subcategory-select");
+                    subcategoryList.innerHTML = "";
+                    console.log(subcategories);
+                    subcategories.forEach(subcategory => {
+                        const option = document.createElement("option");
+                        option.value = subcategory._id;
+                        option.textContent = subcategory.subcategoryname;
+                        subcategoryList.appendChild(option);
+                    });
+
+                }).catch((err) => {
+                    console.log("subcategory management error");
+                    res(window.location.origin + '/error')
+                })
+        });
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+    <%- include ('../users/layout/footer.ejs') %>
+
+        <%- include ('../users/layout/script.ejs') %>

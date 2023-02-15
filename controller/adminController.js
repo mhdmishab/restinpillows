@@ -319,16 +319,15 @@ subcategoryPost:async(req,res)=>{
 },
 
 getSubcategory:async(req,res)=>{
-    console.log("hehiuhsdfiuhsaikdohasikohdikoj")
+    
     const categoryID= req.body.category;
-    console.log(categoryID);
     const categoryId=mongoose.Types.ObjectId(categoryID);
     console.log(categoryId);
     const subcategories=await mySubcategory.find({categoryid:categoryId});
-    console.log(subcategories);
-
     res.json(subcategories);
 },
+
+
 
 
 

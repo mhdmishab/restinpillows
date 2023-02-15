@@ -89,14 +89,13 @@
                           </div>
                         
                     </div>
-                    <a href="about.html" class="nav-item nav-link">Our Story</a>
+                    <a href="/getshop" class="nav-item nav-link">Shop Now</a>
                     <a href="product.html" class="nav-item nav-link">Contact Us</a>
                 </div>
                 <% if (session) { %>
                     <div class="d-flex d-lg-flex ">
-                        <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                            <small class="fa fa-search text-body"></small>
-                        </a>
+                        <button type="button" class="d-flex align-items-center btn-sm-square bg-white rounded-circle ms-3" style="border-radius: 4rem; border: #f5f7f8;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <small class="fa fa-search text-body"></small></button>
                         <div class="nav-item dropdown d-flex">
                             <a class="btn-sm-square bg-white rounded-circle ms-3" data-bs-toggle="dropdown" >
                                 <small class="fa fa-user text-body"></small>
@@ -115,9 +114,8 @@
 
 
                         <div class=" d-lg-flex ms-2">
-                            <a class="btn-sm-square bg-white rounded-circle ms-3" href="">
-                                <small class="fa fa-search text-body"></small>
-                            </a>
+                            <button type="button" class="d-flex align-items-center btn-sm-square bg-white rounded-circle ms-3" style="border-radius: 4rem; border: #f5f7f8;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                <small class="fa fa-search text-body"></small></button>
                             <a class="btn-sm-square bg-white rounded-circle ms-3" href="/userlogin">
                                 <small class="fa fa-user text-body"></small>
                             </a>
@@ -129,3 +127,27 @@
         </nav>
     </div>
     <!-- Navbar End -->
+      <!-- Search Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+    <form method="post" action="/dosearch">
+        <div class="modal-body d-flex align-items-center justify-content-center" style="background-color:#05496C;">
+            
+            <div class="input-group rounded ">
+                
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" name="searchtext"/>
+                <button type="submit" style="background-color:#f5f7f8;border: #05496C;"><span class="input-group-text border-0" id="search-addon">
+                  <i class="fas fa-search"></i></button>
+                </span>
+            
+              </div>
+            
+            
+            
+        </div>
+    </form>
+        
+      </div>
+    </div>
+  </div>
