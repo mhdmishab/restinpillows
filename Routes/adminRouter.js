@@ -10,8 +10,20 @@ adroute.get('/home',verifyAdmin,adminController.adminIndex);
 adroute.post('/home',adminController.adminpost);
 
 
-adroute.get('/orders',verifyAdmin,adminController.orders);
+adroute.get('/orders',verifyAdmin,adminController.getOrders);
+
+
+
 adroute.get('/coupon',verifyAdmin,adminController.coupons);
+adroute.post('/postcoupon',verifyAdmin,adminController.addCoupon);
+adroute.post('/editCoupon/:id',verifyAdmin,adminController.editCoupon);
+adroute.get('/deleteCoupon/:id',verifyAdmin,adminController.deleteCoupon);
+adroute.get('/restoreCoupon/:id',verifyAdmin,adminController.restoreCoupon);
+adroute.get('/removeCoupon/:id',verifyAdmin,adminController.removeCoupon);
+
+
+
+
 
 adroute.get('/users',verifyAdmin,adminController.Users);
 adroute.get('/blockuser',verifyAdmin,adminController.userBlock);

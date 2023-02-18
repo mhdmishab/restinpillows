@@ -4,9 +4,10 @@ const db = require('../config/connection');
 const { findOne } = require('../model/usermodel');
 const myDb = require('../model/usermodel');
 const cart = require('../model/cartmodel');
+const order=require('../model/ordermodel');
 const myProduct = require('../model/productmodel');
-const myCategory=require('../model/categorymodel');
-const mySubcategory=require('../model/subcategory');
+const myCategory = require('../model/categorymodel');
+const mySubcategory = require('../model/subcategory');
 const auth = require('../utils/auth');
 const newOtp = require('../model/otpmodel');
 const nodemailer = require('nodemailer');
@@ -448,6 +449,8 @@ module.exports = {
             return accumulator + object.productPrice;
         }, 0);
         let countCart = productData.length;
+
+           
         // let id = req.params.id;
         // let product = await myProduct.findOne({ _id: id });
         res.render("users/cart", {
@@ -459,6 +462,7 @@ module.exports = {
             // countlnWishlist,
 
         });
+    
     },
 
     userProfile: async (req, res) => {
@@ -468,7 +472,7 @@ module.exports = {
         if (userProfile) {
             res.render('users/profile', { session, userData, userProfile })
         } else {
-            res.render('users/profile', { session, userData,userProfile });
+            res.render('users/profile', { session, userData, userProfile });
         }
 
 
@@ -478,54 +482,20 @@ module.exports = {
         const session = req.session.email;
         let userData = await myDb.users.findOne({ email: session })
         let userProfile = await profile.findOne({ email: session });
-       
-            res.render('users/editprofile', { session, userData, userProfile });
-        
+
+        res.render('users/editprofile', { session, userData, userProfile });
+
     },
 
     postEditProfile: async (req, res) => {
         const session = req.session.email;
         let userProfile = await profile.findOne({ email: session });
-        if(userProfile){
-        await profile.updateOne(
-            { email: session },
-            {
-                $set: {
-                    fullname: req.body.fullname,
-                    phone: req.body.phone,
-                    addressDetails: [
-                        {
-                            housename: req.body.housename,
-                            area: req.body.area,
-                            landmark: req.body.landmark,
-                            district: req.body.district,
-                            state: req.body.state,
-                            postoffice: req.body.postoffice,
-                            pin: req.body.pin
-                        }
-                    ]
-
-                }
-            }
-        );
-        await myDb.users.updateOne(
-            { email: session },
-            {
-                $set: {
-                    fullname: req.body.fullname,
-                    email:req.body.email,
-                    
-
-                }
-            }
-        )
-        }else{
-            const nwprofile=new profile({
-                
-                
-                    
+        if (userProfile) {
+            await profile.updateOne(
+                { email: session },
+                {
+                    $set: {
                         fullname: req.body.fullname,
-                        email:req.body.email,
                         phone: req.body.phone,
                         addressDetails: [
                             {
@@ -538,45 +508,138 @@ module.exports = {
                                 pin: req.body.pin
                             }
                         ]
-    
-                    
-                
-                    });
-                    await myDb.users.updateOne(
-                        { email: session },
-                        {
-                            $set: {
-                                fullname: req.body.fullname,
-                                email:req.body.email,
-                                
-            
-                            }
-                        }
-                    )
-                    nwprofile.save();
+
+                    }
+                }
+            );
+            await myDb.users.updateOne(
+                { email: session },
+                {
+                    $set: {
+                        fullname: req.body.fullname,
+                        email: req.body.email,
+
+
+                    }
+                }
+            )
+        } else {
+            const nwprofile = new profile({
+
+
+
+                fullname: req.body.fullname,
+                email: req.body.email,
+                phone: req.body.phone,
+                addressDetails: [
+                    {
+                        housename: req.body.housename,
+                        area: req.body.area,
+                        landmark: req.body.landmark,
+                        district: req.body.district,
+                        state: req.body.state,
+                        postoffice: req.body.postoffice,
+                        pin: req.body.pin
+                    }
+                ]
+
+
+
+            });
+            await myDb.users.updateOne(
+                { email: session },
+                {
+                    $set: {
+                        fullname: req.body.fullname,
+                        email: req.body.email,
+
+
+                    }
+                }
+            )
+            nwprofile.save();
         }
         res.redirect('/profile')
     },
 
     changeQuantity: async (req, res) => {
+        let session=req.session.email;
+        const userData=await myDb.users.find({email:session});
         console.log(111);
         const data = req.body;
         console.log(data);
         const objId = data.product;
-        cart
-            .aggregate([
-                {
-                    $unwind: "$product",
-                },
-            ])
-            .then((data) => {
-            });
+        let zeroQuantity=false;
+
+        let newdata;
+       
+        
+            
+        
+       
         cart.updateOne(
             { _id: data.cart, "product.productId": objId },
             { $inc: { "product.$.quantity": data.count } }
-        ).then(() => {
-            res.json({ status: true });
-        })
+        ).then(async() => {
+            newdata=await cart.findOne({_id:data.cart},{product:{$elemMatch:{productId:objId}}});
+            if(newdata==null){
+            console.log("newdata is here"+newdata);
+            res.redirect('/viewcart');
+            }
+            if(newdata.product[0].quantity==0||newdata.product[0].quantity<0){
+                await cart.deleteOne({_id:data.cart},{product:{$elemMatch:{productId:objId}}})
+                zeroQuantity=true;
+            }
+            let productData= await cart.aggregate([
+                { 
+                    $match:{userId:userData._id}
+                },
+                {
+                    $unwind:"$product",
+                },
+                {
+                    $project:{
+                        productItem:"$product.productId",
+                        productQuantity:"$product.quantity"
+                    }
+
+                },
+                {
+                    $lookup:{
+                        from:"products",
+                        localField:"productitem",
+                        foreignField:"_id",
+                        as:"productDetail",
+                    }
+                },
+                {
+                    $project: {
+                        productItem: 1,
+                        productQuantity: 1,
+                        productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                    },
+                },
+                {
+                    $addFields:{
+                        productPrice:{
+                            $multiply:["$productQuantity", "$productDetail.price"]
+                        }
+                    }
+                }
+                
+            ]).exec();
+            console.log("lookupp",productData);
+            const sum = productData.reduce((accumulator, object) => {
+                return accumulator + object.productPrice;
+            }, 0);
+            console.log("helooo sum",sum)
+            res.status(200).send({data:"this is data",newdata,zeroQuantity,sum});
+
+            
+        });
+
+    
+
 
 
     },
@@ -591,7 +654,7 @@ module.exports = {
 
         await cart.aggregate([
             {
-                $unwind: "$product"
+                $unwind: "$product",
             }
         ]);
         await cart
@@ -614,204 +677,351 @@ module.exports = {
 
     checkOut: async (req, res) => {
         let session = req.session.email;
-        const userdata=await myDb.users.findOne({email: session});
+        const userdata = await myDb.users.findOne({ email: session });
         const userData = await profile.findOne({ email: session });
         const userId = userdata._id.toString()
         console.log(userId);
         // const productData=await cart.findOne({userId: userId});
         // console.log(productData);
         const productData = await cart
-          .aggregate([
-            {
-              $match: { userId: userId },
-            },
-            {
-              $unwind: "$product",
-            },
-            {
-              $project: {
-                productItem: "$product.productId",
-                productQuantity: "$product.quantity",
-              },
-            },
-            {
-              $lookup: {
-                from: "products",
-                localField: "productItem",
-                foreignField: "_id",
-                as: "productDetail",
-              },
-            },
-            {
-              $project: {
-                productItem: 1,
-                productQuantity: 1,
-                productDetail: { $arrayElemAt: ["$productDetail", 0] },
-              },
-            },
-            {
-              $addFields: {
-                productPrice: {
-                  $multiply: ["$productQuantity", "$productDetail.price"]
+            .aggregate([
+                {
+                    $match: { userId: userId },
+                },
+                {
+                    $unwind: "$product",
+                },
+                {
+                    $project: {
+                        productItem: "$product.productId",
+                        productQuantity: "$product.quantity",
+                    },
+                },
+                {
+                    $lookup: {
+                        from: "products",
+                        localField: "productItem",
+                        foreignField: "_id",
+                        as: "productDetail",
+                    },
+                },
+                {
+                    $project: {
+                        productItem: 1,
+                        productQuantity: 1,
+                        productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                    },
+                },
+                {
+                    $addFields: {
+                        productPrice: {
+                            $multiply: ["$productQuantity", "$productDetail.price"]
+                        }
+                    }
                 }
-              }
-            }
-          ])
-          .exec();
+            ])
+            .exec();
         const sum = productData.reduce((accumulator, object) => {
-          return accumulator + object.productPrice;
+            return accumulator + object.productPrice;
         }, 0);
 
         console.log(sum);
-    
+
         const query = req.query
         console.log(query);
         // await order.deleteOne({_id:query.orderId})
-        res.render("users/checkout", {session, productData, userData ,sum});
-    
-    
-      },
+        res.render("users/checkout", { session, productData, userData, sum });
 
-      addNewAddress: async (req, res) => {
-          const session = req.session.email;
-          console.log("hellooooo"+session);
-        const addObj = {
-          housename: req.body.housename,
-          area: req.body.area,
-          landmark: req.body.landmark,
-          district: req.body.district,
-          state: req.body.state,
-          postoffice: req.body.postoffice,
-          pin: req.body.pin
-        }
-        console.log("hellooooo"+addObj);
-        await profile.updateOne({ email: session }, { $push: { addressDetails: addObj } });
-        res.redirect('/checkout')
-      },
 
-      getShop:async(req,res)=>{
-        const session=req.session.email;
-        const category=await myCategory.find({});
-        const product=await myProduct.find({unlist:false}).populate('category');
-        let productCount = await myProduct.find({unlist:false}).count();
-        res.render('users/shop',{session,product,category,productCount});
-    
     },
 
-    getSubcategory:async(req,res)=>{
-    
-        const categoryID= req.body.category;
-        const categoryId=mongoose.Types.ObjectId(categoryID);
+    addNewAddress: async (req, res) => {
+        const session = req.session.email;
+        console.log("hellooooo" + session);
+        const addObj = {
+            housename: req.body.housename,
+            area: req.body.area,
+            landmark: req.body.landmark,
+            district: req.body.district,
+            state: req.body.state,
+            postoffice: req.body.postoffice,
+            pin: req.body.pin
+        }
+        console.log("hellooooo" + addObj);
+        await profile.updateOne({ email: session }, { $push: { addressDetails: addObj } });
+        res.redirect('/checkout')
+    },
+
+    getShop: async (req, res) => {
+        const session = req.session.email;
+        const category = await myCategory.find({});
+        const product = await myProduct.find({ unlist: false }).populate('category');
+        let productCount = await myProduct.find({ unlist: false }).count();
+        res.render('users/shop', { session, product, category, productCount });
+
+    },
+
+    getSubcategory: async (req, res) => {
+
+        const categoryID = req.body.category;
+        const categoryId = mongoose.Types.ObjectId(categoryID);
         console.log(categoryId);
-        const subcategories=await mySubcategory.find({categoryid:categoryId});
+        const subcategories = await mySubcategory.find({ categoryid: categoryId });
         console.log(subcategories);
         res.json(subcategories);
     },
 
     // shop
 
-    sortProducts:async(req,res)=>{
+    sortProducts: async (req, res) => {
 
-    try{
-        let session=req.session.email;
-        let products=await myProduct.find({unlist:false});
-        const category=await myCategory.find({});
-        let sortedProducts=[];
-        let product;
+        try {
+            let session = req.session.email;
+            let products = await myProduct.find({ unlist: false });
+            const category = await myCategory.find({});
+            let sortedProducts = [];
+            let product;
 
-        let sortby=req.query.sortby;
+            let sortby = req.query.sortby;
 
-        if(sortby==="asending"){
-            sortedProducts=products.sort((a, b) => a.productname.localeCompare(b.productname));
-            product=sortedProducts;
-            res.render('users/shop',{session,product,category});
+            if (sortby === "asending") {
+                sortedProducts = products.sort((a, b) => a.productname.localeCompare(b.productname));
+                product = sortedProducts;
+                res.render('users/shop', { session, product, category });
 
-        }else if(sortby==="decending"){
-            sortedProducts=products.sort((a, b) => b.productname.localeCompare(a.productname));
-            product=sortedProducts;
-        }else if(sortby==="price_asc"){
-            sortedProducts=products.sort((a, b) => a.price-b.price);
-            product=sortedProducts;
-        }else if(sortby==="price_des"){
-            sortedProducts=products.sort((a, b) => b.price-a.price);
-            product=sortedProducts;
-        }else{
-           res.redirect('/getshop');
+            } else if (sortby === "decending") {
+                sortedProducts = products.sort((a, b) => b.productname.localeCompare(a.productname));
+                product = sortedProducts;
+            } else if (sortby === "price_asc") {
+                sortedProducts = products.sort((a, b) => a.price - b.price);
+                product = sortedProducts;
+            } else if (sortby === "price_des") {
+                sortedProducts = products.sort((a, b) => b.price - a.price);
+                product = sortedProducts;
+            } else {
+                res.redirect('/getshop');
+            }
+            res.render('users/shop', { session, product, category });
+        } catch (err) {
+            res.redirect('/error');
         }
-        res.render('users/shop',{session,product,category});
-    }catch(err){
-        res.redirect('/error');
-    }
 
-        
+
 
 
 
     },
 
-    filterProducts:async(req,res)=>{
-        let session=req.session.email;
-    try{
-        let products=await myProduct.find({unlist:false});
-        const category=await myCategory.find({});
-        let filteredProducts=[];
-        let product;
-        console.log(req.params.name);
-        
-        
+    filterProducts: async (req, res) => {
+        let session = req.session.email;
+        try {
+            let products = await myProduct.find({ unlist: false });
+            const category = await myCategory.find({});
+            let filteredProducts = [];
+            let product;
+            console.log(req.params.name);
 
-        if(req.params.name=="category"){
-            console.log("respod is here");
 
-            let selectedCategories= req.query.categorys || [];
-            
-            
-            console.log(selectedCategories);
-            // filteredProducts=products.filter(product=>{
-            //     console.log(product.category);
-            //     return (product.category.Some(category => selectedCategories.includes(category)))
 
-            // });
-            
-            filteredProducts=products.filter(product=> selectedCategories.includes(product.category));
+            if (req.params.name == "category") {
+                console.log("respod is here");
 
-            product=filteredProducts;
-        }else if(req.params.name=="price"){
-        
-            let min=req.query.min || 0;
-            let max=req.query.max || 10000;
+                let selectedCategories = req.query.categorys || [];
 
-            filteredProducts = products.filter(product => {
-            return product.price >= min && product.price <= max;
-          });
 
-          product=filteredProducts; 
-        }else{
-            res.redirect('/getshop');
+                console.log(selectedCategories);
+                // filteredProducts=products.filter(product=>{
+                //     console.log(product.category);
+                //     return (product.category.Some(category => selectedCategories.includes(category)))
+
+                // });
+
+                filteredProducts = products.filter(product => selectedCategories.includes(product.category));
+
+                product = filteredProducts;
+            } else if (req.params.name == "price") {
+
+                let min = req.query.min || 0;
+                let max = req.query.max || 10000;
+
+                filteredProducts = products.filter(product => {
+                    return product.price >= min && product.price <= max;
+                });
+
+                product = filteredProducts;
+            } else {
+                res.redirect('/getshop');
+            }
+            res.render('users/shop', { session, product, category });
+        } catch (err) {
+            res.redirect('/error');
         }
-        res.render('users/shop',{session,product,category});
-    }catch(err){
-        res.redirect('/error');
-    }
 
-      
+
 
     },
 
-    doSearch:async(req,res)=>{
-        let session=req.session.email;
+    doSearch: async (req, res) => {
+        let session = req.session.email;
         console.log(req.body.searchtext);
-        const category=await myCategory.find({});
-        let product=await myProduct.find({productname:new RegExp(req.body.searchtext)});
+        const category = await myCategory.find({});
+        let product = await myProduct.find({ productname: new RegExp(req.body.searchtext) });
         console.log(product);
 
-        if(product){
-            res.render('users/shop',{session,product,category});
+        if (product) {
+            res.render('users/shop', { session, product, category });
         }
-    }
+    },
 
-      
-      
+    placeOrder: async (req, res) => {
+
+
+
+        let invalid;
+        let couponDeleted;
+        const data = req.body;
+        const session = req.session.email;
+        const userData = await myDb.users.findOne({ email: session });
+        const userProfileData = await profile.findOne({ email: session });
+        const cartData = await cart.findOne({ userId: userData._id });
+        const objId = mongoose.Types.ObjectId(userData._id)
+        if (data.coupon) {
+          invalid = await coupon.findOne({ couponName: data.coupon });
+          // console.log(invalid);
+          if (invalid?.delete == true) {
+            couponDeleted = true
+          }
+        } else {
+          invalid = 0;
+        }
+    
+        if (invalid == null) {
+          res.json({ invalid: true });
+        } else if (couponDeleted) {
+          res.json({ couponDeleted: true })
+        } else {
+          const discount = await checkCoupon(data, objId);
+          // console.log(discount);
+          if (discount == true) {
+            res.json({ coupon: true })
+          } else {
+    
+            if (cartData) {
+              const productData = await cart
+                .aggregate([
+                  {
+                    $match: { userId: userData.id },
+                  },
+                  {
+                    $unwind: "$product",
+                  },
+                  {
+                    $project: {
+                      productItem: "$product.productId",
+                      productQuantity: "$product.quantity",
+                      productSize:"$Product.size"
+                    },
+                  },
+                  {
+                    $lookup: {
+                      from: "products",
+                      localField: "productItem",
+                      foreignField: "_id",
+                      as: "productDetail",
+                    },
+                  },
+                  {
+                    $project: {
+                      productItem: 1,
+                      productQuantity: 1,
+                      productSize:1,
+                      productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                    },
+                  },
+                  {
+                    $addFields: {
+                      productPrice: {
+                        $multiply: ["$productQuantity", "$productDetail.price"]
+                      }
+                    }
+                  }
+                ])
+                .exec();
+              const sum = productData.reduce((accumulator, object) => {
+                return accumulator + object.productPrice;
+              }, 0);
+              if (discount == false) {
+                var total = sum; 
+              } else {
+                var dis = sum * discount[0].discount;
+                if (dis > discount[0].maxLimit) {
+                  total = sum - discount[0].maxLimit;
+        
+                } else {
+                  total = sum - dis;
+                }
+              }
+              const orderData = new order({
+                userId: userData._id,
+                name: userProfileData.name,
+                phoneNumber: userProfileData.phone,
+                address: req.body.address, 
+                orderItems: cartData.product,
+                totalAmount: total,
+                paymentMethod: req.body.paymentMethod,
+                orderDate: moment().format("MMM Do YY"),
+                deliveryDate: moment().add(3, "days").format("MMM Do YY")
+              });
+             
+              
+              
+              if (req.body.paymentMethod === "COD")  {
+              const orderDatas = await orderData.save()
+              const orderId   = orderDatas._id
+                
+              await order.updateOne({_id:orderId},{$set:{orderStatus:'placed'}})       
+              await cart.deleteOne({ userId: userData._id });
+              res.json({ success: true})
+              await coupon.updateOne( {couponName:data.coupon}, {$push:{users: {userId : objId}}})
+              } else {
+                const orderDatas = await  orderData.save();
+                const orderId = orderDatas._id;
+    
+                const session = await stripe.checkout.sessions.create({ 
+                  payment_method_types: ["card"], 
+                  line_items:
+                    productData.map((ele) => {
+                      return { 
+                        price_data: { 
+                          currency: "inr", 
+                          product_data: { 
+                            name: ele.productDetail.name, 
+                          }, 
+                          unit_amount:ele.productDetail.price * 100, 
+                        }, 
+                        quantity: ele.productQuantity, 
+                      }
+                    }), 
+                  mode: "payment",  
+                  success_url: `${process.env.SERVER_URL}/orderSuccess?cartId=${userData._id}&orderId=${orderId}`,
+                  cancel_url:  `${process.env.SERVER_URL}/checkout?orderId=${orderId}` 
+                });  
+                console.log(session);
+                res.json({ url: session.url})      
+              } 
+    
+            } else { 
+       
+              res.redirect("/viewCart");
+            }
+          }
+        }
+      },
+
+     
+
+
+
 
 
 

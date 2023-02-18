@@ -28,7 +28,7 @@
                         <hr class="my-4">
 
 
-                        <div class="row mb-4 d-flex justify-content-between align-items-center">
+                        <div class="row mb-4 d-flex justify-content-between align-items-center" id="<%= element?.productDetail?._id %>proline">
 
 
                           <div class="col-md-2 col-lg-2 col-xl-2">
@@ -44,17 +44,17 @@
 
                           <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
                             <button type="button"
-                              onclick="changeQuantity('<%= element._id %>','<%= element.productDetail._id %>',-1)"
+                              onclick="changeQuantityMinus('<%= element._id %>','<%= element?.productDetail?._id %>',-1,'<%=element?.productDetail?.price %>','<%=element?.productQuantity%>')"
                               class="form-control">-
                               <!-- <i class="ion-ios-remove"></i> -->
                             </button>
                             </span>
-                            <input type="text" id="<%= element.productDetail._id %>" name="quantity"
-                              class="quantity form-control input-number" value="<%= element.productQuantity%>" min="1"
+                            <input type="text" id="<%= element?.productDetail?._id %>" name="quantity"
+                              class="quantity form-control input-number" value="<%=element.productQuantity%>" min="1"
                               max="100">
                             <span class="input-group-btn ml-2">
                               <button type="button"
-                                onclick="changeQuantity('<%= element?._id %>','<%= element?.productDetail._id %>',1)"
+                                onclick="changeQuantityPlus('<%= element?._id %>','<%= element?.productDetail?._id %>',1,'<%=element?.productDetail?.price %>','<%=element?.productQuantity%>')"
                                 class="form-control">+
                                 <!-- <i class="ion-ios-add"></i> -->
                               </button>
@@ -63,7 +63,8 @@
                             <% var b=element.productQuantity %>
                               <% var c=a*b %>
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                  <h6 class="mb-0" id="proprice">₹ <%= c %>
+                                  <h6 class="mb-0" id="<%= element?.productDetail?._id %>proprice">
+                                    <%=c  %>
                                   </h6>
                                 </div>
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
@@ -153,73 +154,137 @@
 
 
 
-      // function changeQuantity(cartId, productId, count,quantity,price) {
-      //   const requestOptions = {
-      //     method: 'POST',
-      //     headers: {
-      //       'Content-Type': 'application/json'
-      //     },
-      //     body: JSON.stringify(
-      //       {
-      //         cart: cartId,
-      //         product: productId,
-      //         count: count,
-      //       }
-      //     )
-      //   }
-
-      //   fetch('/changequantity', requestOptions)
-      //     .then((response) => {
-      //       console.log("res is here");
-      //       document.getElementById("proprice").innerHTML = Number(quantity*price)})
-      //     .then((data) => {
-      //       console.log("response in send then");
-      //     })
-      //     .catch((error) => {
-      //       console.error(error)
-      //     })
-      // }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      function changeQuantity(cartId, productId, count) {
-
-        let quantity = parseInt(document.getElementById(productId).innerHTML);
-        $.ajax({
-          url: "/changequantity",
-          data: {
-            cart: cartId,
-            product: productId,
-            count: count,
+      function changeQuantityPlus(cartId, productId, count,price,quantity) {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
           },
-          method: "post",
-          success: (response) => {
-            // document.getElementById(productId).innerHTML = quantity + count;
+          body: JSON.stringify(
+            {
+              cart: cartId,
+              product: productId,
+              count: count,
+              quantity:quantity,
+            }
+          )
+        }
 
-            // document.getElementsByClassName('subtotal').innerText = response.sum
+        fetch('/changequantity', requestOptions)
+          .then((res) => res.json())
+          .then((newdata) => {
+            console.log("response in send then");
+            console.log(newdata);
 
+            // let quant=Number(quantity);
+            if(newdata.zeroQuantity){
+              document.getElementById(productId+"proline").remove();
+              
+            }else{
+           
+            
+            
+            
+            let nwquantity=newdata.newdata.product[0].quantity; 
+            console.log("helloooooo",nwquantity);
+            console.log(price);
+            console.log(Number(nwquantity*price));
+            document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
+            document.getElementById(productId).value =nwquantity;
+            }
+          })
+          .catch((error) => {
+            console.error(error)
+          })
 
-            location.reload();
-          },
-        });
+          // let quant=Number(quantity)+count;
+  
+          // document.getElementById(productId+"proprice").innerHTML = quant*price; 
+          // document.getElementById(productId).value =quant;
       }
+
+      function changeQuantityMinus(cartId, productId, count,price,quantity) {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+              cart: cartId,
+              product: productId,
+              count: count,
+            }
+          )
+        }
+
+        fetch('/changequantity', requestOptions)
+          .then((res) => res.json())
+          .then((newdata) => {
+            console.log("response in send then");
+            console.log(newdata.zeroQuantity,"asdfghwertghyuji");
+            if(newdata.zeroQuantity){
+              document.getElementById(productId+"proline").remove();
+
+            }else{
+            console.log("response in send then");
+            console.log(newdata,"asdfghwertghyuji");
+            
+            
+            let nwquantity=newdata.newdata.product[0].quantity; 
+            console.log(nwquantity);
+            console.log(price);
+            console.log(Number(nwquantity*price));
+            document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
+            document.getElementById(productId).value =nwquantity;
+            // document.getElementById("pricetotal").value =newdata.sum;
+            }
+            
+          })
+        
+          .catch((error) => {
+            console.error(error)
+          })
+      }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // function changeQuantity(cartId, productId, count) {
+
+      //   let quantity = parseInt(document.getElementById(productId).innerHTML);
+      //   $.ajax({
+      //     url: "/changequantity",
+      //     data: {
+      //       cart: cartId,
+      //       product: productId,
+      //       count: count,
+      //     },
+      //     method: "post",
+      //     success: (response) => {
+           
+
+
+      //       location.reload();
+      //     },
+      //   });
+      // }
 
     </script>
 

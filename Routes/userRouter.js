@@ -39,14 +39,14 @@ route.get('/checkout',verifyuser,userController.checkOut);
 route.post('/addnewaddress',verifyuser,userController.addNewAddress);
 
 route.get('/profile',verifyuser,userController.userProfile);
-route.get('/editprofile',verifyuser,userController.editProfile);
+route.get('/profile/editprofile',verifyuser,userController.editProfile);
 route.post('/postEditProfile',verifyuser,userController.postEditProfile);
 
 // route.post('/getsubcategories',verifyuser,userController.getSubcategory)
 
 route.use('/sortproducts',userController.sortProducts)
 route.use('/filterproducts/:name',userController.filterProducts);
-route.post('/dosearch',userController.doSearch);
+route.use('/dosearch',userController.doSearch);
 
 
 

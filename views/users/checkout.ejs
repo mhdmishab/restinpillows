@@ -49,8 +49,12 @@
                       <% }) %>
                   </select>
                   <button type="button" style="background-color: #05496c;" class="btn  mt-3" data-bs-toggle="modal"
-                    data-bs-target="#exampleModal" data-bs-whatever="@mdo">
+                    data-bs-target="#exampleModalLabelAddAdress" data-bs-whatever="@mdo">
                     <p class="text-white">Add new address</p>
+                  </button>
+                  <button type="button" style="background-color: #05496c;" class="btn  mt-3" data-bs-toggle="modal"
+                    data-bs-target="#exampleModalLabelEditAdress" data-bs-whatever="@mdo">
+                    <p class="text-white">Edit current address</p>
                   </button>
                 </div>
 
@@ -80,7 +84,7 @@
                           <div class="custom-control custom-radio">
                             <input id="debit" name="paymentMethod" type="radio" value="Online"
                               class="custom-control-input" required />
-                            <label class="custom-control-label" for="debit">Online</label>
+                            <label class="custom-control-label " for="debit">Online</label>
                           </div>
                           <div class="form-group mt-4">
                             <label for="coupon text-light" style="text-decoration: underline;">
@@ -124,12 +128,12 @@
                       </form>
                     </div>
                   </div>
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                  <div class="modal fade" id="exampleModalLabelAddAdress" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                       <div class="modal-content">
                         <div class="modal-header">
-                          <h1 class="modal-title fs-5" id="exampleModalLabel">
+                          <h1 class="modal-title fs-5" id="exampleModalLabelAddAdress">
                             Add new Address
                           </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -186,6 +190,76 @@
                             </button>
                             <button type="submit" value="submit" class="btn btn-primary">
                               Add
+                            </button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- edit address -->
+
+                  <div class="modal fade" id="exampleModalLabelEditAdress" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabelAddAdress">
+                            Edit current Address
+                          </h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/postEditProfile" method="post">
+                          <div class="modal-body">
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Housename:</label>
+                              <input required type="text" class="form-control" id="housename" name="housename" value=""/>
+                              <p id="houseError" style="color: red"></p>
+                            </div>
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Area:</label>
+                              <input required type="text" class="form-control" id="area" name="area" />
+                              <p id="areaError" style="color: red"></p>
+                            </div>
+                            <div class="mb-3">
+                              <label for="recipient-name" class="col-form-label">Landmark:</label>
+                              <input required type="text" class="form-control" id="landmark" name="landmark" />
+                              <p id="landmarkError" style="color: red"></p>
+                            </div>
+                            <div class="mb-3">
+                              <div class="row">
+                                <div class="col-md-6 mb-3">
+                                  <label for="firstName">District</label>
+                                  <input required type="text" class="form-control" id="district" name="district" />
+                                  <p id="stateError" style="color: red"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label for="lastName">State</label>
+                                  <input required type="text" class="form-control" id="state" name="state" />
+                                  <p id="pincodeError" style="color: red"></p>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="mb-3">
+                              <div class="row">
+                                <div class="col-md-6 mb-3">
+                                  <label for="firstName">Post office</label>
+                                  <input required type="text" class="form-control" id="postoffice" name="postoffice" />
+                                  <p id="stateError" style="color: red"></p>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                  <label for="lastName">Pincode</label>
+                                  <input required type="text" class="form-control" id="pin" name="pin" />
+                                  <p id="pincodeError" style="color: red"></p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                              Close
+                            </button>
+                            <button type="submit" value="submit" class="btn btn-primary">
+                              Edit
                             </button>
                           </div>
                         </form>
