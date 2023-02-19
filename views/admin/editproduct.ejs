@@ -13,52 +13,48 @@
 
 
         <form method="post" id="registration" action="/admin/editproduct?id=<%= item._id%>">
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="pname">Image <span class="text-danger">*</span></label>
-                <% for(let image in item.image){%>
-                    <input type="file" class="form-control" id="image" name="image" multiple value="/<%= item.image[0]%>" >
-                <%}%>
+                <input class="form-control" type="file" onchange="viewImage(event)" name="product_image"
+                id="product_image">
+              <img src="/adminImages/<%= item._id %>.jpg" id="imgView" alt="" style="width:100px;height:auto">
                 
-            </div>
+            </div> -->
             <div class="form-group">
                 <label for="pname">Product Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="fname" name="pname" placeholder="Product Name" value="<%= item.productname%>" >
+                <input type="text" class="form-control" id="fname" name="pname" value="<%= item.productname%>"  placeholder="Product Name" required>
             </div>
             <div class="form-group">
                 <label for="category">Category<span class="text-danger">*</span></label>
-                <select class="form-control" name="category" aria-placeholder="select"   required>
-                    <option  disabled selected>select</option>
-                    <% category.forEach((item)=>{%>
-                    
-                    
-                    <option value="<%=item._id%>"><%= item.categoryname %></option>
-                    <%})%>
+                <select id="category-select" class="form-control" name="category" value="<%= item.category.categoryname%>" required>
+                    <option selected disabled>select</option>
+                    <% category.forEach(function(category) { %>
+                        <option  value="<%= category._id %>">
+                            <%= category.categoryname %>
+                        </option>
+                        <% }); %>
                 </select>
-                    
             </div>
             <div class="form-group">
-                <label for="subcategory">Sub-category</Sub-category><span class="text-danger">*</span></label>
-                <select class="form-control" name="subcategory" aria-placeholder="select"  required>
-                    <option  disabled selected>select</option>
-                    <% subcategory.forEach((item)=>{%>
+                <label for="category">Sub-category<span class="text-danger">*</span></label>
+                
+                <select id="subcategory-select" class="form-control" name="subcategory" required>
                     
-                    
-                    <option value="<%=item._id%>"><%= item.subcategoryname %></option>
-                    <%})%>
+                   
                 </select>
             </div>
             <div class="form-group">
                 <label for="quantity">Quantity<span class="text-danger">*</span></label>
-                <input type="number" class="form-control" name="quantity" id="email" placeholder="Quantity" value="<%= item.quantity%>">
+                <input type="number" class="form-control" name="quantity" id="email" placeholder="Quantity" value="<%= item.quantity%>" required>
             </div>
             
             <div class="form-group">
                 <label for="discription">Description<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="description" id="spassword" placeholder="Description" value="<%= item.description%>">
+                <input type="text" class="form-control" name="description" id="spassword" placeholder="Description" value="<%= item.description%>" required>
             </div>
             <div class="form-group">
                 <label for="discription">Price<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="price" id="spassword" placeholder="Price" value="<%= item.price%>">
+                <input type="text" class="form-control" name="price" id="spassword" placeholder="Price" value="<%= item.price%>" required>
             </div>
            
             <div class="form-group">
@@ -66,6 +62,56 @@
             </div>
         </form>
 </div>
+
+<script>
+     function viewImage(event) {
+            document.getElementById('imgView').src = URL.createObjectURL(event.target.files[0])
+          }
+
+
+          $("#menu-btn").click(function () {
+        $("#menu").toggleClass("active");
+      });
+</script>
+
+
+
+<script>
+
+    document.querySelector("#category-select").addEventListener("change", function () {
+            const selectedCategory = this.value;
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        category:selectedCategory,
+                    }
+                )
+            }
+            fetch(window.location.origin+'/admin/getsubcategories',requestOptions).then((res)=>res.json())
+            
+
+                .then(subcategories => {
+                    const subcategoryList = document.querySelector("#subcategory-select");
+                    subcategoryList.innerHTML = "";
+                    console.log(subcategories);
+                    subcategories.forEach(subcategory => {
+                        const option = document.createElement("option");
+                        option.value = subcategory._id;
+                        option.textContent = subcategory.subcategoryname;
+                        subcategoryList.appendChild(option);
+                    });
+                    
+                }).catch((err)=>{
+                    console.log("subcategory management error");
+                    res(window.location.origin+'/admin/error')
+                })
+        });
+
+</script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 </body>

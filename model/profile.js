@@ -1,7 +1,9 @@
 const mongoose=require('mongoose');
 
 const profileSchema=new mongoose.Schema({
-    fullname:{type:String,required:true},
+    fullname:{type:String,
+      trim: true,
+      required:true},
     email:{
         type:String,
         required:true,
@@ -10,12 +12,14 @@ const profileSchema=new mongoose.Schema({
     phone:{
         type:Number,
         trim: true,
-        required:true,
+        
+
     },
     addressDetails:[
         {
          housename:{
             type:String,
+            
          },
          area:{
             type:String,

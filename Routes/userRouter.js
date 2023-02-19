@@ -41,6 +41,7 @@ route.post('/addnewaddress',verifyuser,userController.addNewAddress);
 route.get('/profile',verifyuser,userController.userProfile);
 route.get('/profile/editprofile',verifyuser,userController.editProfile);
 route.post('/postEditProfile',verifyuser,userController.postEditProfile);
+route.post('/postEditAddress',verifyuser,userController.postEditAddress);
 
 // route.post('/getsubcategories',verifyuser,userController.getSubcategory)
 

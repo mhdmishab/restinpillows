@@ -483,7 +483,12 @@ module.exports = {
         let userData = await myDb.users.findOne({ email: session })
         let userProfile = await profile.findOne({ email: session });
 
+        if(userProfile){
         res.render('users/editprofile', { session, userData, userProfile });
+        }else{
+           
+            res.render('users/editprofile', { session, userData, userProfile });
+        }
 
     },
 
@@ -491,6 +496,7 @@ module.exports = {
         const session = req.session.email;
         let userProfile = await profile.findOne({ email: session });
         if (userProfile) {
+            console.log("iam inside profile");
             await profile.updateOne(
                 { email: session },
                 {
@@ -524,6 +530,7 @@ module.exports = {
                 }
             )
         } else {
+            console.log("iam new profile");
             const nwprofile = new profile({
 
 
@@ -546,6 +553,10 @@ module.exports = {
 
 
             });
+            nwprofile.save();
+
+
+            console.log("iam here");
             await myDb.users.updateOne(
                 { email: session },
                 {
@@ -557,7 +568,7 @@ module.exports = {
                     }
                 }
             )
-            nwprofile.save();
+            
         }
         res.redirect('/profile')
     },
@@ -732,6 +743,56 @@ module.exports = {
         // await order.deleteOne({_id:query.orderId})
         res.render("users/checkout", { session, productData, userData, sum });
 
+
+    },
+
+    postEditAddress:async(req,res)=>{
+        const session = req.session.email;
+        let userProfile = await profile.findOne({ email: session });
+        if (userProfile) {
+            await profile.updateOne(
+                { email: session },
+                {
+                    $set: {
+                        
+                        addressDetails: [
+                            {
+                                housename: req.body.housename,
+                                area: req.body.area,
+                                landmark: req.body.landmark,
+                                district: req.body.district,
+                                state: req.body.state,
+                                postoffice: req.body.postoffice,
+                                pin: req.body.pin
+                            }
+                        ]
+
+                    }
+                }
+            );
+            
+        } else {
+            const nwprofile = new profile({
+
+                addressDetails: [
+                    {
+                        housename: req.body.housename,
+                        area: req.body.area,
+                        landmark: req.body.landmark,
+                        district: req.body.district,
+                        state: req.body.state,
+                        postoffice: req.body.postoffice,
+                        pin: req.body.pin
+                    }
+                ]
+
+
+
+            });
+           
+            nwprofile.save();
+        }
+        res.redirect('/checkout')
 
     },
 

@@ -6,6 +6,7 @@ const coupon=require('../model/couponmodel');
 const order=require('../model/ordermodel');
 const myCategory=require('../model/categorymodel');
 const mySubcategory=require('../model/subcategory');
+const fs=require('fs');
 const dotenv=require('dotenv');
 var bcrypt = require('bcrypt');
 const { response } = require('express');
@@ -133,11 +134,13 @@ module.exports={
     },
     addproducts:async(req,res)=>{
         try{
-            let image=req.files.map((data)=>{
-                return data?.filename;
-            })
+            // let image=req.files.map((data)=>{
+            //     return data?.filename;
+            // })
         const myProducts=new products({
-            image:image,
+            image1:req.files[0].filename,
+            image2:req.files[1].filename,
+            image3:req.files[2].filename,
             productname:req.body.pname,
             category:req.body.category,
             subcategory:req.body.subcategory,
@@ -182,13 +185,14 @@ module.exports={
         
        
         console.log(req.query.id);    
-    try{   let image=req.files.map((data)=>{
-        return data?.filename;
-    })
+    try{  
+        //  let image=req.files.map((data)=>{
+        // return data?.filename;
+        // })
        
         await products.updateOne({_id:req.query.id},{
             $set:{
-            image:image,
+         
             productname:req.body.pname,
             category:req.body.category,
             subcategory:req.body.subcategory,
@@ -197,7 +201,9 @@ module.exports={
             price:req.body.price,
  
             }
-        });
+        }).catch(err=>{
+            res.redirect('/editproduct');
+        })
         console.log('product updated')
         res.redirect('/admin/products');
     }catch(err){
@@ -411,6 +417,100 @@ removeCoupon:async(req,res)=>{
     const id = req.params.id;
     await coupon.deleteOne({_id:id});
     res.redirect("/admin/coupon");
+},
+
+
+changeImage1:async(req,res)=>{
+    try{
+        await products.updateOne({_id:req.params.id},
+            {$set:
+                {
+                    image1:req.file.filename
+                }
+            })
+
+            const directoryPath = "public/"+req.body.image1;
+            fs.unlink(directoryPath,(err)=>{
+                try{
+                    if(err){
+                        throw err;
+                    }
+                    console.log("Delete Image 1 succesfully");
+                }catch(err){
+                    console.error(`error Deleting Image1:${err}`);
+                }
+            });
+            res.redirect('/admin/products')
+
+    }catch(err){
+        console.log(`Error change image1:${err}`);
+        res.redirect('/admin/products');
+       
+
+    }
+
+},
+
+changeImage2:async(req,res)=>{
+    try{
+        await products.updateOne({_id:req.params.id},
+            {$set:
+                {
+                    image2:req.file.filename
+                }
+            })
+
+            const directoryPath = "public/"+req.body.image2;
+            fs.unlink(directoryPath,(err)=>{
+                try{
+                    if(err){
+                        throw err;
+                    }
+                    console.log("Delete Image 2 succesfully");
+                }catch(err){
+                    console.error(`error Deleting Image2:${err}`);
+                }
+            });
+            res.redirect('/admin/products')
+
+    }catch(err){
+        console.log(`Error change image2:${err}`);
+        res.redirect('/admin/products');
+       
+
+    }
+
+},
+
+changeImage3:async(req,res)=>{
+    try{
+        await products.updateOne({_id:req.params.id},
+            {$set:
+                {
+                    image3:req.file.filename
+                }
+            })
+
+            const directoryPath = "public/"+req.body.image3;
+            fs.unlink(directoryPath,(err)=>{
+                try{
+                    if(err){
+                        throw err;
+                    }
+                    console.log("Delete Image 3 succesfully");
+                }catch(err){
+                    console.error(`error Deleting Image1:${err}`);
+                }
+            });
+            res.redirect('/admin/products')
+
+    }catch(err){
+        console.log(`Error change image3:${err}`);
+        res.redirect('/admin/products');
+       
+
+    }
+
 }
 
 

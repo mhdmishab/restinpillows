@@ -33,8 +33,14 @@ adroute.get('/deleteuser',verifyAdmin,adminController.deleteUser);
 
 adroute.get('/products',verifyAdmin,adminController.products);
 adroute.get('/addproducts',verifyAdmin,adminController.addproduct);
-adroute.post('/addproducts',upload.array('image',3),adminController.addproducts);
+adroute.post('/addproducts',upload.array('myFiles',3),adminController.addproducts);
 adroute.get('/editproduct',verifyAdmin,adminController.getProduct);
+
+adroute.post('/changeImage1/:id',upload.single('myFile1'),verifyAdmin,adminController.changeImage1);
+adroute.post('/changeImage2/:id',upload.single('myFile2'),verifyAdmin,adminController.changeImage2);
+adroute.post('/changeImage3/:id',upload.single('myFile3'),verifyAdmin,adminController.changeImage3);
+
+
 adroute.post('/editproduct',verifyAdmin,adminController.editProduct);
 adroute.get('/unlistproduct',verifyAdmin,adminController.unlistProduct);
 adroute.get('/listproduct',verifyAdmin,adminController.listProduct);

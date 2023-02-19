@@ -41,7 +41,7 @@
                   <label class="col-xs-3 control-label">Your Address</label>
 
                   <select class="form-select mt-2" required name="address">
-                    <% userData.addressDetails.forEach((address)=>{%>
+                    <% userData?.addressDetails.forEach((address)=>{%>
                       <option name="address">
                         <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%=
                                   address.district %>,<%= address.pin %>,<%=address.state %>
@@ -67,7 +67,7 @@
                         <label class="col-xs-3 control-label">Select Shipping Address</label>
 
                         <select class="form-select mt-2" required name="address">
-                          <% userData.addressDetails.forEach((address)=>{%>
+                          <% userData?.addressDetails.forEach((address)=>{%>
                             <option name="address">
                               <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area
                                       %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
@@ -208,33 +208,33 @@
                           </h1>
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <form action="/postEditProfile" method="post">
+                        <form action="/postEditAddress" method="post">
                           <div class="modal-body">
                             <div class="mb-3">
                               <label for="recipient-name" class="col-form-label">Housename:</label>
-                              <input required type="text" class="form-control" id="housename" name="housename" value=""/>
+                              <input required type="text" class="form-control" id="housename" name="housename" value="<%= userData?.addressDetails[0]?.housename  %>"/>
                               <p id="houseError" style="color: red"></p>
                             </div>
                             <div class="mb-3">
                               <label for="recipient-name" class="col-form-label">Area:</label>
-                              <input required type="text" class="form-control" id="area" name="area" />
+                              <input required type="text" class="form-control" id="area" name="area" value="<%= userData?.addressDetails[0]?.area %>"/>
                               <p id="areaError" style="color: red"></p>
                             </div>
                             <div class="mb-3">
                               <label for="recipient-name" class="col-form-label">Landmark:</label>
-                              <input required type="text" class="form-control" id="landmark" name="landmark" />
+                              <input required type="text" class="form-control" id="landmark" name="landmark" value="<%= userData?.addressDetails[0]?.landmark  %>" />
                               <p id="landmarkError" style="color: red"></p>
                             </div>
                             <div class="mb-3">
                               <div class="row">
                                 <div class="col-md-6 mb-3">
                                   <label for="firstName">District</label>
-                                  <input required type="text" class="form-control" id="district" name="district" />
+                                  <input required type="text" class="form-control" id="district" name="district" value="<%= userData?.addressDetails[0]?.district %>" />
                                   <p id="stateError" style="color: red"></p>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <label for="lastName">State</label>
-                                  <input required type="text" class="form-control" id="state" name="state" />
+                                  <input required type="text" class="form-control" id="state" name="state" value="<%= userData?.addressDetails[0]?.state %>" />
                                   <p id="pincodeError" style="color: red"></p>
                                 </div>
                               </div>
@@ -243,12 +243,12 @@
                               <div class="row">
                                 <div class="col-md-6 mb-3">
                                   <label for="firstName">Post office</label>
-                                  <input required type="text" class="form-control" id="postoffice" name="postoffice" />
+                                  <input required type="text" class="form-control" id="postoffice" name="postoffice" value="<%= userData?.addressDetails[0]?.postoffice  %>" />
                                   <p id="stateError" style="color: red"></p>
                                 </div>
                                 <div class="col-md-6 mb-3">
                                   <label for="lastName">Pincode</label>
-                                  <input required type="text" class="form-control" id="pin" name="pin" />
+                                  <input required type="text" class="form-control" id="pin" name="pin" value="<%= userData?.addressDetails[0]?.pin %>" />
                                   <p id="pincodeError" style="color: red"></p>
                                 </div>
                               </div>

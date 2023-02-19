@@ -3,98 +3,232 @@
 
 
 
-                <!-- End of Topbar -->
+    <!-- End of Topbar -->
 
 
 
-                <!-- content -->
-                <nav class="navbar navbar-light  justify-content-between mt-0 ">
-                    <a class="navbar-brand"></a>
-                    <a  href="/admin/addproducts" ><button class="btn btn-outline-dark my-2 my-sm-0" >Add-product</button></a>
-                    <!-- <form class="form-inline" action="/admin/search" method="get">
+    <!-- content -->
+    <nav class="navbar navbar-light  justify-content-between mt-0 ">
+        <a class="navbar-brand"></a>
+        <a href="/admin/addproducts"><button class="btn btn-outline-dark my-2 my-sm-0">Add-product</button></a>
+        <!-- <form class="form-inline" action="/admin/search" method="get">
                         <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"
                             name="username">
                         <button class="btn btn-outline-dark my-2 my-sm-0" type="submit">Search</button>
                     </form> -->
 
 
-                </nav>
-                <div class="container-fluid">
-                    <table class="table mt-5">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Image</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Category</th>
-                                <th scope="col">Sub-Category</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Price</th>
-                                <th scope="col">Action</th>
-                                <th scope="col">Status</th>
-                                
+    </nav>
+    <div class="container-fluid">
+        <table class="table mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Sub-Category</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                    <th scope="col">Status</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% var i=1 %>
-                            <% product.forEach((item)=>{%>
-                                <tr>
-                                    <td><%= i%></td>
-                                    <td><img style="height: 3rem; width: 4rem;" src="/<%= item.image[0]%>" alt=""></td>
-                                    <td><%= item.productname%></td>
-                                    <td><%= item?.category?.categoryname %></td>
-                                    <td><%= item?.subcategory?.subcategoryname %></td>
-                                    <td><%= item.quantity%></td>
-                                    <td><%= item.description%></td>
-                                    <td>₹<%= item.price%></td>
-                                    <td>
-                                        <a class="text-decoration-none" href="/admin/editproduct?id=<%= item._id%>">Edit</a>
-                                        <a class="text-decoration-none" href="/admin/unlistproduct?id=<%= item._id%>" onclick="return confirm ('Do You want to Unlist <%= item.productname%>')">Unlist</a>
-                                        <a class="text-decoration-none" href="/admin/listproduct?id=<%= item._id%>" onclick="return confirm ('Do You want to list <%= item.productname%>')">list</a>
-                                    </td>
-                                    <td>
-                                        <% if( item.unlist == false){%>
-                                            <button class="btn-success">Active</button>
-                                        <%}else{%>
-                                            <button class="btn-danger">Unlisted</button>
-                                        <%}%>    
-                                    </td>
 
-                                </tr>
+                </tr>
+            </thead>
+            <tbody>
+                <% var i=1 %>
+                    <% product.forEach((item)=>{%>
+                        <tr>
+                            <td>
+                                <%= i%>
+                            </td>
+                            <td><img style="height: 3rem; width: 4rem;" src="/<%= item.image1%>" alt="">
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal<%=item._id%>">
+                                    edit
+                                </button>
+                            </td>
 
-                                <% i++ %>   
+                            <!-- image outer modal -->
 
-                            <%})%>
+                            <div class="modal fade" id="exampleModal<%=item._id%>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Images</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="d-flex justify-content-center border rounded border-dark p=2 my-2">
+                                                    <img src="/<%= item.image1%>" alt="Image 1" class="me-2" style="width: 80px;">
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#image1<%=item._id%>">
+                                                        edit
+                                                      </button>
+                                                </div>
+                                                <div class="d-flex justify-content-center border rounded border-dark p=2 my-2">
+                                                    <img src="/<%= item.image2%>" alt="Image 1" class="me-2" style="width: 80px;">
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#image2<%=item._id%>">
+                                                        edit
+                                                      </button>
+                                                </div>
+                                                <div class="d-flex justify-content-center border rounded border-dark p=2 my-2">
+                                                    <img src="/<%= item.image3%>" alt="Image 1" class="me-2" style="width: 80px;">
+                                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#image3<%=item._id%>">
+                                                        edit
+                                                      </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="button" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- modal for edit image1 -->
+
+                            <div class="modal fade" id="image1<%=item._id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <div class="modal-content">
+                                    <form id="changeimage1" action="/admin/changeImage1/<%=item._id%>" method="post" enctype="multipart/form-data"> 
+                                    <div class="modal-header">
+                                      <h5 class="modal-title" id="exampleModalLabel">Change Image</h5>
+                                      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                    
+                                      <div class="form-outline mb-1">
+                                        <label class="form-label">Change Image 1</label>
+                                        <input type="file" id="myFile1" class="form-control form-control-lg" name="myFile1">
+                                        <input type="hidden" name="image1" value="/<%= item.image1%>">
+                                      </div>
+                                    
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                      <button type="submit" class="btn btn-primary">Save changes</button>
+                                    </div>
+                                    </form>
+                                  </div>
+                                </div>
+                              </div>
+
+                                  <!-- modal for edit image2 -->
+
+                                  <div class="modal fade" id="image2<%=item._id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <form id="changeimage1" action="/admin/changeImage2/<%=item._id%>" method="post" enctype="multipart/form-data"> 
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Change Image</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                        
+                                          <div class="form-outline mb-1">
+                                            <label class="form-label">Change Image 2</label>
+                                            <input type="file" id="myFile2" class="form-control form-control-lg" name="myFile2">
+                                            <input type="hidden" name="image1" value="/<%= item.image2%>">
+                                          </div>
+                                        
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                          <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                   <!-- modal for edit image3 -->
+
+                                   <div class="modal fade" id="image3<%=item._id%>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <form id="changeimage1" action="/admin/changeImage3/<%=item._id%>" method="post" enctype="multipart/form-data"> 
+                                        <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Change Image</h5>
+                                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                        
+                                          <div class="form-outline mb-1">
+                                            <label class="form-label">Change Image 3</label>
+                                            <input type="file" id="myFile3" class="form-control form-control-lg" name="myFile3">
+                                            <input type="hidden" name="image1" value="/<%= item.image3%>">
+                                          </div>
+                                        
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                          <button type="submit" class="btn btn-primary">Save changes</button>
+                                        </div>
+                                        </form>
+                                      </div>
+                                    </div>
+                                  </div>
                             
 
 
-                        </tbody>
-                    </table>
-                </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                          ...
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                          <button type="button" class="btn btn-primary">Understood</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                            <td>
+                                <%= item.productname%>
+                            </td>
+                            <td>
+                                <%= item?.category?.categoryname %>
+                            </td>
+                            <td>
+                                <%= item?.subcategory?.subcategoryname %>
+                            </td>
+                            <td>
+                                <%= item.quantity%>
+                            </td>
+                            <td>
+                                <%= item.description%>
+                            </td>
+                            <td>₹<%= item.price%>
+                            </td>
+                            <td>
+                                <a class="text-decoration-none" href="/admin/editproduct?id=<%= item._id%>">Edit</a>
+                                <a class="text-decoration-none" href="/admin/unlistproduct?id=<%= item._id%>"
+                                    onclick="return confirm ('Do You want to Unlist <%= item.productname%>')">Unlist</a>
+                                <a class="text-decoration-none" href="/admin/listproduct?id=<%= item._id%>"
+                                    onclick="return confirm ('Do You want to list <%= item.productname%>')">list</a>
+                            </td>
+                            <td>
+                                <% if( item.unlist==false){%>
+                                    <button class="btn-success">Active</button>
+                                    <%}else{%>
+                                        <button class="btn-danger">Unlisted</button>
+                                        <%}%>
+                            </td>
+
+                        </tr>
+
+                        <% i++ %>
+
+                            <%})%>
 
 
 
-                <!-- Footer -->
-                <%- include('../admin/layout/adminfooter.ejs') %>
-            <%- include('../admin/layout/adminscripts.ejs') %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal -->
+  
+
+
+
+
+    <!-- Footer -->
+    <%- include('../admin/layout/adminfooter.ejs') %>
+        <%- include('../admin/layout/adminscripts.ejs') %>
