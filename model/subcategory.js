@@ -9,6 +9,7 @@ const subcategorySchema=new mongoose.Schema({
     subcategoryname:{
         type:String,
         required:true,
+        trim: true,
     },
  
 });

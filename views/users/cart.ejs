@@ -32,7 +32,7 @@
 
 
                           <div class="col-md-2 col-lg-2 col-xl-2">
-                            <img style="height: 3rem; width: 4rem;" src="/<%= element?.productDetail?.image[0]%>"
+                            <img style="height: 3rem; width: 4rem;" src="/<%= element?.productDetail?.image1%>"
                               alt="">
                           </div>
                           <div class="col-md-3 col-lg-3 col-xl-3">
@@ -59,7 +59,7 @@
                                 <!-- <i class="ion-ios-add"></i> -->
                               </button>
                           </div>
-                          <% var a=element.productDetail.price %>
+                          <% var a=element?.productDetail?.price %>
                             <% var b=element.productQuantity %>
                               <% var c=a*b %>
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
@@ -68,7 +68,7 @@
                                   </h6>
                                 </div>
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                  <a href="/removeproduct/<%= element._id%>/<%= element.productDetail._id%>"
+                                  <a  type="button" onclick="removeProduct('<%= element?._id%>','<%= element?.productDetail?._id%>')"
                                     class="text-muted"><i class="fas fa-times"></i></a>
                                 </div>
                         </div>
@@ -110,20 +110,13 @@
                       </select>
                     </div>
 
-                    <!-- <h5 class="text-uppercase mb-3">Give code</h5> -->
-
-                    <!-- <div class="mb-5">
-                      <div class="form-outline">
-                        <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
-                        <label class="form-label" for="form3Examplea2">Enter your code</label>
-                      </div>
-                    </div> -->
+               
 
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between mb-5">
                       <h5 class="text-uppercase">Total price</h5>
-                      <h5 id="pricetotal">
+                      <h5 id="priceTotal">
                         <%=sum %>
                       </h5>
                     </div>
@@ -180,6 +173,7 @@
             if(newdata.zeroQuantity){
               document.getElementById(productId+"proline").remove();
               
+              
             }else{
            
             
@@ -191,16 +185,13 @@
             console.log(Number(nwquantity*price));
             document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
             document.getElementById(productId).value =nwquantity;
+            document.getElementById("pricetotal").innerHTML =newdata.sum;
+            document.getElementById("priceTotal").innerHTML =newdata.sum;
             }
           })
           .catch((error) => {
             console.error(error)
           })
-
-          // let quant=Number(quantity)+count;
-  
-          // document.getElementById(productId+"proprice").innerHTML = quant*price; 
-          // document.getElementById(productId).value =quant;
       }
 
       function changeQuantityMinus(cartId, productId, count,price,quantity) {
@@ -222,22 +213,21 @@
           .then((res) => res.json())
           .then((newdata) => {
             console.log("response in send then");
-            console.log(newdata.zeroQuantity,"asdfghwertghyuji");
+
             if(newdata.zeroQuantity){
               document.getElementById(productId+"proline").remove();
 
             }else{
             console.log("response in send then");
-            console.log(newdata,"asdfghwertghyuji");
-            
-            
+
             let nwquantity=newdata.newdata.product[0].quantity; 
             console.log(nwquantity);
             console.log(price);
             console.log(Number(nwquantity*price));
             document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
             document.getElementById(productId).value =nwquantity;
-            // document.getElementById("pricetotal").value =newdata.sum;
+            document.getElementById("pricetotal").innerHTML =newdata.sum;
+            document.getElementById("priceTotal").innerHTML =newdata.sum;
             }
             
           })
@@ -245,6 +235,36 @@
           .catch((error) => {
             console.error(error)
           })
+      }
+
+
+      function removeProduct(cartId,productId){
+        console.log("add to cart hello")
+            const requestOptions={
+                method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+                cartId:cartId,
+                productId:productId,
+            }
+          )
+            }
+        
+        console.log("here   ");
+        fetch('/removeproduct',requestOptions)
+        // .then((res)=>{res.json()})
+        .then((status)=>{
+            console.log(status)
+            if(status){
+
+              document.getElementById(productId+"proline").remove();
+               
+             
+            }
+        })
       }
 
 

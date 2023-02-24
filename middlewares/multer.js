@@ -12,8 +12,18 @@ const storage = multer.diskStorage({
             `productImages/${Date.now()}${path.extname(file.originalname)}.${ext}`
         );
     },
-})
+});
 
-const upload = multer({ storage: storage});
+const multerFilter=(req,file,res)=>{
+    if(file.mimetype.split('/')[1]==='jpeg'||
+    file.mimetype.split('/')[1]==='jpg'||
+    file.mimetype.split('/')[1]==='png'){
+        cb(null,true);
+    }else{
+        cb(new error("Not a jeg,png or jpg file!!"),false);
+    }
+}
+
+const upload = multer({ storage: storage,fileFilter:multerFilter});
 
 module.exports = upload;

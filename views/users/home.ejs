@@ -256,7 +256,7 @@
                             <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                                 <div class="product-item">
                                     <div class="position-relative bg-light overflow-hidden">
-                                        <img class="img-fluid w-100" src="/<%= element.image[0]%>" alt="">
+                                        <img class="img-fluid w-100" src="/<%= element.image1%>" alt="">
 
                                     </div>
                                     <div class="text-center p-4">
@@ -271,7 +271,7 @@
                                         </small>
                                         <% if(session){%> 
                                         <small class="w-50 text-center py-2">
-                                            <a class="text-body" href="/addcart/<%= element._id%>"><i 
+                                            <a class="text-body" type="button" onclick="addtoCart('<%= element._id%>')"><i 
                                                 class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
                                         </small>
                                         <%} else{ %> 
@@ -490,9 +490,46 @@
     <script src="/home/lib/easing/easing.min.js"></script>
     <script src="/home/lib/waypoints/waypoints.min.js"></script>
     <script src="/home/lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addtoCart(productId){
+            console.log("add to cart hello")
+            const requestOptions={
+                method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+                productId:productId,
+            }
+          )
+            }
+        
+        console.log("here   ");
+        fetch('/addcart',requestOptions)
+        // .then((res)=>{res.json()})
+        .then((success)=>{
+            
+            console.log("inside resonse")
+            if(success){
+                console.log("heyy succes")
+                Swal.fire({
+                title: "added successfully",
+                icon: "success",
+                confirmButtonText: "continue",
+              }).then(function () {
+                // location.reload()
+              });
+            }
+        })
+    }
+
+    </script>
 
     <!-- Template Javascript -->
     <script src="/home/js/main.js"></script>
 </body>
 
 </html>
+

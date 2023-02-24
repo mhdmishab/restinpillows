@@ -179,7 +179,7 @@
                                     <div class="block-4 text-center border">
                                         <figure class="block-4-image">
                                             <a href="/productView/<%=products._id%>"><img
-                                                    style="width:300px; height:225px" src="/<%= products.image[0]%>"
+                                                    style="width:300px; height:225px" src="/<%= products.image1%>"
                                                     alt="Image placeholder" class="img-fluid  rounded  p1"></a>
                                         </figure>
                                         <div class="block-4-text ">
@@ -203,7 +203,7 @@
                                                 </small>
                                                 <% if(session){%>
                                                     <small class="w-50 text-center py-2">
-                                                        <a class="text-body" href="/addcart/<%= products._id%>"><i
+                                                        <a class="text-body" type="button" onclick="addtoCart('<%= products._id%>')"><i
                                                                 class="fa fa-shopping-bag text-primary me-2"></i>Add to
                                                             cart</a>
                                                     </small>
@@ -225,6 +225,43 @@
                     </div>
                 </div>
     </body>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function addtoCart(productId){
+            console.log("add to cart hello")
+            const requestOptions={
+                method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(
+            {
+                productId:productId,
+            }
+          )
+            }
+        
+        console.log("here   ");
+        fetch('/addcart',requestOptions)
+        // .then((res)=>{res.json()})
+        .then((success)=>{
+            
+            console.log("inside resonse")
+            if(success){
+                console.log("heyy succes")
+                Swal.fire({
+                title: "added successfully",
+                icon: "success",
+                confirmButtonText: "continue",
+              }).then(function () {
+                // location.reload()
+              });
+            }
+        })
+    }
+
+    </script>
 
     <script>
 

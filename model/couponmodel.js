@@ -6,15 +6,23 @@ const couponSchema = new mongoose.Schema(
     {
         couponName:{
             type:String,
-            required:true
+            required:true,
+            trim: true,
         },
         discount:{
             type:Number,
-            required:true
+            required:true,
+            trim: true,
         },
         maxLimit:{
             type:Number,
-            required:true
+            required:true,
+            trim: true,
+        },
+        minAmount:{
+            type:Number,
+            required:true,
+            trim: true,
         },
         startDate:{
             type:String,

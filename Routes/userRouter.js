@@ -31,12 +31,20 @@ route.get('/logout',verifyuser,userController.userLogout);
 
 route.get('/error',userController.errorPage);
 
-route.get('/addcart/:id',verifyuser,userController.addCart);
+route.post('/addcart',verifyuser,userController.addCart);
 route.get('/viewcart',verifyuser,userController.viewCart);
 route.post('/changequantity',verifyuser,userController.changeQuantity)
-route.get('/removeproduct/:_id/:id',verifyuser,userController.deleteCartProd);
+route.post('/removeproduct',verifyuser,userController.deleteCartProd);
 route.get('/checkout',verifyuser,userController.checkOut);
+route.post('/placeOrder',verifyuser,userController.placeOrder);
+route.post('/applycoupon',verifyuser,userController.applyCoupon);
 route.post('/addnewaddress',verifyuser,userController.addNewAddress);
+
+
+
+route.get('/orderSuccess',verifyuser,userController.orderSuccess)
+route.post('/verifypayment',verifyuser,userController.verifyPayment);
+
 
 route.get('/profile',verifyuser,userController.userProfile);
 route.get('/profile/editprofile',verifyuser,userController.editProfile);

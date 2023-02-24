@@ -10,15 +10,17 @@ const orderSchema = new Schema(
         },
         name:{
             type:String,
-            requiredd:true
+            required:true,
+            
         },
         address:{
            type:String,
-           required:true
+           required:true,
+           
         },
         phoneNumber:{ 
             type:Number,
-            required:true
+            
         },
         orderItems:[
             {
@@ -30,10 +32,7 @@ const orderSchema = new Schema(
                     type:Number,
                     required:true
                 },
-                size: {
-                    type: Number,
-                    required: true,
-                },
+               
             }
         ],
         totalAmount:{

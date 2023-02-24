@@ -367,11 +367,13 @@ addCoupon: (req,res)=>{
       const data = req.body;
       const dis  = parseInt(data.discount);
       const maxLimit = parseInt(data.maxLimit);
+      const minAmount = parseInt(data.minAmount);
       const discount = dis/100;
       coupon.create({
         couponName:data.couponName,
         discount:discount,
         maxLimit:maxLimit,
+        minAmount:minAmount,
         expirationTime:data.expirationTime,
       }).then((data)=>{
         // console.log(data);
@@ -511,6 +513,77 @@ changeImage3:async(req,res)=>{
 
     }
 
+},
+
+orderStatusChanging:async(req,res)=>{
+    const id = req.params.id;
+    const data = req.body;
+    await order.updateOne(
+        {_id:id},
+        {
+            $set:{
+                orderStatus:data.orderStatus,
+                paymentStatus:data.paymentStatus,
+            }
+        }
+    )
+    res.redirect("/admin/orders");
+
+
+},
+
+getOrderedProduct:async (req,res)=>{
+    const id = req.params.id;
+  
+    const objId = mongoose.Types.ObjectId(id)
+    const productData = await order.aggregate([
+        {
+            $match:{_id:objId}
+        },
+        {
+            $unwind:"$orderItems"
+        },
+        {
+            $project:{
+                productItem:"$orderItems.productId",
+                productQuantity:"$orderItems.quantity",
+                address:1, 
+                name:1,
+                phoneNumber:1  
+            }
+        },
+        {
+            $lookup:{
+                from:"products",
+                localField:"productItem",
+                foreignField:"_id",
+                as:"productDetail"
+            }
+        },
+        {
+            $project:{
+                productItem:1,
+                productQuantity:1,
+                address:1,
+                name:1,
+                phoneNumber:1,
+                productDetail:{$arrayElemAt:["$productDetail",0]}
+            }
+        },
+        {
+            $lookup:{
+                from:'categories',
+                localField:'productDetail.category',
+                foreignField:"_id",
+                as:"category_name"
+            }
+        },
+        {
+            $unwind:"$category_name"
+        },
+
+    ]);
+    res.render('admin/orderedproduct',{productData})
 }
 
 

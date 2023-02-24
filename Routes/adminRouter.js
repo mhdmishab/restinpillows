@@ -11,6 +11,8 @@ adroute.post('/home',adminController.adminpost);
 
 
 adroute.get('/orders',verifyAdmin,adminController.getOrders);
+adroute.post('/orderStatuschange/:id',verifyAdmin,adminController.orderStatusChanging);
+adroute.get('/orderedProduct/:id',verifyAdmin,adminController.getOrderedProduct)
 
 
 

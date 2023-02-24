@@ -19,25 +19,32 @@ const profileSchema=new mongoose.Schema({
         {
          housename:{
             type:String,
-            
+            trim: true,
+
          },
          area:{
             type:String,
+            trim: true,
          },
-         landMark:{
+         landmark:{
             type:String,
+            trim: true,
          },
          district:{
             type:String,
+            trim: true,
          },
          postoffice:{
             type:String,
+            trim: true,
          },
          state:{
             type:String,
+            trim: true,
          },
          pin:{
             type:String,
+            trim: true,
          }
         }
     ],

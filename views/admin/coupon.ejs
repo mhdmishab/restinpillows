@@ -33,6 +33,11 @@
               </div>
 
               <div class="d-flex flex-column">
+                <label>Minimum Amount</label>
+                <input name="minAmount" required  class="rounded-2" style="width: 189px; height: 38px;" type="text">
+              </div>
+
+              <div class="d-flex flex-column">
                 <label>Expiry date</label>
                 <input type="date" required  class="rounded-2" style="width: 189px; height: 38px;"
                   class="form-control border-secondary" id="exdate" name="expirationTime"
@@ -51,6 +56,9 @@
             <tr>
               <th scope="col">No</th>
               <th scope="col">Coupon Code</th>
+              <th scope="col">Discount%</th>
+              <th scope="col">Maximum Limit</th>
+              <th scope="col">Minimum Amount</th>
               <th scope="col">Expiry date</th>
               <th scope="col">Controlls</th>
               <th scope="col">remove</th>
@@ -68,6 +76,16 @@
                   </td>
                   <td>
                     <%=element.couponName %>
+                  </td>
+                 
+                  <td>
+                    <%=element.discount %>
+                  </td>
+                  <td>
+                    <%=element.maxLimit %>
+                  </td>
+                  <td>
+                    <%=element.minAmount %>
                   </td>
                   <td>
                     <%=element.expirationTime %>
@@ -113,6 +131,12 @@
                                   <input name="maxLimit" required  value="<%= element.maxLimit%>" class="rounded-2" style="width: 189px; height: 38px;"
                                     type="text">
                                 </div>
+
+                                <div class="d-flex flex-column">
+                                    <label>Minimum Amount</label>
+                                    <input name="maxLimit" required  value="<%= element.minAmount%>" class="rounded-2" style="width: 189px; height: 38px;"
+                                      type="text">
+                                  </div>
   
                                 <div class="d-flex flex-column">
                                   <label>Expiry date</label>

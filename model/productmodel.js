@@ -18,7 +18,8 @@ const productSchema=new mongoose.Schema({
         },
     productname:
         {type:String,
-        required:true},
+        required:true,
+        trim: true,},
     category:
         {type:mongoose.SchemaTypes.ObjectId,
         ref:"categorys"},
@@ -33,7 +34,8 @@ const productSchema=new mongoose.Schema({
         required:true},
     price:{
         type:Number,
-        required:true},
+        required:true,
+        trim: true,},
     unlist:{type:Boolean,default:false,required:true}
     
 
