@@ -1,0 +1,139 @@
+<%- include ('../users/layout/header.ejs') %>
+    <div style="height: 7em; width: 100%;"></div>
+
+
+
+    <section class="sec-product-detail bg0 p-t-65 p-b-60">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-lg-7 p-b-30">
+                    <div class="p-l-25 p-r-30 p-lr-0-lg">
+                        <div class="wrap-slick3 flex-sb flex-w">
+                            <div class="wrap-slick3-dots"></div>
+                            <div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
+
+                            <%product.forEach(element=> {%>
+
+
+
+                                <div class="slick3 gallery-lb">
+                                    <div class="item-slick3" data-thumb="/<%= element?.image1%>">
+                                        <div class="wrap-pic-w pos-relative">
+                                            <img src="/<%= element?.image1%>" alt="IMG-PRODUCT">
+
+                                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                                href="/<%=element?.image1%>">
+                                                <i class="fa fa-expand"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="item-slick3" data-thumb="/<%= element?.image2%>">
+                                        <div class="wrap-pic-w pos-relative">
+                                            <img src="/<%= element?.image2%>" alt="IMG-PRODUCT">
+
+                                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                                href="/<%=element?.image2%>">
+                                                <i class="fa fa-expand"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="item-slick3" data-thumb="/<%=element?.image3%>">
+                                        <div class="wrap-pic-w pos-relative">
+                                            <img src="/<%=element?.image3%>" alt="IMG-PRODUCT">
+
+                                            <a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04"
+                                                href="/<%=element?.image3%>">
+                                                <i class="fa fa-expand"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5 p-b-30">
+                    <div class="p-r-50 p-t-5 p-lr-0-lg">
+                        <h4 class="mtext-105 cl2 js-name-detail p-b-14">
+                            <%=element.productname%>
+                        </h4>
+
+                        <span class="mtext-106 cl2">
+                            <%=element.price%>
+                        </span>
+
+                        <p class="stext-102 cl3 p-t-23">
+                            <%=element.description%>
+                        </p>
+
+
+
+                        <div class="flex-w flex-r-m p-b-10">
+                            <div class="size-204 flex-w flex-m respon6-next">
+
+
+                                    <% if(session){%>
+
+                                        <a class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail text-white mt-5"
+                                        type="button" onclick="addtoCart('<%= element._id%>')">Add to cart</a>
+
+                                    <%} else{ %>
+
+                                            <a class="flex-c-m stext-101 cl0 size-101 bg1 bor1 hov-btn1 p-lr-15 trans-04 js-addcart-detail text-white mt-5"
+                                            href="/userlogin">
+                                            Add to cart</a>
+
+                                    <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <%})%>
+
+                        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <script>
+                            function addtoCart(productId) {
+                                console.log("add to cart hello")
+                                const requestOptions = {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                    },
+                                    body: JSON.stringify(
+                                        {
+                                            productId: productId,
+                                        }
+                                    )
+                                }
+
+                                console.log("here   ");
+                                fetch('/addcart', requestOptions)
+                                    // .then((res)=>{res.json()})
+                                    .then((success) => {
+
+                                        console.log("inside resonse")
+                                        if (success) {
+                                            console.log("heyy succes")
+                                            Swal.fire({
+                                                title: "added successfully",
+                                                icon: "success",
+                                                confirmButtonText: "continue",
+                                            }).then(function () {
+                                                // location.reload()
+                                            });
+                                        }
+                                    })
+                            }
+
+                        </script>
+
+
+
+
+
+
+
+
+
+                        <%- include ('../users/layout/script.ejs') %>

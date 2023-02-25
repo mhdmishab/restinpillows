@@ -8,7 +8,7 @@ const verifyuser=userSession.verifyUser;
 
 route.get('/',userController.home);
 route.get('/userlogin',userSession.verifyLoginUser,userController.userLogin);
-route.get('/userprofile',verifyuser,userController.userProfile);
+
 
 
 
@@ -32,6 +32,7 @@ route.get('/logout',verifyuser,userController.userLogout);
 route.get('/error',userController.errorPage);
 
 route.post('/addcart',verifyuser,userController.addCart);
+route.get('/viewProduct/:id',userController.productDetail);
 route.get('/viewcart',verifyuser,userController.viewCart);
 route.post('/changequantity',verifyuser,userController.changeQuantity)
 route.post('/removeproduct',verifyuser,userController.deleteCartProd);
@@ -47,14 +48,15 @@ route.post('/verifypayment',verifyuser,userController.verifyPayment);
 
 
 route.get('/profile',verifyuser,userController.userProfile);
-route.get('/profile/editprofile',verifyuser,userController.editProfile);
+route.get('/editprofile',verifyuser,userController.editProfile);
 route.post('/postEditProfile',verifyuser,userController.postEditProfile);
 route.post('/postEditAddress',verifyuser,userController.postEditAddress);
+route.post('/changePassword',verifyuser,userController.changeProfilePass);
 
 // route.post('/getsubcategories',verifyuser,userController.getSubcategory)
 
-route.use('/sortproducts',userController.sortProducts)
-route.use('/filterproducts/:name',userController.filterProducts);
+route.post('/sortproducts',userController.sortProducts)
+route.post('/filterproducts',userController.filterProducts);
 route.use('/dosearch',userController.doSearch);
 
 

@@ -1,8 +1,9 @@
 <%- include ('../users/layout/header.ejs') %>
 
 
+
   <section class="h-100 h-custom container-fluid"
-    style="background-image: url('/img/loginpic.jpg');  background-repeat: no-repeat; background-size: cover;">
+    style="background-image: url('');  background-repeat: no-repeat; background-size: cover;">
     <div style="height: 7rem; width: 100%;"></div>
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
@@ -49,10 +50,11 @@
                               <!-- <i class="ion-ios-remove"></i> -->
                             </button>
                             </span>
-                            <input type="text" id="<%= element?.productDetail?._id %>" name="quantity"
-                              class="quantity form-control input-number" value="<%=element.productQuantity%>" min="1"
-                              max="100">
-                            <span class="input-group-btn ml-2">
+                         
+                              <h5  type="Number" id="<%= element?.productDetail?._id %>" name="quantity"
+                                class="quantity form-control input-number " ><%=element?.productQuantity%> </h5>
+                                
+                            <span class="input-group-btn ">
                               <button type="button"
                                 onclick="changeQuantityPlus('<%= element?._id %>','<%= element?.productDetail?._id %>',1,'<%=element?.productDetail?.price %>','<%=element?.productQuantity%>')"
                                 class="form-control">+
@@ -66,6 +68,7 @@
                                   <h6 class="mb-0" id="<%= element?.productDetail?._id %>proprice">
                                     <%=c  %>
                                   </h6>
+                                  
                                 </div>
                                 <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                   <a  type="button" onclick="removeProduct('<%= element?._id%>','<%= element?.productDetail?._id%>')"
@@ -184,7 +187,7 @@
             console.log(price);
             console.log(Number(nwquantity*price));
             document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
-            document.getElementById(productId).value =nwquantity;
+            document.getElementById(productId).innerHTML =nwquantity;
             document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
             }
@@ -225,7 +228,7 @@
             console.log(price);
             console.log(Number(nwquantity*price));
             document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
-            document.getElementById(productId).value =nwquantity;
+            document.getElementById(productId).innerHTML =nwquantity;
             document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
             }

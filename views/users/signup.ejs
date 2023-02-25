@@ -108,7 +108,7 @@ function submitform(){
     }
     if(email.value==="" ){
         
-        showErrorMessage("Username is Required");
+        showErrorMessage("Email is Required");
         return false;
     }
     if(password.value===""){
@@ -116,14 +116,14 @@ function submitform(){
         showErrorMessage("Password is Required");
         return false;
     }
-    if(email.value==="" && password.value===""){
+    if(email.value==="" || password.value===""){
         
-        showErrorMessage("Name and Password is Required");
+        showErrorMessage("email and Password is Required");
         return false;
     }
     if(fullname.value==="" ){
         
-        showErrorMessage("Name and Password is Required");
+        showErrorMessage("Name  is Required");
         return false;
     }
 

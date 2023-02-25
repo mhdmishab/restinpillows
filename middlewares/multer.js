@@ -14,9 +14,10 @@ const storage = multer.diskStorage({
     },
 });
 
-const multerFilter=(req,file,res)=>{
+const multerFilter=(req,file,cb)=>{
     if(file.mimetype.split('/')[1]==='jpeg'||
     file.mimetype.split('/')[1]==='jpg'||
+    file.mimetype.split('/')[1]==='webp'||
     file.mimetype.split('/')[1]==='png'){
         cb(null,true);
     }else{

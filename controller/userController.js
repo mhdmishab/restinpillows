@@ -67,7 +67,7 @@ let msg = "";
 module.exports = {
     home: async (req, res) => {
         let session = req.session.email;
-        let products = await myProduct.find({});
+        let products = await myProduct.find({}).populate("category").limit(6);
 
 
         res.render('users/home', { session, products });
@@ -164,7 +164,7 @@ module.exports = {
 
 
             const myUser = req.body;
-         
+
             let user = await myDb.users.findOne({ email: req.body.email });
             if (user) {
                 res.redirect('/signup');
@@ -257,6 +257,7 @@ module.exports = {
     forgotPassword: (req, res) => {
         res.render('users/forgetpass');
     },
+
     forgotPass: async (req, res) => {
         console.log(req.body);
         let user = await myDb.users.findOne({ email: req.body.email });
@@ -269,12 +270,14 @@ module.exports = {
             res.redirect('/error');
         }
     },
+
     otpForgot: (req, res) => {
         const userInfo = req.query;
         console.log(userInfo);
         res.render('users/otpforgot', { userInfo });
 
     },
+
     otpForgotpost: async (req, res) => {
         try {
             await myDb.users.updateOne({ email: req.body.email }, { $set: ({ password: req.body.newpassword }) });
@@ -295,7 +298,7 @@ module.exports = {
 
                             myDetails.save().then(item => {
                                 req.session.email = myDetails.email;
-                                res.redirect('/userprofile')
+                                res.redirect('/profile')
                             })
                                 .catch(err => {
                                     console.log("unable to save to database");
@@ -326,6 +329,7 @@ module.exports = {
             res.redirect('/error');
         }
     },
+
 
     addCart: async (req, res) => {
         console.log("inside add cart controlleer");
@@ -473,6 +477,46 @@ module.exports = {
         }
 
 
+    },
+
+    changeProfilePass: async(req,res)=>{
+        try{
+        const session = req.session.email;
+        const oldPassword= req.body.oldpassword;
+        const newPassword= await bcrypt.hash(req.body.newpassword, 10);
+        let userData = await myDb.users.findOne({ email: session });
+        let userProfile = await profile.findOne({ email: session });
+
+        bcrypt.compare(userData.password,oldPassword).then(async(status) => {
+
+            if(status){
+                    await myDb.users.updateOne({email:session},{$set:{password:newPassword}});  
+                     let msg="password changed successfully";
+                     res.render('users/profile', { session, userData, userProfile,msg })
+            
+                    msg="";
+        }else{
+            let msg="password change failed,Invalid old password";
+            res.render('users/profile', { session, userData, userProfile,msg })
+            msg="";
+        }
+
+    })
+
+    }catch(err){
+        console.error('change password error');
+        res.redirect('/error')
+    }
+
+        
+
+        
+
+        
+      
+           
+      
+        
     },
 
     editProfile: async (req, res) => {
@@ -820,11 +864,44 @@ module.exports = {
     },
 
     getShop: async (req, res) => {
+        // const session = req.session.email;
+        // const category = await myCategory.find({});
+        // const product = await myProduct.find({ unlist: false }).populate('category');
+        // let productCount = await myProduct.find({ unlist: false }).count();
+        // res.render('users/shop', { session, product, category, productCount });
+
+
         const session = req.session.email;
         const category = await myCategory.find({});
-        const product = await myProduct.find({ unlist: false }).populate('category');
-        let productCount = await myProduct.find({ unlist: false }).count();
-        res.render('users/shop', { session, product, category, productCount });
+        const page = parseInt(req.query.page) || 1;
+        const limit = parseInt(req.query.limit) || 10;
+        const startIndex = (page - 1) * limit;
+        const endIndex = page * limit;
+
+        const product = await myProduct.find({ unlist: false })
+            .populate('category')
+            .skip(startIndex)
+            .limit(limit)
+            .exec();
+
+        const productCount = await myProduct.countDocuments({ unlist: false });
+
+        const results = {};
+        if (endIndex < productCount) {
+            results.next = {
+                page: page + 1,
+                limit: limit
+            };
+        }
+
+        if (startIndex > 0) {
+            results.previous = {
+                page: page - 1,
+                limit: limit
+            };
+        }
+
+        res.render('users/shop', { session, product, category, results });
 
     },
 
@@ -844,31 +921,31 @@ module.exports = {
 
         try {
             let session = req.session.email;
-            let products = await myProduct.find({ unlist: false });
-            const category = await myCategory.find({});
-            let sortedProducts = [];
+            let products = await myProduct.find({ unlist: false }).populate('category');
+            let sortedProducts;
             let product;
 
-            let sortby = req.query.sortby;
+            let sortby = req.body.sortby;
 
-            if (sortby === "asending") {
+            if (sortby == "asending") {
                 sortedProducts = products.sort((a, b) => a.productname.localeCompare(b.productname));
                 product = sortedProducts;
-                res.render('users/shop', { session, product, category });
+                res.json({ product, session })
 
-            } else if (sortby === "decending") {
+            } else if (sortby == "decending") {
                 sortedProducts = products.sort((a, b) => b.productname.localeCompare(a.productname));
                 product = sortedProducts;
+                res.json({ product, session })
             } else if (sortby === "price_asc") {
                 sortedProducts = products.sort((a, b) => a.price - b.price);
                 product = sortedProducts;
+                res.json({ product, session })
             } else if (sortby === "price_des") {
                 sortedProducts = products.sort((a, b) => b.price - a.price);
                 product = sortedProducts;
-            } else {
-                res.redirect('/getshop');
+                res.json({ product, session })
             }
-            res.render('users/shop', { session, product, category });
+
         } catch (err) {
             res.redirect('/error');
         }
@@ -881,45 +958,17 @@ module.exports = {
 
     filterProducts: async (req, res) => {
         let session = req.session.email;
+
         try {
-            let products = await myProduct.find({ unlist: false });
-            const category = await myCategory.find({});
-            let filteredProducts = [];
-            let product;
-            console.log(req.params.name);
+            console.log("hey filter")
+            let products = await myProduct.find({ unlist: false, category: req.body.categoryId }).populate('category');
+
+            console.log("heyy", products);
+
+            res.status(200).send({ products, session });
 
 
 
-            if (req.params.name == "category") {
-                console.log("respod is here");
-
-                let selectedCategories = req.query.categorys || [];
-
-
-                console.log(selectedCategories);
-                // filteredProducts=products.filter(product=>{
-                //     console.log(product.category);
-                //     return (product.category.Some(category => selectedCategories.includes(category)))
-
-                // });
-
-                filteredProducts = products.filter(product => selectedCategories.includes(product.category));
-
-                product = filteredProducts;
-            } else if (req.params.name == "price") {
-
-                let min = req.query.min || 0;
-                let max = req.query.max || 10000;
-
-                filteredProducts = products.filter(product => {
-                    return product.price >= min && product.price <= max;
-                });
-
-                product = filteredProducts;
-            } else {
-                res.redirect('/getshop');
-            }
-            res.render('users/shop', { session, product, category });
         } catch (err) {
             res.redirect('/error');
         }
@@ -1249,9 +1298,22 @@ module.exports = {
 
         }
 
-    }
+    },
+
+    productDetail: async (req, res) => {
+        let session = req.session.email;
+        const productId = req.params.id;
+        console.log(productId);
+
+        const product = await myProduct.find({ _id: productId });
+        console.log(product)
 
 
+        res.render('users/productDetail', { session, product })
+
+    },
+
+    
 
 
 

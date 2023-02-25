@@ -170,7 +170,7 @@ module.exports={
         const Id=req.query.id;
         console.log(Id);
         try{
-        let item= await products.findOne({_id:Id});
+        let item= await products.findOne({_id:Id}).populate("category");
         let category= await myCategory.find({});
         let subcategory= await mySubcategory.find({});
 

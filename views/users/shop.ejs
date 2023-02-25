@@ -1,132 +1,69 @@
 <%- include ('../users/layout/header.ejs') %>
     <div style="height: 10rem; width: 100%;"></div>
 
-    <body>
 
 
 
-        <div class="site-section d-flex">
-            <div class=" left-container d-flex flex-column align-items-top  ">
 
-                <div class="m-3" style="background-color: white;">
+    <!-- Product -->
+    <div class="bg0 m-t-23 p-b-140">
+        <div class="container">
+            <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
 
+                <ul class="nav nav-pills d-inline-flex justify-content-end mb-3">
+                    <li class="nav-item me-2">
+                        <% var sortby="price_des" %>
+                            <a class="btn btn-outline-dark border-2  active" data-bs-toggle=""
+                                onclick="sort('<%= sortby%>')">Price-high to low
 
-                <article class="filter-group ">
-                    <header class="card-header" style="background-color: #05496c;">
-                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside4"
-                            aria-expanded="false" >Categories<i class="icon-control ms-5 fa fa-chevron-down"></i></a>
-                    </header>
-                    
-                </article>
+                            </a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <% var sortby="price_asc" %>
+                            <a class="btn btn-outline-dark border-2  active" data-bs-toggle=""
+                                onclick="sort('<%= sortby%>')">Price-low to high
 
-                <div class="collapse" id="collapse_aside4">
-                    <% var filter="category" %> 
-                    <form action="/filterproducts/<%= filter %>  " method="get">
-                    <div class="card card-body ms-1">
-                        <ul class="">
-                            <% category.forEach(item=>{%>
-                               <input class="form-check-input" type="checkbox" name="categorys" value="<%=item._id %>"><%=item.categoryname  %><br>
-                            <% }) %>
-                        </ul>
-                        <button class="btn btn-light w-100" type="submit">Apply</button>
-                    </div>
-                </form>
-                </div>
+                            </a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <% var sortby="asending" %>
+                            <a class="btn btn-outline-dark border-2  active" data-bs-toggle=""
+                                onclick="sort('<%= sortby%>')">Alphabet- A-Z
 
+                            </a>
+                    </li>
+                    <li class="nav-item me-2">
+                        <% var sortby="decending" %>
+                            <a class="btn btn-outline-dark border-2  active" data-bs-toggle=""
+                                onclick="sort('<%= sortby%>')">Alphabet- Z-A
 
-                <article class="filter-group">
-                    <header class="card-header" style="background-color: #05496c;">
-                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside2"
-                            aria-expanded="false">Subcategory<i class="icon-control ms-5 fa fa-chevron-down"></i></a>
-                    </header>
-                    
-                </article>
-
-                <div class="collapse" id="collapse_aside2">
-                    <div class="card card-body">
-                        <!-- <label class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" value="checked">
-                            <span class="form-check-label">
-                                <ul class="rating stars">
-                                    <li class="stars-active" style="width: 100%;">
-                                    <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/misc/stars-active.svg" alt="">
-                                    </li>
-                                    <li>
-                                        <img src="https://bootstrap-ecommerce.com/bootstrap5-ecommerce/images/misc/starts-disable.svg" alt="">
-                                    </li>
-                                </ul>
-                            </span>
-                        </label> -->
-                    
-                        <label class="form-check mb-2">
-                            <input class="form-check-input" type="checkbox" value="checked">
-                        </label>
-                        
-                    </div>
-                </div>
-
-                <article class="filter-group">
-                    <header class="card-header " style="background-color: #05496c;">
-                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside3"
-                            aria-expanded="false">#<i class="icon-control  ms-5 fa fa-chevron-down"></i></a>
-                    </header>
-                    
-                </article>
-
-                <div class="collapse" id="collapse_aside3">
-                    <div class="card card-body">
-                        <a><button class="btn btn-light w-100" type="submit">Reset</button></a>
-                    </div>
-                </div>
+                            </a>
+                    </li>
 
 
-                <article class="filter-group">
-                    <header class="card-header " style="background-color: #05496c;">
-                        <a class="btn mx-5 text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#collapse_aside1"
-                            aria-expanded="false">Price<i class="icon-control ms-5 fa fa-chevron-down"></i></a>
-                    </header>
-                    
-                </article>
-
-                <div class="collapse" id="collapse_aside1">
-                    <div class="card card-body">
-                        <!-- <input type="range" class="form-range" min="0" max="100"> -->
-                        
-                    </div>
-                    <% var filter="price" %> 
-                    <form method="get" action="/filterproducts/<%=filter  %> ">
-                    <div class="row mb-3">
-                        
-                        <div class="col-6">
-                            <label for="min" class="form-label">Min</label>
-                            <input class="form-control" id="min" placeholder="₹0" type="number" name="min">
-                        </div>
-                        <div class="col-6">
-                            <label for="max" class="form-label">Max</label>
-                            <input class="form-control" id="min" placeholder="₹10000" type="number" name="max">
-                        </div>
-                    </div>
-                    <button class="btn btn-light w-100" type="submit">Apply</button>
-                
-                </div>
-            </form>
-            <div>
-                <% var filter="reset" %>
-            <a href="/filterproducts/<%=filter  %> "><button class="btn btn-light w-100" type="submit">Reset</button></a>
-            </div>
-           
-
-                
+                </ul>
 
 
-            </div>
-
-                
-
-                
+                <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
 
 
 
+
+                    <% category.forEach(item=>{%>
+
+
+
+                        <li class="nav-item me-2">
+                            <a class="btn btn-outline-primary border-2  active" data-bs-toggle=""
+                                onclick="filterCategory('<%=item._id %>')">
+                                <%=item.categoryname %>
+                            </a>
+                        </li>
+
+
+
+                        <%})%>
+                </ul>
 
 
 
@@ -134,141 +71,103 @@
 
 
 
-            <div class="container ">
+            <% if (product.length) { %>
 
+                <div class="row isotope-grid" id="products-container">
+                    <% product?.forEach((products)=>{ %>
+                        <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                            <!-- Block2 -->
+                            <div class="block2">
+                                <div class="block2-pic hov-img0">
+                                    <img src="/<%= products.image1%>" alt="IMG-PRODUCT">
 
-                <div class="row mb-5">
-                    <div class="col-md-9 order-2">
-
-                        <div class="row">
-                            <div class="col-md-12 mb-5">
-                                <div class="float-md-left mb-4">
-                                    <small class="text-black ">Explore Products</small>
+                                    <a href="/viewProduct/<%=products._id%>"
+                                        class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
+                                        View
+                                    </a>
                                 </div>
-                                <div class="d-flex">
-                                    <div class="dropdown mr-1 ml-md-auto">
-                                        <div class="btn-group m-2">
-                                            <button type="button" class="btn text-white" style="background-color: #05496c;">Reference</button>
-                                            <button type="button"
-                                                class="text-white  dropdown-toggle dropdown-toggle-split"
-                                                id="dropdownMenuReference" data-bs-toggle="dropdown"
-                                                aria-expanded="false" data-bs-reference="parent" style="background-color: #05496c;border:#05496c;">
-                                                <span class="visually-hidden">Toggle Dropdown</span>
-                                            </button>
-                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuReference">
-                                                <li><a class="dropdown-item" href="sortproducts?sortby=all">All</a></li>
-                                                <li><a class="dropdown-item" href="sortproducts?sortby=asending">Name, A to Z</a></li>
-                                                <li><a class="dropdown-item" href="sortproducts?sortby=decending">Name, Z to A</a></li>
-                                                <li>
-                                                    <hr class="dropdown-divider">
-                                                </li>
-                                                <li><a class="dropdown-item" href="sortproducts?sortby=price_asc">Price,low to high</a></li>
-                                                <li><a class="dropdown-item" href="sortproducts?sortby=price_des">Price,high to low</a></li>
-                                            </ul>
-                                        </div>
 
+                                <div class="block2-txt flex-w flex-t p-t-14">
+                                    <div class="block2-txt-child1 flex-col-l ">
+                                        <a href="/viewProduct/<%=products._id%>"
+                                            class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                            <%= products.productname %>
+                                        </a>
+                                        <a href="/viewProduct/<%=products._id%>"
+                                            class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                            <%= products.category.categoryname %>
+                                        </a>
+
+                                        <span class="stext-105 cl3">
+                                            ₹<%= products.price %>
+                                        </span>
                                     </div>
 
+                                    <div class="block2-txt-child2 flex-r p-t-3">
+                                        <% if(session){%>
+                                            <small class="w-50 text-center py-2">
+                                                <a class="text-body" type="button"
+                                                    onclick="addtoCart('<%= products._id%>')"><i
+                                                        class="fa fa-shopping-bag text-black me-2"></i>Add</a>
+                                            </small>
+                                            <%} else{ %>
+                                                <small class="w-50 text-center py-2">
+                                                    <a class="text-body" href="/userlogin"><i
+                                                            class="fa fa-shopping-bag text-primary me-2"></i>Add</a>
+                                                </small>
+                                                <% } %>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        <% }) %>
+                </div>
 
-                        <div class="row mb-5">
-                            <% product?.forEach((products)=>{ %>
-                                <div class="col-sm-6 col-lg-4 mb-4" data-aos="fade-up">
-                                    <div class="block-4 text-center border">
-                                        <figure class="block-4-image">
-                                            <a href="/productView/<%=products._id%>"><img
-                                                    style="width:300px; height:225px" src="/<%= products.image1%>"
-                                                    alt="Image placeholder" class="img-fluid  rounded  p1"></a>
-                                        </figure>
-                                        <div class="block-4-text ">
-                                            <h3><a href="/productView/<%=products._id%>">
-                                                    <%= products.productname %>
-                                                </a></h3>
-                                            <p class="">
-                                                <%= products.category.categoryname %>
-                                            </p>
-                                            <p class="">
-                                                <%= products.description %>
-                                            </p>
-                                            <p class="text-primary font-weight-bold">
-                                                <%= products.price %>₹
-                                            </p>
-                                            <div class="d-flex border-top">
-                                                <small class="w-50 text-center border-end py-2">
-                                                    <a class="text-body" href=""><i
-                                                            class="fa fa-eye text-primary me-2"></i>View
-                                                        detail</a>
-                                                </small>
-                                                <% if(session){%>
-                                                    <small class="w-50 text-center py-2">
-                                                        <a class="text-body" type="button" onclick="addtoCart('<%= products._id%>')"><i
-                                                                class="fa fa-shopping-bag text-primary me-2"></i>Add to
-                                                            cart</a>
-                                                    </small>
-                                                    <%} else{ %>
-                                                        <small class="w-50 text-center py-2">
-                                                            <a class="text-body" href="/userlogin"><i
-                                                                    class="fa fa-shopping-bag text-primary me-2"></i>Add
-                                                                to cart</a>
-                                                        </small>
-                                                        <% } %>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <% }) %>
+                <% if (results.previous || results.next) { %>
+                    <div class="d-flex justify-content-around">
+                        <% if (results.previous) { %>
+                            <a class=" me-4" style="color: black;"
+                                href="/getshop?page=<%= results.previous.page %>&limit=<%= results.previous.limit %>">Previous</a>
+                            <% } %>
+
+                                <% if (results.next) { %>
+                                    <a  class=" ms-5" style="color: black;"
+                                        href="/getshop?page=<%= results.next.page %>&limit=<%= results.next.limit %>">Next</a>
+                                    <% } %>
+                    </div>
+                    <% } %>
+
+                        <div class="flex-c-m flex-w w-full p-t-45">
+                            <a href="#" class="flex-c-m stext-101 cl5 size-103 bg2 bor1 hov-btn1 p-lr-15 trans-04">
+                                Load More
+                            </a>
                         </div>
 
+                        <% } else { %>
+                            <p>No products found</p>
+                            <% } %>
 
-                    </div>
-                </div>
-    </body>
+
+
+
+                                <!-- Block2 -->
+
+
+
+
+                                <!-- Load more -->
+
+        </div>
+    </div>
+
+
+
+
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function addtoCart(productId){
+        function addtoCart(productId) {
             console.log("add to cart hello")
-            const requestOptions={
-                method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(
-            {
-                productId:productId,
-            }
-          )
-            }
-        
-        console.log("here   ");
-        fetch('/addcart',requestOptions)
-        // .then((res)=>{res.json()})
-        .then((success)=>{
-            
-            console.log("inside resonse")
-            if(success){
-                console.log("heyy succes")
-                Swal.fire({
-                title: "added successfully",
-                icon: "success",
-                confirmButtonText: "continue",
-              }).then(function () {
-                // location.reload()
-              });
-            }
-        })
-    }
-
-    </script>
-
-    <script>
-
-
-
-        document.querySelector("#category-select").addEventListener("change", function () {
-            const selectedCategory = this.value;
             const requestOptions = {
                 method: 'POST',
                 headers: {
@@ -276,29 +175,189 @@
                 },
                 body: JSON.stringify(
                     {
-                        category: selectedCategory,
+                        productId: productId,
                     }
                 )
             }
-            fetch(window.location.origin + '/getsubcategories', requestOptions).then((res) => res.json())
 
+            console.log("here   ");
+            fetch('/addcart', requestOptions)
+                // .then((res)=>{res.json()})
+                .then((success) => {
 
-                .then(subcategories => {
-                    const subcategoryList = document.querySelector("#subcategory-select");
-                    subcategoryList.innerHTML = "";
-                    console.log(subcategories);
-                    subcategories.forEach(subcategory => {
-                        const option = document.createElement("option");
-                        option.value = subcategory._id;
-                        option.textContent = subcategory.subcategoryname;
-                        subcategoryList.appendChild(option);
-                    });
-
-                }).catch((err) => {
-                    console.log("subcategory management error");
-                    res(window.location.origin + '/error')
+                    console.log("inside resonse")
+                    if (success) {
+                        console.log("heyy succes")
+                        Swal.fire({
+                            title: "added successfully",
+                            icon: "success",
+                            confirmButtonText: "continue",
+                        }).then(function () {
+                            // location.reload()
+                        });
+                    }
                 })
-        });
+        }
+
+    </script>
+
+    <script>
+
+
+
+        function filterCategory(categoryId) {
+            const productsContainer = document.getElementById('products-container');
+
+            console.log("filter category fetch")
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        categoryId: categoryId,
+
+                    }
+                )
+            }
+            console.log("here  inside ");
+            fetch('/filterproducts', requestOptions)
+                .then((response) => response.json())
+                .then((response) => {
+                    console.log(response.products)
+                    console.log("inside response")
+
+                    // clear previous content of the container element
+                    productsContainer.innerHTML = '';
+
+                    // add the filtered product elements to the container element
+                    response.products.forEach(product => {
+                        const productElement = document.createElement('div');
+                        productElement.classList.add('col-sm-6', 'col-md-4', 'col-lg-3', 'p-b-35', 'isotope-item', 'women');
+                        productElement.innerHTML = `
+        <!-- Block2 -->
+        <div class="block2">
+          <div class="block2-pic hov-img0">
+            <img src="/${product.image1}" alt="IMG-PRODUCT">
+            <a href="/viewProduct/${product._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+              View
+            </a>
+          </div>
+          <div class="block2-txt flex-w flex-t p-t-14">
+            <div class="block2-txt-child1 flex-col-l">
+              <a href="/viewProduct/${product._id}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                ${product.productname}
+              </a>
+              <a href="/viewProduct/${product._id}"
+                class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                ${product.category.categoryname}
+            </a>
+              <span class="stext-105 cl3">
+                ₹${product.price}
+              </span>
+            </div>
+            <div class="block2-txt-child2 flex-r p-t-3">
+              ${response.session ? `
+                <small class="w-50 text-center py-2">
+                  <a class="text-body" type="button" onclick="addtoCart('${product._id}')">
+                    <i class="fa fa-shopping-bag text-black me-2"></i>Add
+                  </a>
+                </small>
+              ` : `
+                <small class="w-50 text-center py-2">
+                  <a class="text-body" href="/userlogin">
+                    <i class="fa fa-shopping-bag text-primary me-2"></i>Add
+                  </a>
+                </small>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+                        productsContainer.appendChild(productElement);
+                    })
+
+                });
+        }
+
+
+
+        function sort(sortby) {
+            const productsContainer = document.getElementById('products-container');
+
+            console.log("sort fetch")
+            const requestOptions = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(
+                    {
+                        sortby: sortby,
+
+                    }
+                )
+            }
+            console.log("here  inside ");
+            fetch('/sortproducts', requestOptions)
+                .then((response) => response.json())
+                .then((response) => {
+                    console.log(response.product)
+                    console.log("inside response")
+
+                    // clear previous content of the container element
+                    productsContainer.innerHTML = '';
+
+                    // add the filtered product elements to the container element
+                    response.product.forEach(product => {
+                        const productElement = document.createElement('div');
+                        productElement.classList.add('col-sm-6', 'col-md-4', 'col-lg-3', 'p-b-35', 'isotope-item', 'women');
+                        productElement.innerHTML = `
+        <!-- Block2 -->
+        <div class="block2">
+          <div class="block2-pic hov-img0">
+            <img src="/${product.image1}" alt="IMG-PRODUCT">
+            <a href="/viewProduct/${product._id}" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04">
+              View
+            </a>
+          </div>
+          <div class="block2-txt flex-w flex-t p-t-14">
+            <div class="block2-txt-child1 flex-col-l">
+              <a href="/viewProduct/${product._id}" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                ${product.productname}
+              </a>
+              <a href="/viewProduct/${product._id}"
+                class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                ${product.category.categoryname}
+            </a>
+              <span class="stext-105 cl3">
+                ₹${product.price}
+              </span>
+            </div>
+            <div class="block2-txt-child2 flex-r p-t-3">
+              ${response.session ? `
+                <small class="w-50 text-center py-2">
+                  <a class="text-body" type="button" onclick="addtoCart('${product._id}')">
+                    <i class="fa fa-shopping-bag text-black me-2"></i>Add
+                  </a>
+                </small>
+              ` : `
+                <small class="w-50 text-center py-2">
+                  <a class="text-body" href="/userlogin">
+                    <i class="fa fa-shopping-bag text-primary me-2"></i>Add
+                  </a>
+                </small>
+              `}
+            </div>
+          </div>
+        </div>
+      `;
+                        productsContainer.appendChild(productElement);
+                    })
+
+                });
+        }
 
 
 
@@ -312,6 +371,6 @@
 
 
 
-    <%- include ('../users/layout/footer.ejs') %>
 
-        <%- include ('../users/layout/script.ejs') %>
+
+    <%- include ('../users/layout/script.ejs') %>

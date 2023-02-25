@@ -30,6 +30,41 @@
 
     <!-- Template Stylesheet -->
     <link href="/css/style.css" rel="stylesheet">
+
+
+  <!-- addon template -->
+     <!-- <link rel="icon" type="image/png" href="images/icons/favicon.png"/> -->
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="/vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/fonts/linearicons-v1.0.0/icon-font.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animate/animate.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/select2/select2.min.css">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="/vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/slick/slick.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/MagnificPopup/magnific-popup.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/vendor/perfect-scrollbar/perfect-scrollbar.css">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="/cssaddon/util.css">
+	<link rel="stylesheet" type="text/css" href="/cssaddon/main.css">
+
+
+
+
 </head>
 
 <body>
@@ -46,7 +81,7 @@
     <div class="container-fluid fixed-top px-0 wow fadeIn" data-wow-delay="0.1s">
 
         <div class="top-bar row gx-0 align-items-center d-none d-lg-flex">
-            <div class="col-lg-6 px-5 text-start">
+            <div class="col-lg-6 px-5 text-start text-white">
                 <small>
                     <i class="fa fa-map-marker-alt me-2">
 
@@ -79,15 +114,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <div class="navbar-nav ms-auto p-4 p-lg-0">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">All Products</a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        
-                    </div>
+                    
                     <a href="/getshop" class="nav-item nav-link">Shop Now</a>
                     <a href="product.html" class="nav-item nav-link">Contact Us</a>
                 </div>
@@ -142,8 +169,8 @@
                             <h1 class="display-2  animated slideInDown" style="color:#05496C;">Oh God<br>
                                 Nothing,<br>
                                 But only one of these.</h1>
-                            <a href="" class="btn rounded-pill py-sm-3 px-sm-5"
-                                style="color:#f5f7f8;background-color: #05496C;">EXPLORE</a>
+                            <a href="/getshop" class="btn rounded-pill py-sm-3 px-sm-5"
+                                style="color:#f5f7f8;background-color: #05496C;">SHOP NOW</a>
 
                         </div>
                     </div>
@@ -190,7 +217,7 @@
             <div class="row g-4">
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                     <div class="bg-white text-center h-100 p-4 p-xl-5">
-                        <img class="img-fluid mb-4" src="/img/world-of-pillows.jpg" alt="">
+                        <a href="/getshop"><img class="img-fluid mb-4" src="/img/world-of-pillows.jpg" alt=""></a>
                         <h4 class="mb-3">World-of-pillows</h4>
 
                         <!-- <a class="btn btn-outline-primary border-2 py-2 px-4 rounded-pill" href="">Read More</a> -->
@@ -198,7 +225,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
                     <div class="bg-white text-center h-100 p-4 p-xl-5">
-                        <img class="img-fluid mb-4" src="/img/interesting-combos.jpg" alt="">
+                        <a href="/getshop"><img class="img-fluid mb-4" src="/img/interesting-combos.jpg" alt=""></a>
                         <h4 class="mb-3">Intresting-combos</h4>
 
 
@@ -206,7 +233,7 @@
                 </div>
                 <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="bg-white text-center h-100 p-4 p-xl-5">
-                        <a href="#"><img class="img-fluid mb-4" src="/img/house of cushion and bolster.jpg" alt=""></a>
+                        <a href="/getshop"><img class="img-fluid mb-4" src="/img/house of cushion and bolster.jpg" alt=""></a>
                         <h4 class="mb-3">House of cushions and bolsters</h4>
 
                     </div>
@@ -227,69 +254,63 @@
                         <h1 class="display-5 mb-3">Best sellers</h1>
                     </div>
                 </div>
-                <div class="col-lg-6 text-start text-lg-end wow slideInRight" data-wow-delay="0.1s">
-                    <ul class="nav nav-pills d-inline-flex justify-content-end mb-5">
-                        <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary border-2  active" data-bs-toggle="pill"
-                                href="#tab-1">world-of-pillows</a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a class="btn btn-outline-primary border-2" data-bs-toggle="pill"
-                                href="#tab-2">Intresting-combos</a>
-                        </li>
-                        <li class="nav-item me-0">
-                            <a class="btn btn-outline-primary border-2" data-bs-toggle="pill" href="#tab-3">house of
-                                cushions and bolster</a>
-                        </li>
-                    </ul>
-                </div>
+                
             </div>
             <div class="tab-content">
                 <div id="tab-1" class="tab-pane fade show p-0 active">
                     <div class="row g-4">
 
 
-                        <% products.forEach(element => { %>
-                            <% if (element.unlist==false) { %>
-                             
-                            
-                            <div class="col-xl-3 col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
-                                <div class="product-item">
-                                    <div class="position-relative bg-light overflow-hidden">
-                                        <img class="img-fluid w-100" src="/<%= element.image1%>" alt="">
+                        <div class="row isotope-grid" id="products-container">
+                            <% products?.forEach((products)=>{ %>
+                                <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women">
+                                    <!-- Block2 -->
+                                    <div class="block2">
+                                        <div class="block2-pic hov-img0">
+                                            <img src="/<%= products.image1%>" alt="IMG-PRODUCT">
+            
+                                            <a href="/viewProduct/<%=products._id%>"
+                                                class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 ">
+                                                View
+                                            </a>
+                                        </div>
+            
+                                        <div class="block2-txt flex-w flex-t p-t-14">
+                                            <div class="block2-txt-child1 flex-col-l ">
+                                                <a href="/viewProduct/<%=products._id%>"
+                                                    class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                    <%= products.productname %>
+                                                </a>
 
-                                    </div>
-                                    <div class="text-center p-4">
-                                        <a class="d-block h5 mb-2" href=""><%= element.productname %> </a>
-                                        <span class="text-primary me-1">₹ <%= element.price%></span>
-                                        <!-- <span class="text-body text-decoration-line-through">$529.00</span> -->
-                                    </div>
-                                    <div class="d-flex border-top">
-                                        <small class="w-50 text-center border-end py-2">
-                                            <a class="text-body" href=""><i class="fa fa-eye text-primary me-2"></i>View
-                                                detail</a>
-                                        </small>
-                                        <% if(session){%> 
-                                        <small class="w-50 text-center py-2">
-                                            <a class="text-body" type="button" onclick="addtoCart('<%= element._id%>')"><i 
-                                                class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                        </small>
-                                        <%} else{ %> 
-                                            <small class="w-50 text-center py-2">
-                                                <a class="text-body" href="/userlogin"><i 
-                                                    class="fa fa-shopping-bag text-primary me-2"></i>Add to cart</a>
-                                            </small>
-                                        <% } %> 
+                                                <a href="/viewProduct/<%=products._id%>"
+                                                    class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                                    <%= products.category.categoryname%>
+                                                </a>
+            
+                                                <span class="stext-105 cl3">
+                                                    ₹<%= products.price %>
+                                                </span>
+                                            </div>
+            
+                                            <div class="block2-txt-child2 flex-r p-t-3">
+                                                <% if(session){%>
+                                                    <small class="w-50 text-center py-2">
+                                                        <a class="text-body" type="button"
+                                                            onclick="addtoCart('<%= products._id%>')"><i
+                                                                class="fa fa-shopping-bag text-black me-2"></i>Add</a>
+                                                    </small>
+                                                    <%} else{ %>
+                                                        <small class="w-50 text-center py-2">
+                                                            <a class="text-body" href="/userlogin"><i
+                                                                    class="fa fa-shopping-bag text-primary me-2"></i>Add</a>
+                                                        </small>
+                                                        <% } %>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                            <% } %>
-                            
-
-
-
-                        <% }) %>
+                                <% }) %>
+                        </div>
                         
                                     <!-- <div
                                         class="bg-secondary rounded text-white position-absolute start-0 top-0 m-4 py-1 px-3">
@@ -529,6 +550,115 @@
 
     <!-- Template Javascript -->
     <script src="/home/js/main.js"></script>
+
+
+    <!-- addon template scripts -->
+
+
+
+<!--===============================================================================================-->	
+<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/select2/select2.min.js"></script>
+	<script>
+		$(".js-select2").each(function(){
+			$(this).select2({
+				minimumResultsForSearch: 20,
+				dropdownParent: $(this).next('.dropDownSelect2')
+			});
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/daterangepicker/moment.min.js"></script>
+	<script src="/vendor/daterangepicker/daterangepicker.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/slick/slick.min.js"></script>
+	<script src="/jsaddon/slick-custom.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/parallax100/parallax100.js"></script>
+	<script>
+        $('.parallax100').parallax100();
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script>
+		$('.gallery-lb').each(function() { // the containers for all your galleries
+			$(this).magnificPopup({
+		        delegate: 'a', // the selector for gallery item
+		        type: 'image',
+		        gallery: {
+		        	enabled:true
+		        },
+		        mainClass: 'mfp-fade'
+		    });
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/isotope/isotope.pkgd.min.js"></script>
+<!--===============================================================================================-->
+	<script src="/vendor/sweetalert/sweetalert.min.js"></script>
+	<!-- <script>
+		$('.js-addwish-b2, .js-addwish-detail').on('click', function(e){
+			e.preventDefault();
+		});
+
+		$('.js-addwish-b2').each(function(){
+			var nameProduct = $(this).parent().parent().find('.js-name-b2').html();
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-b2');
+				$(this).off('click');
+			});
+		});
+
+		$('.js-addwish-detail').each(function(){
+			var nameProduct = $(this).parent().parent().parent().find('.js-name-detail').html();
+
+			$(this).on('click', function(){
+				swal(nameProduct, "is added to wishlist !", "success");
+
+				$(this).addClass('js-addedwish-detail');
+				$(this).off('click');
+			});
+		}); -->
+        </script>
+        <script>
+
+		/*---------------------------------------------*/
+
+		// $('.js-addcart-detail').each(function(){
+		// 	var nameProduct = $(this).parent().parent().parent().parent().find('.js-name-detail').html();
+		// 	$(this).on('click', function(){
+		// 		swal(nameProduct, "is added to cart !", "success");
+		// 	});
+		// });
+	
+	</script>
+<!--===============================================================================================-->
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script>
+		$('.js-pscroll').each(function(){
+			$(this).css('position','relative');
+			$(this).css('overflow','hidden');
+			var ps = new PerfectScrollbar(this, {
+				wheelSpeed: 1,
+				scrollingThreshold: 1000,
+				wheelPropagation: false,
+			});
+
+			$(window).on('resize', function(){
+				ps.update();
+			})
+		});
+	</script>
+<!--===============================================================================================-->
+	<script src="/jsaddon/main.js"></script>
 </body>
 
 </html>
