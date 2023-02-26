@@ -8,10 +8,6 @@ const verifyuser=userSession.verifyUser;
 
 route.get('/',userController.home);
 route.get('/userlogin',userSession.verifyLoginUser,userController.userLogin);
-
-
-
-
 route.post('/userlogin',userController.doLogin);
 
 route.get('/getshop',userController.getShop);
@@ -19,14 +15,10 @@ route.get('/forgotpassword',userSession.verifyLoginUser,userController.forgotPas
 route.post('/forgotpass',userSession.verifyLoginUser,userController.forgotPass);
 route.get('/otpforgot',userSession.verifyLoginUser,userController.otpForgot)
 route.post('/otpforgot',userSession.verifyLoginUser,userController.otpForgotpost)
-
-
 route.get('/signup',userSession.verifyLoginUser,userController.userSignup)
 route.post('/signup',userSession.verifyLoginUser,userController.register);
-
 route.get('/otp',userSession.verifyLoginUser,userController.otpIndex);
 route.post('/otp',userSession.verifyLoginUser,userController.otpValidation);
-
 route.get('/logout',verifyuser,userController.userLogout);
 
 route.get('/error',userController.errorPage);
@@ -41,8 +33,9 @@ route.post('/placeOrder',verifyuser,userController.placeOrder);
 route.post('/applycoupon',verifyuser,userController.applyCoupon);
 route.post('/addnewaddress',verifyuser,userController.addNewAddress);
 
-
-
+route.get('/cancelOrder/:id',verifyuser,userController.cancelOrder);
+route.get('/orderedProduct/:id',verifyuser,userController.orderedProduct);
+route.get('/orderDetails', verifyuser,userController.orderDetails);
 route.get('/orderSuccess',verifyuser,userController.orderSuccess)
 route.post('/verifypayment',verifyuser,userController.verifyPayment);
 

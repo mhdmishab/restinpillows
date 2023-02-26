@@ -1,111 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <!-- CSS only -->
-  <link rel="stylesheet" href="/https://fonts.googleapis.com/css?family=Mukta:300,400,700">
-  <link rel="stylesheet" href="/fonts/icomoon/style.css">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
-  <link rel="stylesheet" href="/css/style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body>
-<style>
-  HTML
-CSS
-.gradient-custom {
-/* fallback for old browsers */
-background: #cd9cf2;
-
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1));
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 255, 1))
-}
-</style>
-  <div class="site-wrap">
-    <header class="site-navbar" role="banner">
-      <div class="site-navbar-top">
-        <div class="container">
-          <div class="row align-items-center">
-
-            <div class="col-6 col-md-4 order-2 order-md-1 site-search-icon text-left">
-              <form action="" class="site-block-top-search">
-                <span class="icon icon-search2"></span>
-                <input type="text" class="form-control border-0" placeholder="Search">
-              </form>
-            </div>
-
-            <div class="col-12 mb-3 mb-md-0 col-md-4 order-1 order-md-2 text-center">
-              <div class="site-logo">
-                <a href="/index" class="js-logo-clone" style="text-decoration: none;">Wonder Shoes</a>
-              </div>
-            </div>
-
-            <div class="col-6 col-md-4 order-3 order-md-3 text-right">
-              <div class="site-top-icons">
-                <ul>
-
-                  <li><a href="/viewProfile" style="text-decoration: none;"><span class="icon icon-person"></li>
-                    <li>
-                      <a href="/viewWishlist" class="site-cart"  style="text-decoration: none;">
-                        <span class="icon icon-heart-o"></span>
-                      <% if (locals.countInWishlist) { %>
-                       <span class="count"><%= countInWishlist %> </span>
-                      <% } %>
-                      
-                      </a></li>
-                  <li>
-                    <a href="/viewCart" class="site-cart" style="text-decoration: none;">
-
-                      <span class="icon icon-shopping_cart"></span>
-                      <% if(locals.countInCart) {%>
-                        <span class="count">
-                          <%=countInCart%>
-                        </span>
-                        <% } %>
-                    </a>
-
-                  </li>
-                  <li class="d-inline-block d-md-none ml-md-0"><a href="#" class="site-menu-toggle js-menu-toggle"><span
-                        class="icon-menu"></span></a></li>
-
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <nav class="site-navigation text-right text-md-center" role="navigation">
-        <div class="container">
-          <ul class="site-menu js-clone-nav d-none d-md-block">
-            <li >
-              <a href="/index" style="text-decoration: none;">Home</a>
-            </li>
-            <li >
-              <a href="/about" style="text-decoration: none;">About</a>
-            </li>
-            <li><a href="/shop" style="text-decoration: none;">Shop</a></li>
-            <li><a href="" style="text-decoration: none;">My Orders</a></li>
-            <li><a href="/contact" style="text-decoration: none;">Contact Us</a></li>
-            <% if(customer){%>
-              <li><a href="/logout" style="text-decoration: none;">Logout</a></li>
-              <%}else{%>
-                <li><a href="/login" style="text-decoration: none;">Login</a></li>
-                <%}%>
-          </ul>
-        </div>
-      </nav>
-    </header>
-
-  </div>
+<%- include ('../users/layout/header.ejs') %>
+<div style="height: 8rem; width: 100%;"></div>
   
   <% if (productData.length>0) { %>
 
@@ -120,7 +14,7 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
             <div class="card-body p-4">
               <div class="d-flex justify-content-between align-items-center mb-4">
                 <p class="lead fw-normal mb-0" style="color: #a8729a;">All orders</p>
-                <p class="small text-muted mb-0">wondershoes.tk</p>
+                <p class="small text-muted mb-0">restinpillows</p>
               </div>
               <% productData.forEach((product)=>{ %>
               <div class="card shadow-0 border mb-4">
@@ -129,19 +23,18 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
                     
                     <div class="col-md-2">
                       
-                      <img src="/adminImages/<%= product.productDetail._id %>.jpg"
+                      <img src="/<%= product.productDetail.image1 %>"
                         class="img-fluid" alt="Phone">
                         <a href="/orderedProduct/<%= product._id %>" style="text-decoration: #a8729a; "  >Track </a>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0"><%=product.productDetail.name%></p>
+                      <p class="text-muted mb-0"><%=product.productDetail.productname%></p>
                     </div>
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0 small"><%= product.category_name.category_name %></p>
-                    </div>
-                    <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
-                      <p class="text-muted mb-0 small">size <%=product.productDetail.size[0]%></p>
-                    </div>
+                        <p class="text-muted mb-0 small"><%= product.category_name.categoryname %></p>
+                      </div>
+                  
+                    
                     <div class="col-md-2 text-center d-flex justify-content-center align-items-center">
                       <p class="text-muted mb-0 small">payment: <%= product.paymentMethod %></p>
                     </div>
@@ -238,9 +131,9 @@ background: linear-gradient(to top left, rgba(205, 156, 242, 1), rgba(246, 243, 
 
 
 
+<div style="height: 4rem; width: 100%;"></div>
 
 
 
-<%- include ('../users/layout/footer.ejs') %>
 
 <%- include ('../users/layout/script.ejs') %>

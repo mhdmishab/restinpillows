@@ -534,56 +534,66 @@ orderStatusChanging:async(req,res)=>{
 
 getOrderedProduct:async (req,res)=>{
     const id = req.params.id;
+    
   
     const objId = mongoose.Types.ObjectId(id)
+
+    console.log(objId);
     const productData = await order.aggregate([
         {
-            $match:{_id:objId}
+            $match: {_id:objId }
         },
         {
-            $unwind:"$orderItems"
+            $unwind: "$orderItems"
         },
         {
-            $project:{
-                productItem:"$orderItems.productId",
-                productQuantity:"$orderItems.quantity",
-                address:1, 
-                name:1,
-                phoneNumber:1  
+            $project: {
+                productItem: "$orderItems.productId",
+                productQuantity: "$orderItems.quantity",
+                address: 1, 
+                name: 1,
+                phoneNumber: 1  
             }
         },
         {
-            $lookup:{
-                from:"products",
-                localField:"productItem",
-                foreignField:"_id",
-                as:"productDetail"
+            $lookup: {
+                from: "products",
+                localField: "productItem",
+                foreignField: "_id",
+                as: "productDetail"
             }
         },
         {
-            $project:{
-                productItem:1,
-                productQuantity:1,
-                address:1,
-                name:1,
-                phoneNumber:1,
-                productDetail:{$arrayElemAt:["$productDetail",0]}
+            $project: {
+                productItem: 1,
+                productQuantity: 1,
+                address: 1,
+                name: 1,
+                phoneNumber: 1,
+                productDetail: { $arrayElemAt: ["$productDetail", 0] }
             }
         },
         {
-            $lookup:{
-                from:'categories',
-                localField:'productDetail.category',
-                foreignField:"_id",
-                as:"category_name"
+            $lookup: {
+                from: "categorys",
+                localField: "productDetail.category",
+                foreignField: "_id",
+                as: "category_name"
             }
         },
         {
-            $unwind:"$category_name"
+            $unwind: "$category_name"
         },
+    
+    ]).exec();
 
-    ]);
+    console.log("orderproductData",productData);
     res.render('admin/orderedproduct',{productData})
+},
+
+deleteorder:async()=>{
+    console.log("delete order allllllllll")
+    await order.deleteMany({});
 }
 
 
@@ -594,3 +604,4 @@ getOrderedProduct:async (req,res)=>{
 
 
 }
+

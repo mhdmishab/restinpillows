@@ -12,7 +12,7 @@
                     </div>
                     <% let phone='Ph:' %> 
                     <div class="ms-3">
-                        <p></p>
+                        <p><%=productData[0].name %>,<br><%=productData[0].address %>,<br><%=phone %> <%=productData[0].phoneNumber %></p>
                     </div>
                     
                 </div>
@@ -34,9 +34,9 @@
 
                     <% productData.forEach((order)=>{ %>
                         <tr>
-                          <td><img style="height: 60px; width: 60px;" src="/adminimages/<%= order.productDetail._id %>.jpg" class="img-fluid" alt="" /></td>
+                          <td><img style="height: 60px; width: 60px;" src="/<%= order.productDetail.image1 %>" class="img-fluid" alt="" /></td>
                           <td><%= order.productDetail.productname %></td>
-                          <td><%= order.category.category_name%></td>
+                          <td><%= order.category_name.categoryname%></td>
                           <td><%= order.productQuantity %></td>
                           <% var a=order.productQuantity%>
                           <% var b=order.productDetail.price%>

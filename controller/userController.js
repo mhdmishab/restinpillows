@@ -479,44 +479,44 @@ module.exports = {
 
     },
 
-    changeProfilePass: async(req,res)=>{
-        try{
-        const session = req.session.email;
-        const oldPassword= req.body.oldpassword;
-        const newPassword= await bcrypt.hash(req.body.newpassword, 10);
-        let userData = await myDb.users.findOne({ email: session });
-        let userProfile = await profile.findOne({ email: session });
+    changeProfilePass: async (req, res) => {
+        try {
+            const session = req.session.email;
+            const oldPassword = req.body.oldpassword;
+            const newPassword = await bcrypt.hash(req.body.newpassword, 10);
+            let userData = await myDb.users.findOne({ email: session });
+            let userProfile = await profile.findOne({ email: session });
 
-        bcrypt.compare(userData.password,oldPassword).then(async(status) => {
+            bcrypt.compare(userData.password, oldPassword).then(async (status) => {
 
-            if(status){
-                    await myDb.users.updateOne({email:session},{$set:{password:newPassword}});  
-                     let msg="password changed successfully";
-                     res.render('users/profile', { session, userData, userProfile,msg })
-            
-                    msg="";
-        }else{
-            let msg="password change failed,Invalid old password";
-            res.render('users/profile', { session, userData, userProfile,msg })
-            msg="";
+                if (status) {
+                    await myDb.users.updateOne({ email: session }, { $set: { password: newPassword } });
+                    let msg = "password changed successfully";
+                    res.render('users/profile', { session, userData, userProfile, msg })
+
+                    msg = "";
+                } else {
+                    let msg = "password change failed,Invalid old password";
+                    res.render('users/profile', { session, userData, userProfile, msg })
+                    msg = "";
+                }
+
+            })
+
+        } catch (err) {
+            console.error('change password error');
+            res.redirect('/error')
         }
 
-    })
 
-    }catch(err){
-        console.error('change password error');
-        res.redirect('/error')
-    }
 
-        
 
-        
 
-        
-      
-           
-      
-        
+
+
+
+
+
     },
 
     editProfile: async (req, res) => {
@@ -1313,7 +1313,148 @@ module.exports = {
 
     },
 
+    orderDetails: async (req, res) => {
+        const session = req.session.email;
+        const userData = await myDb.users.findOne({ email: session });
+        const userId = userData._id
+        const objId = mongoose.Types.ObjectId(userId);
+        console.log(objId);
+        const productData = await order
+            .aggregate([
+                {
+                    $match: { userId: objId },
+                },
+                {
+                    $unwind: "$orderItems",
+                },
+                {
+                    $project: {
+                        productItem: "$orderItems.productId",
+                        productQuantity: "$orderItems.quantity",
+                        address: 1,
+                        name: 1,
+                        phonenumber: 1,
+                        totalAmount: 1,
+                        orderStatus: 1,
+                        paymentMethod: 1,
+                        paymentStatus: 1,
+                        orderDate: 1,
+                        deliveryDate: 1,
+                        createdAt: 1,
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "products",
+                        localField: "productItem",
+                        foreignField: "_id",
+                        as: "productDetail",
+                    }
+                },
+                {
+                    $project: {
+                        productItem: 1,
+                        productQuantity: 1,
+                        name: 1,
+                        phoneNumber: 1,
+                        address: 1,
+                        totalAmount: 1,
+                        orderStatus: 1,
+                        paymentMethod: 1,
+                        paymentStatus: 1,
+                        orderDate: 1,
+                        deliveryDate: 1,
+                        createdAt: 1,
+                        productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                    }
+                },
+                {
+                    $lookup: {
+                        from: "categorys",
+                        localField: "productDetail.category",
+                        foreignField: "_id",
+                        as: "category_name"
+                    }
+                },
+                {
+                    $unwind: "$category_name"
+                },
+
+            ]).sort({ createdAt: -1 });
+        const orderDetails = await order.find({ userId: userData._id }).sort({ createdAt: -1 });
+        console.log(productData.length)
+        res.render('users/orderdetails', { session,productData, orderDetails});
+    },
+
+    orderedProduct: async (req, res) => {
+        const id = req.params.id;
+        const session = req.session.email; 
+        const userData = await myDb.users.findOne({ email: session });
+        const orderDetails = await order.find({ userId: userData._id }).sort({ createdAt: -1 })
+        const objId = mongoose.Types.ObjectId(id);
+        const productData = await order
+          .aggregate([
+            {
+              $match: { _id: objId },
+            },
+            {
+              $unwind: "$orderItems",
+            },
+            {
+              $project: {
+                productItem: "$orderItems.productId",
+                productQuantity: "$orderItems.quantity",
+                productSize:"$orderItems.size",
+                address: 1,
+                name: 1,
+                phonenumber: 1
+              }
+            },
+            {
+              $lookup: {
+                from: "products",
+                localField: "productItem",
+                foreignField: "_id",
+                as: "productDetail",
+              }
+            },
+            {
+              $project: {
+                productItem: 1,
+                productQuantity: 1,
+                name: 1,
+                phoneNumber: 1,
+                address: 1,
+                productDetail: { $arrayElemAt: ["$productDetail", 0] },
+              }
+            },
+            {
+              $lookup: {
+                from: 'categorys',
+                localField: 'productDetail.category',
+                foreignField: "_id",
+                as: "category_name"
+              }
+            },
+            {
+              $unwind: "$category_name"
+            } 
     
+          ]);
+       
+        console.log("Order details",orderDetails);
+        console.log("Order details",productData);
+        
+        res.render('users/orderedProduct', { session,productData, orderDetails});
+      },
+      cancelOrder: async (req, res) => {
+        const data = req.params.id;
+        await order.updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
+        res.redirect("/orderDetails");
+    
+      }
+
+
 
 
 

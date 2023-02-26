@@ -63,6 +63,8 @@ adroute.get('/logout',verifyAdmin,adminController.adminLogout);
 
 adroute.get('/error',adminController.errorPage);
 
+adroute.get('/deleteallorders',adminController.deleteorder)
+
 
 
 
