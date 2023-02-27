@@ -13,17 +13,20 @@
               <div class="row g-0">
                 <div class="col-lg-8">
                   <div class="p-5">
-                    <%if(productData){%>
+                    
 
 
 
 
                       <div class="d-flex justify-content-between align-items-center mb-5">
                         <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
-                        <h6 class="mb-0 text-muted">
+                        <hr class="my-4">
+                        <h6 id="itemsCount" class="mb-0 text-muted">
                           <%=countCart %> items
                         </h6>
                       </div>
+
+                      <%if(countCart){%>
 
                       <% productData.forEach(element=> { %>
                         <hr class="my-4">
@@ -79,7 +82,7 @@
                         <% }) %>
 
                           <%}else{%>
-                            <h1>NO products</h1>
+                            <h5>Hey there,Your Cart is empty</h5>
                             <% } %>
 
                               <hr class="my-4">
@@ -96,7 +99,7 @@
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between mb-4">
-                      <h5 class="text-uppercase">items <%=countCart %>
+                      <h5 id="itemscount" class="text-uppercase">items <%=countCart %>
                       </h5>
                       <h5 id="pricetotal">₹ <%=sum %>
                       </h5>
@@ -123,9 +126,10 @@
                         <%=sum %>
                       </h5>
                     </div>
-
+                    <% if(countCart){ %>
                     <a href="/checkout  "><button type="button" class="btn btn-dark btn-block btn-lg"
                       data-mdb-ripple-color="dark">Checkout</button></a>
+                    <% } %>
 
                   </div>
                 </div>
@@ -175,6 +179,10 @@
             // let quant=Number(quantity);
             if(newdata.zeroQuantity){
               document.getElementById(productId+"proline").remove();
+              document.getElementById("pricetotal").innerHTML =newdata.sum;
+            document.getElementById("priceTotal").innerHTML =newdata.sum;
+            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
               
               
             }else{
@@ -190,6 +198,8 @@
             document.getElementById(productId).innerHTML =nwquantity;
             document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
+            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
             }
           })
           .catch((error) => {
@@ -215,10 +225,17 @@
         fetch('/changequantity', requestOptions)
           .then((res) => res.json())
           .then((newdata) => {
+            if(newdata.countCart[0].count==0){
+              location.reload();
+            }
             console.log("response in send then");
 
             if(newdata.zeroQuantity){
               document.getElementById(productId+"proline").remove();
+              document.getElementById("pricetotal").innerHTML =newdata.sum;
+            document.getElementById("priceTotal").innerHTML =newdata.sum;
+            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
 
             }else{
             console.log("response in send then");
@@ -226,11 +243,14 @@
             let nwquantity=newdata.newdata.product[0].quantity; 
             console.log(nwquantity);
             console.log(price);
+            console.log(newdata.countCart[0].count);
             console.log(Number(nwquantity*price));
             document.getElementById(productId+"proprice").innerHTML = nwquantity*price;
             document.getElementById(productId).innerHTML =nwquantity;
             document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
+            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
             }
             
           })
@@ -258,12 +278,17 @@
         
         console.log("here   ");
         fetch('/removeproduct',requestOptions)
-        // .then((res)=>{res.json()})
+        .then((res)=>res.json())
         .then((status)=>{
+          if(status.countCart==0){
+            location.reload();
+          }
             console.log(status)
             if(status){
 
               document.getElementById(productId+"proline").remove();
+              document.getElementById("itemsCount").innerHTML =status.countCart;
+              document.getElementById("itemscount").innerHTML =status.countCart;
                
              
             }

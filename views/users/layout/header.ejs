@@ -127,7 +127,7 @@
                 </div>
                 <% if (session) { %>
                     <div class="d-flex d-lg-flex ">
-                        <button type="button" class="d-flex align-items-center btn-sm-square bg-white rounded-circle ms-3" style="border-radius: 4rem; border: #f5f7f8;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="d-flex align-items-center btn-sm-square bg-white rounded-circle ms-3" style="border-radius: 4rem; border: #f5f7f8;" data-bs-toggle="modal" data-bs-target="#searchModal">
                             <small class="fa fa-search text-body"></small></button>
                         <div class="nav-item dropdown d-flex">
                             <a class="btn-sm-square bg-white rounded-circle ms-3" data-bs-toggle="dropdown" >
@@ -148,7 +148,7 @@
 
 
                         <div class=" d-lg-flex ms-2">
-                            <button type="button" class="d-flex align-items-center btn-sm-square bg-white rounded-circle ms-3" style="border-radius: 4rem; border: #f5f7f8;" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            <button type="button" class="d-flex align-items-center btn-sm-square bg-white rounded-circle ms-3" style="border-radius: 4rem; border: #f5f7f8;" data-bs-toggle="modal" data-bs-target="#searchModal">
                                 <small class="fa fa-search text-body"></small></button>
                             <a class="btn-sm-square bg-white rounded-circle ms-3" href="/userlogin">
                                 <small class="fa fa-user text-body"></small>
@@ -162,7 +162,7 @@
     </div>
     <!-- Navbar End -->
       <!-- Search Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
     <form method="post" action="/dosearch">

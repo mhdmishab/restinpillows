@@ -9,6 +9,7 @@ const myProduct = require('../model/productmodel');
 const myCategory = require('../model/categorymodel');
 const mySubcategory = require('../model/subcategory');
 const coupon = require('../model/couponmodel');
+const banner=require('../model/bannermodal');
 const auth = require('../utils/auth');
 const newOtp = require('../model/otpmodel');
 const nodemailer = require('nodemailer');
@@ -68,9 +69,10 @@ module.exports = {
     home: async (req, res) => {
         let session = req.session.email;
         let products = await myProduct.find({}).populate("category").limit(6);
+        let bannerData = await banner.find().sort({ createdAt: -1 }).limit(1);
 
 
-        res.render('users/home', { session, products });
+        res.render('users/home', { session, products,bannerData });
 
 
     },
@@ -627,10 +629,6 @@ module.exports = {
 
         let newdata;
 
-
-
-
-
         cart.updateOne(
             { _id: data.cart, "product.productId": objId },
             { $inc: { "product.$.quantity": data.count } }
@@ -693,8 +691,12 @@ module.exports = {
             const sum = productData.reduce((accumulator, object) => {
                 return accumulator + object.productPrice;
             }, 0);
-            console.log("helooo sum", sum)
-            res.status(200).send({ data: "this is data", newdata, zeroQuantity, sum });
+            console.log("helooo sum", sum);
+            const countCart = await cart.aggregate([
+                { $match: { userId: cartData[0].userId  } },
+                { $project: { count: { $size: "$product" } } }
+              ]);
+            res.status(200).send({ data: "this is data", newdata, zeroQuantity, sum,countCart });
 
 
         });
@@ -723,8 +725,10 @@ module.exports = {
                 { _id: cartid, "product.productId": productid },
                 { $pull: { product: { productId: productid } } }
             )
-            .then(() => {
-                res.json({ status: true });
+            .then(async() => {
+                const Cart=await cart.findOne({_id: cartId});
+                const countCart=Cart.product.length;
+                res.json({ countCart });
                 // res.redirect('/viewcart');
 
             });
@@ -981,11 +985,11 @@ module.exports = {
         let session = req.session.email;
         console.log(req.body.searchtext);
         const category = await myCategory.find({});
-        let product = await myProduct.find({ productname: new RegExp(req.body.searchtext) });
+        let product = await myProduct.find({ productname: new RegExp(req.body.searchtext) }).populate('category');
         console.log(product);
-
+        let results;
         if (product) {
-            res.render('users/shop', { session, product, category });
+            res.json({product})
         }
     },
 

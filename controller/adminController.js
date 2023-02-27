@@ -4,9 +4,11 @@ const myDbs=require('../model/usermodel');
 const products=require('../model/productmodel');
 const coupon=require('../model/couponmodel');
 const order=require('../model/ordermodel');
+const banner=require('../model/bannermodal');
 const myCategory=require('../model/categorymodel');
 const mySubcategory=require('../model/subcategory');
 const fs=require('fs');
+const moment = require('moment');
 const dotenv=require('dotenv');
 var bcrypt = require('bcrypt');
 const { response } = require('express');
@@ -18,9 +20,34 @@ let msg="";
 
 module.exports={
     adminIndex:
-    (req,res)=>{
-        
-        res.render('admin/adminindex');
+    async(req,res)=>{
+    const orderData = await order.find({orderStatus:{$ne:"cancelled"}});
+    const totalRevenue = orderData.reduce((accumulator,object)=>{
+        return accumulator+object.totalAmount;
+    },0);
+    const todayOrder = await order.find({
+        orderDate:moment().format("MMM Do YY"),
+    });
+    const todayRevenue = todayOrder.reduce((accumulator,object)=>{
+        return accumulator +object.totalAmount;
+    },0);
+    const start = moment().startOf("month");
+    const end   = moment().endOf("month");
+    const oneMonthOrder = await order.find({orderStatus:{$ne:"cancelled"},createdAt:{$gte:start,$lte:end},})
+    const monthlyRevenue = oneMonthOrder.reduce((accumulator,object)=>{
+        return accumulator+object.totalAmount
+    },0);
+    const allOrders = orderData.length;
+    const pending   = await order.find({orderStatus:"pending"}).count();
+    const shipped = await order.find({orderStatus:"shipped"}).count();
+    const placed = await order.find({orderStatus:"placed"}).count();
+    const cancelled = await order.find({orderStatus:"cancelled"}).count();
+    const cod    = await order.find({paymentStatus:"COD"}).count();
+    const online    = await order.find({paymentStatus:"online"}).count();
+    const activeUsers = await myDbs.users.find({unblockuser:true}).count();
+    const product     = await  products.find({unlist:false}).count();
+   
+    res.render('admin/adminindex',{cod,online,pending,shipped,placed,cancelled,totalRevenue,allOrders,activeUsers,product ,monthlyRevenue,todayRevenue });
     },
     adminLogin:(req,res)=>{
         res.render("admin/adminlogin");
@@ -594,7 +621,79 @@ getOrderedProduct:async (req,res)=>{
 deleteorder:async()=>{
     console.log("delete order allllllllll")
     await order.deleteMany({});
-}
+},
+
+
+
+getBannerPage:async(req,res)=>{
+    const bannerData = await banner.find()
+    res.render('admin/banner',{bannerData});
+},
+
+addBanner:async(req,res)=>{
+    try{
+        await banner.create({
+            offerType:req.body.offerType,
+            bannerText:req.body.bannerText,
+            couponName:req.body.couponName,  
+        }).then((data)=>{
+            res.redirect('/admin/getBanner')
+        })
+    }catch{
+       console.error();
+       res.render('user/error');
+    }
+
+},
+editBanner:async(req,res)=>{ 
+  try{
+    const id = req.params.id;
+    const editedData = req.body;
+    await banner.updateOne(
+        {_id:id},
+        {
+            offerType:editedData.offerType,
+            bannerText:editedData.bannerText,
+            couponName:editedData.couponName,    
+        }
+        ).then(()=>{
+            res.redirect('/admin/getBanner');
+        })
+  }catch{
+    console.error()
+    res.render("users/error")
+  }
+},
+
+deleteBanner:async(req,res)=>{
+    try{
+      const id= req.params.id;
+      await banner.updateOne(
+          {_id:id},
+          {isDeleted:true}
+      ).then(()=>{
+          res.redirect('/admin/getBanner');
+      })
+    }catch{
+      console.error();
+      res.render("user/error");
+    }
+  },
+  restoreBanner:async(req,res)=>{
+    try{
+      const id = req.params.id;
+      await banner.updateOne(
+          {_id:id},
+          {isDeleted:false}
+      ).then(()=>{
+          res.redirect('/admin/getBanner');
+      })
+    }catch{
+      console.error()
+      res.redirect("/admin/getBanner");
+    }
+  }
+
 
 
 

@@ -24,6 +24,13 @@ adroute.get('/restoreCoupon/:id',verifyAdmin,adminController.restoreCoupon);
 adroute.get('/removeCoupon/:id',verifyAdmin,adminController.removeCoupon);
 
 
+adroute.get('/getBanner',verifyAdmin,adminController.getBannerPage)
+adroute.post('/addBanner',verifyAdmin,adminController.addBanner)
+adroute.post('/editBanner/:id',verifyAdmin,adminController.editBanner)
+adroute.get('/deleteBanner/:id',verifyAdmin,adminController.deleteBanner);
+adroute.get('/restoreBanner/:id',verifyAdmin,adminController.restoreBanner);
+
+
 
 
 

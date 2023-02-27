@@ -81,16 +81,16 @@
 
                       <div class="d-block my-3">
                         <div class="custom-control custom-radio">
-                          <input id="credit" name="paymentMethod" type="radio" value="COD" class="custom-control-input"
+                          <input id="credit" name="paymentMethod" type="radio" value="COD" class="custom-control"
                             checked required />
                           <label class="custom-control-label" for="credit">COD</label>
                         </div>
                         <div class="custom-control custom-radio">
                           <input id="debit" name="paymentMethod" type="radio" value="Online"
-                            class="custom-control-input" required />
+                            class="custom-control" required />
                           <label class="custom-control-label " for="debit">Online</label>
                         </div>
-                        <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+                        <h2 class="h3 mb-3 text-black"></h2>
                         <div class="p-3 p-lg-5 border">
 
                           <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
@@ -446,12 +446,9 @@
           "name": "restinpillows",
           "description": "Test Transaction",
           "image": "/img/riplogo.png",
-          "order_id": order._id,
+          "order_id": order.id,
           "handler": function (response) {
-            alert(response.razorpay_payment_id);
-        alert(response.razorpay_order_id);
-        alert(response.razorpay_signature)
-            console.log(response);
+           
             verifyPayment(response, order);
           },
           "prefill": {

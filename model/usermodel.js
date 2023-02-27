@@ -10,9 +10,11 @@ const userSchema=new mongoose.Schema({
     password:{
         type:String,
         required:true,
-        
+
     },
-    unblockuser:{type:Boolean,required:true}
+    unblockuser:{type:Boolean,
+        default:true,
+        required:true}
 });
 
 
