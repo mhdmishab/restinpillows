@@ -45,6 +45,8 @@ route.get('/editprofile',verifyuser,userController.editProfile);
 route.post('/postEditProfile',verifyuser,userController.postEditProfile);
 route.post('/postEditAddress',verifyuser,userController.postEditAddress);
 route.post('/changePassword',verifyuser,userController.changeProfilePass);
+route.post('/editaddress/:id',verifyuser,userController.editAddress);
+
 
 // route.post('/getsubcategories',verifyuser,userController.getSubcategory)
 

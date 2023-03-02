@@ -22,10 +22,12 @@ module.exports={
 
     verifyUser:async(req,res,next)=>{
         const user=await myDb.users.findOne({email:req.session.email});
-        console.log(user.unblockuser);
+        if(user){
         if(user.unblockuser==false){
             req.session.email=null;
+            // res.redirect('/userlogin')
         }
+    }
         
         if(req.session.email){
             next();

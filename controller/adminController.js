@@ -175,20 +175,23 @@ module.exports={
             description:req.body.description,
             price:req.body.price,
         });
+       
         console.log(myProducts);
 
         myProducts.save().then((item)=>{
+      
             
             res.redirect('/admin/products');
             
         }).catch(err=>{
+        
             console.log(err)
             res.redirect('/admin/addproducts')
-            console.log('product addition failed');
+            console.log('product image addition failed');
         })
     }catch(err){
         console.log('add product error');
-        res.redirect('/error');
+        res.redirect('/admin/error');
     }
 
         
@@ -283,10 +286,13 @@ try{
     const category=req.body.mycategory;
     console.log(req.body.mycategory);
     console.log(category);
+    const capscategory=category.toLowerCase();
     
     let categ= await myCategory.findOne({categoryname:category});
 
-    if(categ){
+    const category_Db=categ.toLowerCase();
+
+    if(capscategory==category_Db){
         msg="Category already added";
         res.redirect('/admin/category')
 
@@ -308,6 +314,17 @@ try{
     res.redirect('/admin/error');
 }
     
+},
+
+deleteCategory:async(req,res)=>{
+    
+    const category=mongoose.Types.ObjectId(req.query.id);
+    console.log(category);
+    await myCategory.deleteOne({_id:category});
+    res.redirect('/admin/category');
+    
+
+
 },
 
 adminLogout:(req,res)=>{
@@ -384,6 +401,8 @@ getSubcategory:async(req,res)=>{
 
 coupons:async(req,res)=>{
     const couponData = await coupon.find();
+    console.log(couponData);
+    
     res.render('admin/coupon',{couponData});
    
 },
@@ -394,7 +413,7 @@ addCoupon: (req,res)=>{
       const data = req.body;
       const dis  = parseInt(data.discount);
       const maxLimit = parseInt(data.maxLimit);
-      const minAmount = parseInt(data.minAmount);
+    //   const minAmount = parseInt(data.minAmount);
       const discount = dis/100;
       coupon.create({
         couponName:data.couponName,
@@ -577,6 +596,7 @@ getOrderedProduct:async (req,res)=>{
             $project: {
                 productItem: "$orderItems.productId",
                 productQuantity: "$orderItems.quantity",
+                productPrice: "$orderItems.productprice",
                 address: 1, 
                 name: 1,
                 phoneNumber: 1  
@@ -594,6 +614,7 @@ getOrderedProduct:async (req,res)=>{
             $project: {
                 productItem: 1,
                 productQuantity: 1,
+                productPrice:1,
                 address: 1,
                 name: 1,
                 phoneNumber: 1,

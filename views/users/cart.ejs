@@ -99,21 +99,17 @@
                     <hr class="my-4">
 
                     <div class="d-flex justify-content-between mb-4">
-                      <h5 id="itemscount" class="text-uppercase">items <%=countCart %>
+                      <h5 id="itemscount" class="">Items:<%=countCart %>
                       </h5>
                       <h5 id="pricetotal">₹ <%=sum %>
                       </h5>
                     </div>
 
-                    <h5 class="text-uppercase mb-3">Shipping</h5>
-
-                    <div class="mb-4 pb-2">
-                      <select class="form-control">
-                        <option value="1">Standard-Delivery- €5.00</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                        <option value="4">Four</option>
-                      </select>
+                    <div class="d-flex justify-content-between mb-4">
+                      <h5 id="" class="">Shipping-Charge
+                      </h5>
+                      <h5 id="">FREE
+                      </h5>
                     </div>
 
                
@@ -181,8 +177,8 @@
               document.getElementById(productId+"proline").remove();
               document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
-            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
-            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemsCount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
+            document.getElementById("itemscount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
               
               
             }else{
@@ -198,8 +194,8 @@
             document.getElementById(productId).innerHTML =nwquantity;
             document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
-            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
-            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
+           document.getElementById("itemsCount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
+            document.getElementById("itemscount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
             }
           })
           .catch((error) => {
@@ -234,8 +230,8 @@
               document.getElementById(productId+"proline").remove();
               document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
-            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
-            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemsCount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
+            document.getElementById("itemscount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
 
             }else{
             console.log("response in send then");
@@ -249,8 +245,8 @@
             document.getElementById(productId).innerHTML =nwquantity;
             document.getElementById("pricetotal").innerHTML =newdata.sum;
             document.getElementById("priceTotal").innerHTML =newdata.sum;
-            document.getElementById("itemsCount").innerHTML =newdata.countCart[0].count;
-            document.getElementById("itemscount").innerHTML =newdata.countCart[0].count;
+            document.getElementById("itemsCount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
+            document.getElementById("itemscount").innerHTML =`<div>Items:${newdata.countCart[0].count}</div>`
             }
             
           })
@@ -287,8 +283,8 @@
             if(status){
 
               document.getElementById(productId+"proline").remove();
-              document.getElementById("itemsCount").innerHTML =status.countCart;
-              document.getElementById("itemscount").innerHTML =status.countCart;
+              document.getElementById("itemsCount").innerHTML =document.getElementById("itemsCount").innerHTML =`<div>Items:${status.countCart}</div>`
+              document.getElementById("itemscount").innerHTML =document.getElementById("itemsCount").innerHTML =`<div>Items:${status.countCart}</div>`
                
              
             }

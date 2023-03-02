@@ -12,26 +12,26 @@
       </div>
     </div> -->
 
-  <div class="row">
-    <div class="site-section">
+  <div class="row" style="width:1519px;">
+    <div class="site-section " >
       <div class="container">
         <div class="col-md-6">
           <div class="row mb-5">
-            <div class="col-md-12">
-              <!-- <h2 class="h3 mb-3 text-black">Coupon Code</h2>
-              <div class="p-3 p-lg-5 border">
+            <!-- <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black">Coupon Code</h2>
+                <div class="p-3 p-lg-5 border">
 
-                <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
-                <div class="input-group w-75">
-                  <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
-                    aria-describedby="button-addon2">
-                  <div class="input-group-append">
-                    <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
+                  <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+                  <div class="input-group w-75">
+                    <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
+                      aria-describedby="button-addon2">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
+                    </div>
                   </div>
-                </div>
 
-              </div> -->
-            </div>
+                </div>
+            </div> -->
           </div>
           <div class="row mb-5">
             <div class="col-md-12">
@@ -40,10 +40,10 @@
 
                 <label class="col-xs-3 control-label">Your Address</label>
 
-                <select class="form-select mt-2" required name="address">
+                <select class="form-select mt-2" name="address"  required>
                   <% userData?.addressDetails.forEach((address)=>{%>
-                    <option name="address">
-                      <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%=
+                    <option name="address" id="selectedAddress" value="<%=address._id %>" >
+                      <%= address.housename%>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%=
                                 address.district %>,<%= address.pin %>,<%=address.state %>
                     </option>
                     <% }) %>
@@ -68,14 +68,17 @@
 
 
                     <form id="placeOrder">
+         
                       <label class="col-xs-3 control-label">Select Shipping Address</label>
 
                       <select class="form-select mt-2" required name="address" id="deliveryAddress">
                         <% userData?.addressDetails.forEach((address)=>{%>
                           <option name="address">
+                        
                             <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>
                                     ,<%= address.district %>,<%= address.pin %>,<%=address.state %>
                           </option>
+                     
                           <% }) %>
                       </select>
 
@@ -95,7 +98,7 @@
 
                           <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
                           <div class="input-group w-75">
-                            <input type="text" class="form-control" id="c_code" placeholder="Coupon Code"
+                            <input type="text" class="form-control text-uppercase" id="c_code" placeholder="Coupon Code"
                               aria-label="Coupon Code" aria-describedby="button-addon2" name="coupon">
                             <div class="input-group-append">
                               <button class="btn btn-primary btn-md" type="button" onclick="applyCoupon()"
@@ -236,7 +239,7 @@
                           <div class="mb-3">
                             <label for="recipient-name" class="col-form-label">Area:</label>
                             <input required type="text" class="form-control" id="area" name="area"
-                              value="<%= userData?.addressDetails[0]?.area %>" />
+                              value="<%= userData?.addressDetails?.area %>" />
                             <p id="areaError" style="color: red"></p>
                           </div>
                           <div class="mb-3">
@@ -283,7 +286,7 @@
                             Close
                           </button>
                           <button type="submit" value="submit" class="btn btn-primary">
-                            Edit
+                            Save Changes
                           </button>
                         </div>
                       </form>
@@ -373,6 +376,7 @@
 
       function applyCoupon() {
         let couponcode = document.querySelector('#c_code').value;
+        let couponCode=couponcode.toUpperCase()
 
         console.log("inside apply coupon");
 
@@ -383,7 +387,7 @@
           },
           body: JSON.stringify(
             {
-              couponcode: couponcode,
+              couponcode: couponCode,
             }
           )
         }
@@ -410,6 +414,16 @@
                 // location.reload()
               });
             }
+            // }else if (response[0].minamount) {
+            //   console.log(response.minamount)
+            //   Swal.fire({
+            //     title: `Minimum amount of ${reponse.minAmount} required`,
+            //     icon: "error",
+            //     confirmButtonText: "continue",
+            //   }).then(function () {
+            //     // location.reload()
+            //   });
+            // }
 
             else if (response.invalid) {
               
@@ -441,7 +455,7 @@
         console.log(order);
         var options = {
           "key": 'rzp_test_AKZuqO9DIb9bQK',
-          "amount": (order.amount) * 100,
+          "amount": (order.amount),
           "currency": "INR",
           "name": "restinpillows",
           "description": "Test Transaction",

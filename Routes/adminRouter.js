@@ -3,6 +3,7 @@ const adminController=require('../controller/adminController');
 const adminSession=require('../middlewares/session');
 const verifyAdmin=adminSession.verifyLoginAdmin;
 const upload=require('../middlewares/multer');
+const uploadImage = require('../middlewares/multer');
 
 
 adroute.get('/',verifyAdmin,adminController.adminIndex);
@@ -56,6 +57,7 @@ adroute.get('/listproduct',verifyAdmin,adminController.listProduct);
 
 adroute.get('/category',verifyAdmin,adminController.Category);
 adroute.post('/categorypost',verifyAdmin,adminController.categoryPost);
+adroute.get('/deletecategory',verifyAdmin,adminController.deleteCategory);
 
 adroute.get('/subcategory',verifyAdmin,adminController.Subcategory);
 adroute.post('/subcategorypost',verifyAdmin,adminController.subcategoryPost);

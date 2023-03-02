@@ -41,6 +41,7 @@ app.use('/', userRouter);
 app.use('/admin', adminRouter);
 
 app.use(function (req, res) {
+   
     res.redirect('/error');
 })
 

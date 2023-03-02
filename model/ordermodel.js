@@ -32,6 +32,9 @@ const orderSchema = new Schema(
                     type:Number,
                     required:true
                 },
+                productprice:{
+                    type:Number,
+                }
                
             }
         ],

@@ -326,7 +326,9 @@
     <!-- Firm Visit Start -->
     <div class="container-fluid bg bg-icon mt-5 py-6">
         <div class="container">
-            <% if(bannerData.length){ %> 
+            
+           
+                <% if(bannerData[0].isDeleted==false){ %>
                 <div class="row justify-content-center  mb-5">       
                   <div class="col-md-7 site-section-heading text-center pt-4">            
                     <h2><%=bannerData[0].offerType%> </h2>
@@ -343,7 +345,8 @@
                     <p><a href="/getshop" class="btn btn-primary btn-sm">Shop Now</a></p>
                   </div>
                 </div>
-                <% } %>
+                    <% } %>
+             
         </div>
     </div>
     <!-- Firm Visit End -->
@@ -508,8 +511,8 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
-            class="bi bi-arrow-up"></i></a>
+    <!-- <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
+            class="bi bi-arrow-up"></i></a> -->
 
 
     <!-- JavaScript Libraries -->

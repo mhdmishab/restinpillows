@@ -59,23 +59,37 @@ db.dbConnect();
 function generateOTP() {
     return Math.floor(1000 + Math.random() * 9000);
 }
-let msg = "";
+let msg;
 
 
 
 
 
 module.exports = {
+    
     home: async (req, res) => {
+        console.log("hooommmee");
+        try{
         let session = req.session.email;
-        let products = await myProduct.find({}).populate("category").limit(6);
-        let bannerData = await banner.find().sort({ createdAt: -1 }).limit(1);
+        let products = await myProduct.find({unlist:false}).populate("category").limit(6);
+        let bannerData = await banner.find({isDeleted:false}).sort({ createdAt: -1 }).limit(1);
+        console.log(bannerData);
 
 
-        res.render('users/home', { session, products,bannerData });
+        res.render('users/home', { session, products, bannerData });
+    }catch(err){
+        console.log("inside home error");
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
 
-    },
+
+
+    
+
     userLogin: (req, res) => {
         if (req.session.email) {
             res.redirect('userprofile');
@@ -86,6 +100,7 @@ module.exports = {
 
         }
     },
+
     doLogin: async (req, res) => {
         let userData = {};
         userData = req.body;
@@ -152,6 +167,7 @@ module.exports = {
 
 
     },
+
     userSignup: (req, res) => {
         if (req.session.email) {
             res.redirect('/userprofile');
@@ -160,6 +176,7 @@ module.exports = {
             msg = "";
         }
     },
+
     register: async (req, res) => {
         console.log(req.body);
         try {
@@ -183,6 +200,7 @@ module.exports = {
             res.redirect('/error');
         }
     },
+
     otpValidation: async (req, res) => {
         try {
             var myDetails = new myDb.users({
@@ -207,21 +225,25 @@ module.exports = {
 
                             myDetails.save().then(item => {
                                 req.session.email = myDetails.email;
-                                res.redirect('/userprofile')
+                                res.redirect('/');
                             })
                                 .catch(err => {
+                                    console.error(err.message);
                                     console.log("unable to save to database");
                                     res.redirect('/signup');
                                 });
 
                         } else {
                             console.log("OTP expired");
+                            msg="OTP Expired"
                             res.redirect('/signup');
 
                         }
                     } else {
                         console.log('Invalid OTP');
-                        res.render('users/login', { msg: "invalid otp" })
+                        msg= "Invalid OTP";
+                        res.redirect('/signup')
+                        
 
                     }
                 }
@@ -233,7 +255,7 @@ module.exports = {
                 }
             });
         } catch (err) {
-            console.log("big error");
+            console.log(err.message);
             res.redirect('/error');
         }
 
@@ -337,6 +359,7 @@ module.exports = {
         console.log("inside add cart controlleer");
         try {
             const id = req.body.productId;
+            const product=await myProduct.findOne({_id:id});
             console.log(id);
 
             const session = req.session.email;
@@ -344,6 +367,7 @@ module.exports = {
             let proObj = {
                 productId: id,
                 quantity: 1,
+                productprice:product.price,
             };
 
             console.log(proObj);
@@ -389,6 +413,7 @@ module.exports = {
                         {
                             productId: id,
                             quantity: 1,
+                            productprice:product.price
                         },
                     ],
                 });
@@ -472,11 +497,10 @@ module.exports = {
         const session = req.session.email;
         let userData = await myDb.users.findOne({ email: session })
         let userProfile = await profile.findOne({ email: session });
-        if (userProfile) {
-            res.render('users/profile', { session, userData, userProfile })
-        } else {
-            res.render('users/profile', { session, userData, userProfile });
-        }
+       
+        res.render('users/profile', { session, userData, userProfile,msg });
+        msg="";
+     
 
 
     },
@@ -489,7 +513,7 @@ module.exports = {
             let userData = await myDb.users.findOne({ email: session });
             let userProfile = await profile.findOne({ email: session });
 
-            bcrypt.compare(userData.password, oldPassword).then(async (status) => {
+            bcrypt.compare(oldPassword,userData.password).then(async (status) => {
 
                 if (status) {
                     await myDb.users.updateOne({ email: session }, { $set: { password: newPassword } });
@@ -498,9 +522,9 @@ module.exports = {
 
                     msg = "";
                 } else {
-                    let msg = "password change failed,Invalid old password";
-                    res.render('users/profile', { session, userData, userProfile, msg })
-                    msg = "";
+                     msg = "Invalid old password";
+                    res.redirect('/profile')
+                    
                 }
 
             })
@@ -546,7 +570,7 @@ module.exports = {
                     $set: {
                         fullname: req.body.fullname,
                         phone: req.body.phone,
-                        addressDetails: [
+                        'addressDetails.0': [
                             {
                                 housename: req.body.housename,
                                 area: req.body.area,
@@ -581,7 +605,7 @@ module.exports = {
                 fullname: req.body.fullname,
                 email: req.body.email,
                 phone: req.body.phone,
-                addressDetails: [
+                'addressDetails.0': [
                     {
                         housename: req.body.housename,
                         area: req.body.area,
@@ -850,6 +874,69 @@ module.exports = {
 
     },
 
+    editAddress:async(req,res)=>{
+        console.log("inside edit adress")
+      
+            const session = req.session.email;
+            const addressId=req.params.id;
+
+            console.log(addressId);
+            console.log(req.body.housename);
+            console.log(req.body.area);
+            console.log(req.body.landmark);
+            console.log(req.body.district);
+            console.log(req.body.state);
+            console.log(req.body.pin);
+
+            let userProfile = await profile.findOne({ email: session });
+            if (userProfile) {
+                await profile.updateOne(
+                  { 
+                    email: session,
+                    addressDetails: {
+                      $elemMatch: {
+                        _id: addressId
+                      }
+                    }
+                  },
+                  {
+                    $set: {
+                      "addressDetails.$.housename": req.body.housename,
+                      "addressDetails.$.area": req.body.area,
+                      "addressDetails.$.landmark": req.body.landmark,
+                      "addressDetails.$.district": req.body.district,
+                      "addressDetails.$.state": req.body.state,
+                      "addressDetails.$.postoffice": req.body.postoffice,
+                      "addressDetails.$.pin": req.body.pin
+                    }
+                  }
+                );
+              }else {
+                const nwprofile = new profile({
+    
+                    addressDetails: [
+                        {
+                            housename: req.body.housename,
+                            area: req.body.area,
+                            landmark: req.body.landmark,
+                            district: req.body.district,
+                            state: req.body.state,
+                            postoffice: req.body.postoffice,
+                            pin: req.body.pin
+                        }
+                    ]
+    
+    
+    
+                });
+    
+                nwprofile.save();
+            }
+            res.redirect('/profile')
+    
+        
+    },
+
     addNewAddress: async (req, res) => {
         const session = req.session.email;
         console.log("hellooooo" + session);
@@ -1006,6 +1093,8 @@ module.exports = {
         const cartData = await cart.findOne({ userId: userData._id });
         const objId = mongoose.Types.ObjectId(userData._id)
 
+        console.log(cartData.product);
+
         const orderData = new order({
             userId: userData._id,
             name: userProfileData.fullname,
@@ -1017,6 +1106,8 @@ module.exports = {
             orderDate: moment().format("MMM Do YY"),
             deliveryDate: moment().add(3, "days").format("MMM Do YY")
         });
+
+        console.log(orderData.orderItems);
 
 
 
@@ -1043,7 +1134,7 @@ module.exports = {
             console.log(orderDatas);
 
             let options = {
-                amount: orderDatas.totalAmount,
+                amount: (orderDatas.totalAmount)*100,
                 currency: "INR",
                 receipt: "" + orderId,
             };
@@ -1067,88 +1158,6 @@ module.exports = {
         // }
         // }
     },
-
-
-    // placeOrder: async (req, res) => {
-    //     console.log("Inside place order")
-
-
-    //     // let invalid;
-    //     // let couponDeleted;
-    //     const data = req.body;
-    //     console.log(data);
-
-    //     const session = req.session.email;
-    //     const userData = await myDb.users.findOne({ email: session });
-    //     const userProfileData = await profile.findOne({ email: session });
-    //     const cartData = await cart.findOne({ userId: userData._id });
-    //     const objId = mongoose.Types.ObjectId(userData._id)
-
-    //                 const orderData = new order({
-    //                     userId: userData._id,
-    //                     name: userProfileData.fullname,
-    //                     phoneNumber: userProfileData.phone,
-    //                     address: req.body.address,
-    //                     orderItems: cartData.product,
-    //                     totalAmount:parseInt(req.body.totalAmountPaid),
-    //                     paymentMethod: req.body.payment,
-    //                     orderDate: moment().format("MMM Do YY"),
-    //                     deliveryDate: moment().add(3, "days").format("MMM Do YY")
-    //                 });
-
-
-
-    //                 if (req.body.payment === "COD") {
-    //                     const orderDatas = await orderData.save()
-
-    //                     console.log("Order data Saved");
-    //                     const orderId = orderDatas._id
-
-    //                     await order.updateOne({ _id: orderId }, { $set: { orderStatus: 'placed' } })
-    //                     await cart.deleteOne({ userId: userData._id });
-    //                     let session = req.session.email;
-
-    //                         if(data.coupon&&data.coupon!=''){
-    //                         await coupon.updateOne( {couponName:data.coupon}, {$push:{users: {userId : objId}}});
-    //                         }
-
-    //                       res.json({ success: true})
-
-    //                 } else {
-    //                     console.log("HERE IN ONLINE PAYMENT");
-    //                     const orderDatas = await orderData.save();
-    //                     const orderId = orderDatas._id;
-    //                     console.log(orderDatas);
-
-    //                     let options = {
-    //                         amount: orderDatas.totalAmount * 100, // multiply by 100 to convert to paisa (Razorpay's currency unit)
-    //                         currency: "INR",
-    //                         receipt: "" + orderId,
-    //                     };
-    //                     instance.orders.create(options, function (err, order) {
-    //                         if (err) {
-    //                         console.log(err);
-    //                         res.status(500).json({ success: false, message: "Error creating Razorpay order" });
-    //                         } else {
-    //                         console.log(order);
-    //                         razorPay(order);
-    //                         // The Razorpay order ID and signature will not be available here
-    //                         // as they need to be generated by Razorpay and passed to the client-side JavaScript code
-    //                         // You can send the order ID to the client-side JavaScript code as a response to the API call
-    //                         res.json({ success: true, orderId: order.id });
-    //                         }
-    //                     });
-    //                     }
-    //             // } else {
-
-    //                 //   res.redirect("users/viewCart");
-    //             // }
-    //         // }
-    //     // }
-    // },
-
-
-
 
     orderSuccess: async (req, res) => {
         let session = req.session.email;
@@ -1278,6 +1287,12 @@ module.exports = {
                     const sum = productData.reduce((accumulator, object) => {
                         return accumulator + object.productPrice;
                     }, 0);
+
+                    // if (sum < invalid.minAmount) {
+                    //     console.log("insidew minimum amount");
+                    //     let minamount=invalid.minAmount;
+                    //     res.json({minamount});
+                    // }
 
                     var total = sum;
                     if (discount == false) {
@@ -1451,7 +1466,8 @@ module.exports = {
         
         res.render('users/orderedProduct', { session,productData, orderDetails});
       },
-      cancelOrder: async (req, res) => {
+
+    cancelOrder: async (req, res) => {
         const data = req.params.id;
         await order.updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
         res.redirect("/orderDetails");

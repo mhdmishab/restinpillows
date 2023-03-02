@@ -92,7 +92,7 @@
                             </div>
                             <div class="col-sm-9 text-secondary">
                                 <input type="text" class="form-control" name="fullname" placeholder="Name"
-                                    value="<%=userData.fullname%>">
+                                    value="<%=userData.fullname%>" required>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -112,7 +112,7 @@
                             </div>
                             <div class="col-sm-9 text-secondary">
                                 <input type="text" class="form-control" name="phone" placeholder="Phone"
-                                    value="<%=userProfile?.phone%>">
+                                    value="<%=userProfile?.phone%>" required>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -121,34 +121,34 @@
                             </div>
                             <div class="col-sm-9 text-secondary ">
                                 <input type="text" name="housename" id="housename" class="form-control" placeholder="House name"
-                                    value="<%= userProfile?.addressDetails[0]?.housename  %> ">
+                                    value="<%= userProfile?.addressDetails[0]?.housename  %> "required>
                             </div>
                             <div class="col-sm-3">
                                 <p class="mt-4">Area</p>
                             </div>
                             <div class="col-sm-9 text-secondary mb-0 mt-3">
                                 <input type="text" placeholder="Area" name="area" id="area" class="form-control"
-                                    value="<%= userProfile?.addressDetails[0]?.area  %>">
+                                    value="<%= userProfile?.addressDetails[0]?.area  %>" required>
                             </div>
                             <div class="col-sm-3">
                                 <p class="mt-4">Landmark</p>
                             </div>
                             <div class="col-sm-9 text-secondary ml-10 mb-0 mt-3">
-                                <input type="text" placeholder="Landmark" name="landmark" id="landmark" class="form-control" value="<%= userProfile?.addressDetails[0]?.landmark  %>">
+                                <input type="text" placeholder="Landmark" name="landmark" id="landmark" class="form-control" value="<%= userProfile?.addressDetails[0]?.landmark  %>" required>
                             </div>
                             <div class="d-flex form-outline flex-fill mb-0 mt-3">
                                 <input type="text" value="<%= userProfile?.addressDetails[0]?.district  %>" placeholder="District" name="district" id="district"
                                     class="form-control" />
                                 <input type="text" value="<%= userProfile?.addressDetails[0]?.state  %>" placeholder="State" name="state" id="state"
-                                    class="form-control" />
+                                    class="form-control" required/>
 
                             </div>
 
                             <div class="d-flex form-outline flex-fill mb-0 mt-3">
                                 <input type="text" value="<%= userProfile?.addressDetails[0]?.postoffice  %>" placeholder="Post office" name="postoffice"
-                                    id="postoffice" class="form-control" />
+                                    id="postoffice" class="form-control" required />
                                 <input type="text" value="<%= userProfile?.addressDetails[0]?.pin  %>" placeholder="Pin code" name="pin" id="pin"
-                                    class="form-control" />
+                                    class="form-control" required/>
 
                             </div>
                         </div>

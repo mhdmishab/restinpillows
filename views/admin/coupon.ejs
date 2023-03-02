@@ -32,10 +32,10 @@
                 <input name="maxLimit" required  class="rounded-2" style="width: 189px; height: 38px;" type="text">
               </div>
 
-              <div class="d-flex flex-column">
+              <!-- <div class="d-flex flex-column">
                 <label>Minimum Amount</label>
                 <input name="minAmount" required  class="rounded-2" style="width: 189px; height: 38px;" type="text">
-              </div>
+              </div> -->
 
               <div class="d-flex flex-column">
                 <label>Expiry date</label>
@@ -58,7 +58,7 @@
               <th scope="col">Coupon Code</th>
               <th scope="col">Discount%</th>
               <th scope="col">Maximum Limit</th>
-              <th scope="col">Minimum Amount</th>
+              <th scope="col">No of Users Used</th>
               <th scope="col">Expiry date</th>
               <th scope="col">Controlls</th>
               <th scope="col">remove</th>
@@ -79,13 +79,13 @@
                   </td>
                  
                   <td>
-                    <%=element.discount %>
+                    <%=element.discount*100 %>%
                   </td>
                   <td>
                     <%=element.maxLimit %>
                   </td>
                   <td>
-                    <%=element.minAmount %>
+                    <%=element.users.length %>
                   </td>
                   <td>
                     <%=element.expirationTime %>

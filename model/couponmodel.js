@@ -19,11 +19,11 @@ const couponSchema = new mongoose.Schema(
             required:true,
             trim: true,
         },
-        minAmount:{
-            type:Number,
-            required:true,
-            trim: true,
-        },
+        // minAmount:{
+        //     type:Number,
+        //     required:true,
+        //     trim: true,
+        // },
         startDate:{
             type:String,
             default:moment().format("DD/MM/YYYY") +" "+ moment().format("hh:mm:ss"),
