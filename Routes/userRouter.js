@@ -31,7 +31,7 @@ route.post('/removeproduct',verifyuser,userController.deleteCartProd);
 route.get('/checkout',verifyuser,userController.checkOut);
 route.post('/placeOrder',verifyuser,userController.placeOrder);
 route.post('/applycoupon',verifyuser,userController.applyCoupon);
-route.post('/addnewaddress',verifyuser,userController.addNewAddress);
+route.post('/addnewaddress/:name',verifyuser,userController.addNewAddress);
 
 route.get('/cancelOrder/:id',verifyuser,userController.cancelOrder);
 route.get('/orderedProduct/:id',verifyuser,userController.orderedProduct);
@@ -45,7 +45,8 @@ route.get('/editprofile',verifyuser,userController.editProfile);
 route.post('/postEditProfile',verifyuser,userController.postEditProfile);
 route.post('/postEditAddress',verifyuser,userController.postEditAddress);
 route.post('/changePassword',verifyuser,userController.changeProfilePass);
-route.post('/editaddress/:id',verifyuser,userController.editAddress);
+route.post('/editaddress/:id/:name',verifyuser,userController.editAddress);
+route.get('/deleteAddress/:id',verifyuser,userController.deleteAddress);
 
 
 // route.post('/getsubcategories',verifyuser,userController.getSubcategory)

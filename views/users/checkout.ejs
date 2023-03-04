@@ -1,307 +1,346 @@
 <%- include ('../users/layout/header.ejs') %>
-  <div style="height: 7rem; width: 100%;"></div>
 
-  <!-- <div class="bg-light py-3">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 mb-0"><a href="/index" style="text-decoration: none;">Home</a> <span
-              class="mx-2 mb-0">/</span> <a href="/getCart" style="text-decoration: none;">Cart</a> <span
-              class="mx-2 mb-0">/</span> <strong class="text-black" style="text-decoration: none;">Checkout</strong>
-          </div>
-        </div>
-      </div>
-    </div> -->
+  <div style="height: 10rem; width: 100%;"></div>
 
-  <div class="row" style="width:1519px;">
-    <div class="site-section " >
-      <div class="container">
-        <div class="col-md-6">
-          <div class="row mb-5">
-            <!-- <div class="col-md-12">
-                <h2 class="h3 mb-3 text-black">Coupon Code</h2>
-                <div class="p-3 p-lg-5 border">
+  <% const locationName="checkout" %>
 
-                  <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
-                  <div class="input-group w-75">
-                    <input type="text" class="form-control" id="c_code" placeholder="Coupon Code" aria-label="Coupon Code"
-                      aria-describedby="button-addon2">
-                    <div class="input-group-append">
-                      <button class="btn btn-primary btn-sm" type="button" id="button-addon2">Apply</button>
+    <div class="row" style="width:1519px;">
+      <div class="site-section ">
+        <div class="container">
+          <div class="col-md-6">
+
+            <div class="row mb-5">
+              <div class="col-md-12">
+                <h2 class="h3 mb-3 text-black"> Address</h2>
+                <div class="p-3 p-lg-5 border justify-content-center align-items-center">
+
+                  <label class="col-xs-3 control-label">Your Address</label>
+
+                  <% if(userData){%>
+
+
+                    <select class="form-select mt-2 form-select-lg" name="address" required>
+                      <% userData?.addressDetails.forEach((address)=>{%>
+                        <option name="address" id="selectedAddress" value="<%=address._id %>">
+                          <%= address.housename%>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,
+                                  <%= address.district %>,<%= address.pin %>,<%=address.state %>
+                        </option>
+                        <% }) %>
+                    </select>
+                    <div class="row">
+                      <div class="col-3">
+                        <button type="button" style="background-color: #05496c;" class="btn  mt-3"
+                          data-bs-toggle="modal" data-bs-target="#exampleModalLabelAddAdress" data-bs-whatever="@mdo">
+                          <p class="text-white">Add new address</p>
+                        </button>
+                      </div>
+                      <div class="col-5"></div>
+                      <div class="col-3">
+                        <button type="button" class="btn text-white mt-3" style="background-color: #05496c;"
+                          data-bs-toggle="modal" data-bs-target="#addressesModal">
+                          View Other Addresses
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  <%}else{%>
 
+                    <h5>Update your profile</h5>
+
+                  <% } %>
                 </div>
-            </div> -->
-          </div>
-          <div class="row mb-5">
-            <div class="col-md-12">
-              <h2 class="h3 mb-3 text-black"> Address</h2>
-              <div class="p-3 p-lg-5 border">
 
-                <label class="col-xs-3 control-label">Your Address</label>
-
-                <select class="form-select mt-2" name="address"  required>
-                  <% userData?.addressDetails.forEach((address)=>{%>
-                    <option name="address" id="selectedAddress" value="<%=address._id %>" >
-                      <%= address.housename%>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,<%=
-                                address.district %>,<%= address.pin %>,<%=address.state %>
-                    </option>
-                    <% }) %>
-                </select>
-                <button type="button" style="background-color: #05496c;" class="btn  mt-3" data-bs-toggle="modal"
-                  data-bs-target="#exampleModalLabelAddAdress" data-bs-whatever="@mdo">
-                  <p class="text-white">Add new address</p>
-                </button>
-                <button type="button" style="background-color: #05496c;" class="btn  mt-3" data-bs-toggle="modal"
-                  data-bs-target="#exampleModalLabelEditAdress" data-bs-whatever="@mdo">
-                  <p class="text-white">Edit current address</p>
-                </button>
-              </div>
-
-              <div class="row mb-5">
-                <div class="col-md-12">
-                  <h2 class="h3 mb-3 text-black">Your Order</h2>
-                  <div class="p-3 p-lg-5 border">
-                    <h2>Payment</h2>
+                <div class="row mb-5">
+                  <div class="col-md-12">
+                    <h2 class="h3 mb-3 mt-3 text-black">Your Order</h2>
+                    <div class="p-3 p-lg-5 border">
+                      <h2>Payment</h2>
 
 
 
 
-                    <form id="placeOrder">
-         
-                      <label class="col-xs-3 control-label">Select Shipping Address</label>
+                      <form id="placeOrder">
 
-                      <select class="form-select mt-2" required name="address" id="deliveryAddress">
-                        <% userData?.addressDetails.forEach((address)=>{%>
-                          <option name="address">
-                        
-                            <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>
-                                    ,<%= address.district %>,<%= address.pin %>,<%=address.state %>
-                          </option>
-                     
-                          <% }) %>
-                      </select>
+                        <label class="col-xs-3 control-label mb-2 mt-2">Select Shipping Address</label>
 
-                      <div class="d-block my-3">
-                        <div class="custom-control custom-radio">
-                          <input id="credit" name="paymentMethod" type="radio" value="COD" class="custom-control"
-                            checked required />
-                          <label class="custom-control-label" for="credit">COD</label>
-                        </div>
-                        <div class="custom-control custom-radio">
-                          <input id="debit" name="paymentMethod" type="radio" value="Online"
-                            class="custom-control" required />
-                          <label class="custom-control-label " for="debit">Online</label>
-                        </div>
-                        <h2 class="h3 mb-3 text-black"></h2>
-                        <div class="p-3 p-lg-5 border">
+                        <select class="form-select mt-2" required name="address" id="deliveryAddress">
+                          <% userData?.addressDetails.forEach((address)=>{%>
+                            <option value="<%= address._id %>">
+                              <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area
+                                      %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
+                            </option>
+                            <% }) %>
+                        </select>
 
-                          <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
-                          <div class="input-group w-75">
-                            <input type="text" class="form-control text-uppercase" id="c_code" placeholder="Coupon Code"
-                              aria-label="Coupon Code" aria-describedby="button-addon2" name="coupon">
-                            <div class="input-group-append">
-                              <button class="btn btn-primary btn-md" type="button" onclick="applyCoupon()"
-                                id="couponapply">Apply</button>
-                            </div>
+                        <div class="d-block my-3">
+                          <div class="form-check">
+                            <input id="credit" name="paymentMethod" type="radio" value="COD" class="form-check-input"
+                               checked/>
+                            <label class="form-check-label" for="credit">Cash on Delivery</label>
                           </div>
+                          <div class="form-check">
+                            <input id="credit" name="paymentMethod" type="radio" value="online" class="form-check-input"
+                              />
+                            <label class="form-check-label" for="credit">Online</label>
+                          </div>
+                          <h2 class="h3 mb-3 text-black"></h2>
+                          <div class="p-3 p-lg-5 border">
 
-                        </div>
-                        <h5 class="text-muted mt-4">Amount to be paid</h5>
-                        <table class="table site-block-order-table mb-5">
-                          <thead>
-                            <th>Product</th>
-                            <th>Total</th>
-                          </thead>
-                          <tbody>
-                            <% productData.forEach(function(product) {%>
-                              <tr>
-                                <td>
-                                  <%=product.productDetail.productname%> <strong class="mx-2">x</strong>
-                                    <%= product.productQuantity%>
-                                </td>
-                                <% var a=product.productDetail.price%>
-                                  <% var b=product.productQuantity%>
-                                    <% var c=a*b %>
-                                      <td>
-                                        <%= c %>₹
-                                      </td>
-                              </tr>
-                              <% }) %>
+                            <label for="c_code" class="text-black mb-3">Enter your coupon code if you have one</label>
+                            <div class="input-group w-75">
+                              <input type="text" class="form-control text-uppercase" id="c_code"
+                                placeholder="Coupon Code" aria-label="Coupon Code" aria-describedby="button-addon2"
+                                name="coupon">
+                              <div class="input-group-append">
+                                <button class="btn btn-primary btn-md" style="background-color: #05496c;" type="button"
+                                  onclick="applyCoupon()" id="couponapply">Apply</button>
+                              </div>
+                            </div>
+
+                          </div>
+                          <h5 class="text-muted mt-4">Amount to be paid</h5>
+                          <table class="table site-block-order-table mb-5">
+                            <thead>
+                              <th>Product</th>
+                              <th>Total</th>
+                            </thead>
+                            <tbody>
+                              <% productData.forEach(function(product) {%>
                                 <tr>
-                                  <td><b>Total Amount</b></td>
                                   <td>
-                                    <%=sum %>
+                                    <%=product.productDetail.productname%> <strong class="mx-2">x</strong>
+                                      <%= product.productQuantity%>
                                   </td>
+                                  <% var a=product.productDetail.price%>
+                                    <% var b=product.productQuantity%>
+                                      <% var c=a*b %>
+                                        <td>
+                                          <%= c %>₹
+                                        </td>
                                 </tr>
-                                <tr>
-                                  <td><b>Discounted Amount</b></td>
-                                  <td>
-                                    <p id="discountedAmount"><%=sum %></p>
-                                  </td>
-                                </tr>
-                          </tbody>
-                        </table>
-                        <button class="btn btn-primary btn-lg py-3 btn-block mt-5" id="placeOrder-submit" type="button"
-                          onclick="placeOrder()">Place Order</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-                <div class="modal fade" id="exampleModalLabelAddAdress" tabindex="-1"
-                  aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabelAddAdress">
-                          Add new Address
-                        </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <form action="/addnewaddress" method="post">
-                        <div class="modal-body">
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Housename:</label>
-                            <input required type="text" class="form-control" id="housename" name="housename" />
-                            <p id="houseError" style="color: red"></p>
-                          </div>
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Area:</label>
-                            <input required type="text" class="form-control" id="area" name="area" />
-                            <p id="areaError" style="color: red"></p>
-                          </div>
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Landmark:</label>
-                            <input required type="text" class="form-control" id="landmark" name="landmark" />
-                            <p id="landmarkError" style="color: red"></p>
-                          </div>
-                          <div class="mb-3">
-                            <div class="row">
-                              <div class="col-md-6 mb-3">
-                                <label for="firstName">District</label>
-                                <input required type="text" class="form-control" id="district" name="district" />
-                                <p id="stateError" style="color: red"></p>
-                              </div>
-                              <div class="col-md-6 mb-3">
-                                <label for="lastName">State</label>
-                                <input required type="text" class="form-control" id="state" name="state" />
-                                <p id="pincodeError" style="color: red"></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="mb-3">
-                            <div class="row">
-                              <div class="col-md-6 mb-3">
-                                <label for="firstName">Post office</label>
-                                <input required type="text" class="form-control" id="postoffice" name="postoffice" />
-                                <p id="stateError" style="color: red"></p>
-                              </div>
-                              <div class="col-md-6 mb-3">
-                                <label for="lastName">Pincode</label>
-                                <input required type="text" class="form-control" id="pin" name="pin" />
-                                <p id="pincodeError" style="color: red"></p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                          </button>
-                          <button type="submit" value="submit" class="btn btn-primary">
-                            Add
-                          </button>
+                                <% }) %>
+                                  <tr>
+                                    <td><b>Total Amount</b></td>
+                                    <td>
+                                      <%=sum %>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td><b>Discounted Amount</b></td>
+                                    <td id="discountedAmount">
+                                        <%=sum %>
+                                      
+                                    </td>
+                                  </tr>
+                            </tbody>
+                          </table>
+                          <% if(userData){ %>
+                          
+                          <button class="btn btn-primary btn-lg py-3 btn-block mt-5" style="background-color: #05496c;"
+                            id="placeOrder-submit" type="button" onclick="placeOrder()">Place Order</button>
+
+                            <% } %>
                         </div>
                       </form>
                     </div>
                   </div>
                 </div>
-                <!-- edit address -->
-
-                <div class="modal fade" id="exampleModalLabelEditAdress" tabindex="-1"
-                  aria-labelledby="exampleModalLabel" aria-hidden="true">
-                  <div class="modal-dialog">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabelAddAdress">
-                          Edit current Address
-                        </h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <form action="/postEditAddress" method="post">
-                        <div class="modal-body">
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Housename:</label>
-                            <input required type="text" class="form-control" id="housename" name="housename"
-                              value="<%= userData?.addressDetails[0]?.housename  %>" />
-                            <p id="houseError" style="color: red"></p>
-                          </div>
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Area:</label>
-                            <input required type="text" class="form-control" id="area" name="area"
-                              value="<%= userData?.addressDetails?.area %>" />
-                            <p id="areaError" style="color: red"></p>
-                          </div>
-                          <div class="mb-3">
-                            <label for="recipient-name" class="col-form-label">Landmark:</label>
-                            <input required type="text" class="form-control" id="landmark" name="landmark"
-                              value="<%= userData?.addressDetails[0]?.landmark  %>" />
-                            <p id="landmarkError" style="color: red"></p>
-                          </div>
-                          <div class="mb-3">
-                            <div class="row">
-                              <div class="col-md-6 mb-3">
-                                <label for="firstName">District</label>
-                                <input required type="text" class="form-control" id="district" name="district"
-                                  value="<%= userData?.addressDetails[0]?.district %>" />
-                                <p id="stateError" style="color: red"></p>
-                              </div>
-                              <div class="col-md-6 mb-3">
-                                <label for="lastName">State</label>
-                                <input required type="text" class="form-control" id="state" name="state"
-                                  value="<%= userData?.addressDetails[0]?.state %>" />
-                                <p id="pincodeError" style="color: red"></p>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="mb-3">
-                            <div class="row">
-                              <div class="col-md-6 mb-3">
-                                <label for="firstName">Post office</label>
-                                <input required type="text" class="form-control" id="postoffice" name="postoffice"
-                                  value="<%= userData?.addressDetails[0]?.postoffice  %>" />
-                                <p id="stateError" style="color: red"></p>
-                              </div>
-                              <div class="col-md-6 mb-3">
-                                <label for="lastName">Pincode</label>
-                                <input required type="text" class="form-control" id="pin" name="pin"
-                                  value="<%= userData?.addressDetails[0]?.pin %>" />
-                                <p id="pincodeError" style="color: red"></p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                            Close
-                          </button>
-                          <button type="submit" value="submit" class="btn btn-primary">
-                            Save Changes
-                          </button>
-                        </div>
-                      </form>
-                    </div>
-                  </div>
-                </div>
-
               </div>
+
             </div>
           </div>
-
         </div>
       </div>
-      <!-- </form> -->
     </div>
+
+
+
+    <!-- add address -->
+
+    <div class="modal fade" id="exampleModalLabelAddAdress" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabelAddAdress">
+              Add new Address
+            </h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <form action="/addnewaddress/<%=locationName%>" method="post">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Housename:</label>
+                <input required type="text" class="form-control" id="housename" name="housename" />
+                <p id="houseError" style="color: red"></p>
+              </div>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Area:</label>
+                <input required type="text" class="form-control" id="area" name="area" />
+                <p id="areaError" style="color: red"></p>
+              </div>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Landmark:</label>
+                <input required type="text" class="form-control" id="landmark" name="landmark" />
+                <p id="landmarkError" style="color: red"></p>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="firstName">District</label>
+                    <input required type="text" class="form-control" id="district" name="district" />
+                    <p id="stateError" style="color: red"></p>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="lastName">State</label>
+                    <input required type="text" class="form-control" id="state" name="state" />
+                    <p id="pincodeError" style="color: red"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-3">
+                <div class="row">
+                  <div class="col-md-6 mb-3">
+                    <label for="firstName">Post office</label>
+                    <input required type="text" class="form-control" id="postoffice" name="postoffice" />
+                    <p id="stateError" style="color: red"></p>
+                  </div>
+                  <div class="col-md-6 mb-3">
+                    <label for="lastName">Pincode</label>
+                    <input required type="text" class="form-control" id="pin" name="pin" />
+                    <p id="pincodeError" style="color: red"></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                Close
+              </button>
+              <button type="submit" value="submit" class="btn btn-primary">
+                Add
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- edit address -->
+
+    <div class="modal fade" id="addressesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+      aria-labelledby="staticBackdropLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="staticBackdropLabel">View Addresses</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+
+            <ul>
+              <% let i=1 %>
+
+                <% userProfile?.addressDetails.slice(1).forEach((address)=>{%>
+
+                  <li>
+
+                    <form method="post" action="/editaddress/<%=address?._id%>/<%=locationName%>">
+
+                      <div class="row mb-3">
+                      
+                        <h6>Address:<%=i%>
+                        </h6>
+                        <div class="col-sm-9 text-secondary ">
+                          <input type="text" name="housename" id="housename" class="form-control my-2"
+                            placeholder="House name" value="<%= address?.housename  %> " required>
+                        </div>
+                        <!-- <div class="col-sm-3">
+                                  <p class="mt-4">Area</p>
+                                </div> -->
+                        <div class="col-sm-9 text-secondary mb-0 mt-3">
+                          <input type="text" placeholder="Area" name="area" id="area" class="form-control"
+                            value="<%= address?.area  %>" required>
+                        </div>
+                        <!-- <div class="col-sm-3">
+                                  <p class="mt-4">Landmark</p>
+                                </div> -->
+                        <div class="col-sm-9 text-secondary ml-10 mb-0 mt-3">
+                          <input type="text" placeholder="Landmark" name="landmark" id="landmark" class="form-control"
+                            value="<%= address?.landmark  %>" required>
+                        </div>
+                        <div class="d-flex form-outline flex-fill mb-0 mt-3">
+                          <input type="text" value="<%= address?.district  %>" placeholder="District" name="district"
+                            id="district" class="form-control" required />
+                          <input type="text" value="<%= address?.state  %>" placeholder="State" name="state" id="state"
+                            class="form-control" required />
+
+                        </div>
+
+                        <div class="d-flex form-outline flex-fill mb-0 mt-3">
+                          <input type="text" value="<%= address?.postoffice  %>" placeholder="Post office"
+                            name="postoffice" id="postoffice" class="form-control" required />
+                          <input type="text" value="<%= address?.pin  %>" placeholder="Pin code" name="pin" id="pin"
+                            class="form-control" required />
+
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-4">
+                          <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                            data-bs-target="#exampleModal-<%=address?._id%>">
+                            Delete
+                          </button>
+
+                          <!-- delete modal -->
+                          <div class="modal fade" id="exampleModal-<%=address?._id%>" tabindex="-1"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                            <div class="modal-dialog modal-dialog-centered">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation
+                                  </h1>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                  Are you sure you want to delete this Address?
+                                </div>
+
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+                                  <a href="/deleteAddress/<%=address?._id%>"><button type="button"
+                                      class="btn btn-danger">Delete</button></a>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+                        </div>
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-5 text-secondary">
+                          <button type="submit" class="btn btn-primary px-4 mb-5">Save Changes</button>
+                        </div>
+                      </div>
+
+                    </form>
+
+                  </li>
+                  <% i++ %>
+                    <% }); %>
+
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -309,66 +348,66 @@
 
     <script>
       let totalAmountPaid;
-      let couponStatus=false;
+      let couponStatus = false;
 
-      if(couponStatus==false){
-        totalAmountPaid=document.getElementById("discountedAmount").innerHTML;
+      if (couponStatus == false) {
+        totalAmountPaid = document.getElementById("discountedAmount").innerHTML;
 
       }
-    
-      
+
+
 
       function placeOrder() {
         console.log("helloooooo")
         let address = document.querySelector('#deliveryAddress').value;
         // let couponcode = document.querySelector('#c_code').value;
-        
+
         console.log(address);
         let payment = document.querySelector('input[name="paymentMethod"]:checked').value;
         console.log(payment);
 
 
-       
+
         // console.log(couponcode);
 
         // if (payment == "Online") {
 
 
-       
-          let coupon = document.querySelector('#c_code').value;
-          const requestOptions = {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            
-            body: JSON.stringify(
-              
-              {
-                
-                payment: payment,
-                address: address,
-                totalAmountPaid:totalAmountPaid,
-                coupon: coupon,
-              }
-            )
-          }
-        
-          
 
-          fetch('/placeOrder', requestOptions)
-            .then((res) => res.json())
-            .then((newdata) => {
-            
-              console.log("response in send then");
-              if(newdata.success){
-                location.href = "/orderSuccess";
-              }else{
+        let coupon = document.querySelector('#c_code').value;
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+
+          body: JSON.stringify(
+
+            {
+
+              payment: payment,
+              address: address,
+              totalAmountPaid: totalAmountPaid,
+              coupon: coupon,
+            }
+          )
+        }
+
+
+
+        fetch('/placeOrder', requestOptions)
+          .then((res) => res.json())
+          .then((newdata) => {
+
+            console.log("response in send then");
+            if (newdata.success) {
+              location.href = "/orderSuccess";
+            } else {
               console.log(newdata)
               razorPay(newdata)
-              }
-              
-            })
+            }
+
+          })
 
         // }
       }
@@ -376,7 +415,7 @@
 
       function applyCoupon() {
         let couponcode = document.querySelector('#c_code').value;
-        let couponCode=couponcode.toUpperCase()
+        let couponCode = couponcode.toUpperCase()
 
         console.log("inside apply coupon");
 
@@ -426,7 +465,7 @@
             // }
 
             else if (response.invalid) {
-              
+
               Swal.fire({
                 title: "Invalid Coupon!",
                 icon: "error",
@@ -434,12 +473,12 @@
               }).then(function () {
                 // location.reload()
               });
-            }else if(response.total){
+            } else if (response.total) {
               console.log(response.total);
-              totalAmountPaid=response.total;
-              couponStatus=true;
-              document.getElementById('discountedAmount').innerText=totalAmountPaid;
-            }else{
+              totalAmountPaid = response.total;
+              couponStatus = true;
+              document.getElementById('discountedAmount').innerText = totalAmountPaid;
+            } else {
               // totalAmountPaid=document.getElementById('discountedAmount').innerText
             }
           })
@@ -462,7 +501,7 @@
           "image": "/img/riplogo.png",
           "order_id": order.id,
           "handler": function (response) {
-           
+
             verifyPayment(response, order);
           },
           "prefill": {
@@ -512,8 +551,9 @@
             console.log(newdata)
             if (newdata.success) {
               location.href = "/ordersuccess";
+             
             } else {
-              location.href = "/paymentFail";
+              location.href = "/";
             }
 
           })

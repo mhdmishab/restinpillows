@@ -71,7 +71,7 @@
                 </button>
 
 
-                <div class="alert text-danger " role="alert">
+                <div class="alert text-danger " id="alertmsg" role="alert">
                   <%= msg%>
                 </div>
                 <div id="alert"></div>
@@ -85,7 +85,7 @@
         </div>
       </div>
     </div>
-    
+
 
     <!-- Jumbotron -->
   </section>
@@ -97,6 +97,17 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
     integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
     crossorigin="anonymous"></script>
+
+  <script>
+
+    setTimeout(() => {
+      document.getElementById('alertmsg').innerHTML = `<div></div>`
+    }, 5000);
+
+  </script>
+
+
+
   <script>
     const reg = document.querySelector('#registration');
     const fullname = reg.querySelector('#fullname');
@@ -111,40 +122,65 @@
     function showErrorMessage(message) {
 
       errorElement.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
+      setTimeout(() => {
+        errorElement.innerHTML = `<div></div>`
+      }, 5000);
 
     }
 
     function submitform() {
-      if (email.value === "" && password.value === "") {
-
-        showErrorMessage("Username and Password is Required");
-        return false;
-      }
-      if (email.value === "") {
-
-        showErrorMessage("Email is Required");
-        return false;
-      }
-      if (password.value === "") {
-
-        showErrorMessage("Password is Required");
-        return false;
-      }
-      if (email.value === "" || password.value === "") {
-
-        showErrorMessage("email and Password is Required");
-        return false;
-      }
-      if (fullname.value === "") {
+      if (fullname.value.trim() === "") {
 
         showErrorMessage("Name  is Required");
         return false;
       }
+
+      if (email.value.trim() === "") {
+
+        showErrorMessage("Email is Required");
+        return false;
+      }
+
+      let validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+      if (email.value.match(validRegex)) {
+
+      } else {
+        showErrorMessage("Email is not correct");
+        return false;
+      }
+
+      if (password.value.trim() === "") {
+
+        showErrorMessage("Password is Required");
+        return false;
+      }
+      if (Cpassword.value.trim() === "") {
+
+        showErrorMessage("Confirm your Password");
+        return false;
+      }
+      if (email.value === "" || password.value === "") {
+
+        showErrorMessage("Email and Password is Required");
+        return false;
+      }
+
       if (password.value != Cpassword.value) {
 
         showErrorMessage("Passwords does not match");
         return false;
       }
+      if (password.value.length < 6) {
+
+        showErrorMessage("Password must be greater than 6 Characters");
+        return false;
+      }
+      if (password.value.length >= 15) {
+
+        showErrorMessage("Password must be less than 15 Characters");
+        return false;
+      }
+
 
       hideErrorMessage();
       return true;
