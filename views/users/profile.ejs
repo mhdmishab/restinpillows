@@ -5,178 +5,181 @@
   <div class="container">
     <div class="main-body">
       <% var locationName="profile" %>
-      <% var msg %>
+        <% var msg %>
 
-        <div class="row gutters-sm">
-          <div class="col-md-4 mb-3">
-            <div class="card">
-              <div class="card-body">
-                <div class="d-flex flex-column align-items-center text-center">
-                  <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
-                    width="150">
-                  <div class="mt-3">
-                    <h4>
-                      <%=userData.fullname%>
-                    </h4>
-                    <p class="text-secondary mb-1">
-                      <%=userData.email%>
-                    </p>
-                    <p class="text-muted font-size-sm"></p>
-                    <a class="btn text-white" style="background-color: #05496c;" href="/getshop">Shop Now</a>
-                    <a class="btn text-white" style="background-color: #05496c;" href="/">Home</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="card mt-3">
-              <ul class="list-group list-group-flush">
-                <a href="/orderDetails">
-                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0" style="color: #05496c;"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                        height="24" viewBox="0 0 24 24" fill="none" stroke=" #05496c" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-cart mr-2 icon-inline">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <line x1="2" y1="12" x2="22" y2="12"></line>
-                        <path
-                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                        </path>
-                      </svg>Orders</h6>
-                </a>
-                </li>
-                <a href="/viewcart">
-                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <h6 class="mb-0" style="color: #05496c;"><svg xmlns="http://www.w3.org/2000/svg" width="24"
-                        height="24" viewBox="0 0 24 24" fill="none" stroke="#05496c" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-github mr-2 icon-inline">
-                        <path
-                          d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
-                        </path>
-                      </svg>Cart</h6>
-                </a>
-                </li>
-
-
-
-              </ul>
-            </div>
-          </div>
-          <div class="col-md-8">
-            <div class="card mb-3">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Full Name</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <%=userData.fullname%>
-                  </div>
-                </div>
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Email</h6>
-                  </div>
-                  <div class="col-sm-9 text-secondary">
-                    <%=userData.email%>
-                  </div>
-                </div>
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Phone</h6>
-                  </div>
-                
-                
-                  <div class="col-sm-9 text-secondary">
-                    <%= userProfile?.phone%>
-                  </div>
-                </div>
-                <hr>
-                <div class="row">
-                  <div class="col-sm-3">
-                    <h6 class="mb-0">Permanent Address</h6>
-                  </div>
-                  <% if(userProfile){ %>
-                  <div class="col-sm-9 text-secondary">
-                    <div class="row">
-                      <% if(userProfile.addressDetails[0]!=""){ %>
-                       
-                      <div class="col-sm-9 text-secondary">
-                        <%=userProfile?.addressDetails[0]?.housename%>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <%= userProfile?.addressDetails[0]?.area%>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <%= userProfile?.addressDetails[0]?.landmark %>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <%= userProfile?.addressDetails[0]?.postoffice%>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <%= userProfile?.addressDetails[0]?.district%>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <%= userProfile?.addressDetails[0]?.state%>
-                      </div>
-                      <div class="col-sm-9 text-secondary">
-                        <%= userProfile?.addressDetails[0]?.pin%>
-                      </div>
-                      <% }else{ %>
-                        No permanent address added
-                      <% } %>
-
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-column align-items-center text-center">
+                    <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                      width="150">
+                    <div class="mt-3">
+                      <h4>
+                        <%=userData.fullname%>
+                      </h4>
+                      <p class="text-secondary mb-1">
+                        <%=userData.email%>
+                      </p>
+                      <p class="text-muted font-size-sm"></p>
+                      <a class="btn text-white" style="background-color: #05496c;" href="/getshop">Shop Now</a>
+                      <a class="btn text-white" style="background-color: #05496c;" href="/">Home</a>
                     </div>
                   </div>
-
-
-                </div>
-                <hr>
-                <% } %>
-               
-                <div class="alert text-danger " role="alert">
-                  <%= msg%>
-                </div>
-                <div class="row">
-                  <div class="col-sm-12">
-                    <a class="btn text-white " style="background-color: #05496c;" href="/editprofile">Edit</a>
-                    <!-- <a class="btn btn-info " type="button" target="__blank" data-mdb-toggle="modal" data-mdb-target="#changePass" >Change Password</a> -->
-                    <button type="button" class="btn text-white" style="background-color: #05496c;"
-                      data-bs-toggle="modal" data-bs-target="#changepassModal">
-                      Change Password
-                    </button>
-                    <% if(userProfile){ %>
-                    
-
-                    <button type="button" style="background-color: #05496c;" class="btn  " data-bs-toggle="modal"
-                      data-bs-target="#exampleModalLabelAddAdress" data-bs-whatever="@mdo">
-                      <p class="text-white">Add new address</p>
-                    </button>
-                    <button type="button" class="btn text-white" style="background-color: #05496c;"
-                      data-bs-toggle="modal" data-bs-target="#addressesModal">
-                      View Other Addresses
-                    </button>
-                    <% } %>
-                  </div>
                 </div>
               </div>
+              <div class="card mt-3">
+                <ul class="list-group list-group-flush">
+                  <a href="/orderDetails">
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                      <h6 class="mb-0" style="color: #05496c;"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                          height="24" viewBox="0 0 24 24" fill="none" stroke=" #05496c" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round" class="feather feather-cart mr-2 icon-inline">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <line x1="2" y1="12" x2="22" y2="12"></line>
+                          <path
+                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                          </path>
+                        </svg>Orders</h6>
+                  </a>
+                  </li>
+                  <a href="/viewcart">
+                    <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                      <h6 class="mb-0" style="color: #05496c;"><svg xmlns="http://www.w3.org/2000/svg" width="24"
+                          height="24" viewBox="0 0 24 24" fill="none" stroke="#05496c" stroke-width="2"
+                          stroke-linecap="round" stroke-linejoin="round"
+                          class="feather feather-github mr-2 icon-inline">
+                          <path
+                            d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
+                          </path>
+                        </svg>Cart</h6>
+                  </a>
+                  </li>
+
+
+
+                </ul>
+              </div>
             </div>
+            <div class="col-md-8">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Full Name</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <%=userData.fullname%>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Email</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                      <%=userData.email%>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Phone</h6>
+                    </div>
 
-           
+
+                    <div class="col-sm-9 text-secondary">
+                      <%= userProfile?.phone%>
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Permanent Address</h6>
+                    </div>
+                    <% if(userProfile){ %>
+                      <div class="col-sm-9 text-secondary">
+                        <div class="row">
+                          <% if(userProfile.addressDetails[0]!="" ){ %>
+
+                            <div class="col-sm-9 text-secondary">
+                              <%=userProfile?.addressDetails[0]?.housename%>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <%= userProfile?.addressDetails[0]?.area%>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <%= userProfile?.addressDetails[0]?.landmark %>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <%= userProfile?.addressDetails[0]?.postoffice%>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <%= userProfile?.addressDetails[0]?.district%>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <%= userProfile?.addressDetails[0]?.state%>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                              <%= userProfile?.addressDetails[0]?.pin%>
+                            </div>
+                            <% }else{ %>
+                              No permanent address added
+                              <% } %>
+
+                        </div>
+                      </div>
+
+
+                  </div>
+                  <hr>
+                  <% } %>
+
+                    <div class="alert text-danger " role="alert">
+                      <%= msg%>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <a class="btn text-white " style="background-color: #05496c;" href="/editprofile">Edit</a>
+                        <!-- <a class="btn btn-info " type="button" target="__blank" data-mdb-toggle="modal" data-mdb-target="#changePass" >Change Password</a> -->
+                        <button type="button" class="btn text-white" style="background-color: #05496c;"
+                          data-bs-toggle="modal" data-bs-target="#changepassModal">
+                          Change Password
+                        </button>
+                        <% if(userProfile){ %>
+
+
+                          <button type="button" style="background-color: #05496c;" class="btn  " data-bs-toggle="modal"
+                            data-bs-target="#exampleModalLabelAddAdress" data-bs-whatever="@mdo">
+                            <p class="text-white">Add new address</p>
+                          </button>
+                          <button type="button" class="btn text-white" style="background-color: #05496c;"
+                            data-bs-toggle="modal" data-bs-target="#addressesModal">
+                            View Other Addresses
+                          </button>
+                          <% }else{ %>
+                           <h6 class="text text-danger mt-3"> Please edit your profile</h6>
+                          <% } %>
+                      </div>
+                    </div>
+                </div>
+              </div>
 
 
 
+
+
+            </div>
           </div>
-        </div>
 
     </div>
   </div>
 
   <!-- add address modal -->
 
-  <div class="modal fade" id="exampleModalLabelAddAdress" tabindex="-1" aria-labelledby="exampleModalLabel"
+  <div class="modal fade" id="exampleModalLabelAddAdress" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog ">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5" id="exampleModalLabelAddAdress">
@@ -184,35 +187,35 @@
           </h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        
-        <form action="/addnewaddress/<%=locationName%>" method="post">
+
+        <form action="/addnewaddress/<%=locationName%>" method="post" id="addAddressform" onsubmit="return addsubmitform(event)">
           <div class="modal-body">
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Housename:</label>
-              <input required type="text" class="form-control" id="housename" name="housename" />
-              <p id="houseError" style="color: red"></p>
+              <input  type="text" class="form-control" id="addhousename" name="housename" />
+              
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Area:</label>
-              <input required type="text" class="form-control" id="area" name="area" />
-              <p id="areaError" style="color: red"></p>
+              <input  type="text" class="form-control" id="addarea" name="area" />
+              
             </div>
             <div class="mb-3">
               <label for="recipient-name" class="col-form-label">Landmark:</label>
-              <input required type="text" class="form-control" id="landmark" name="landmark" />
-              <p id="landmarkError" style="color: red"></p>
+              <input  type="text" class="form-control" id="addlandmark" name="landmark" />
+              
             </div>
             <div class="mb-3">
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="firstName">District</label>
-                  <input required type="text" class="form-control" id="district" name="district" />
-                  <p id="stateError" style="color: red"></p>
+                  <input  type="text" class="form-control" id="adddistrict" name="district" />
+                
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="lastName">State</label>
-                  <input required type="text" class="form-control" id="state" name="state" />
-                  <p id="pincodeError" style="color: red"></p>
+                  <input  type="text" class="form-control" id="addstate" name="state" />
+               
                 </div>
               </div>
             </div>
@@ -220,25 +223,27 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="firstName">Post office</label>
-                  <input required type="text" class="form-control" id="postoffice" name="postoffice" />
-                  <p id="stateError" style="color: red"></p>
+                  <input  type="text" class="form-control" id="addpostoffice" name="postoffice" />
+                 
                 </div>
                 <div class="col-md-6 mb-3">
                   <label for="lastName">Pincode</label>
-                  <input required type="text" class="form-control" id="pin" name="pin" />
-                  <p id="pincodeError" style="color: red"></p>
+                  <input  type="text" class="form-control" id="addpin" name="pin" />
+                 
                 </div>
               </div>
             </div>
           </div>
+          
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
               Close
             </button>
-            <button type="submit" value="submit" class="btn btn-primary">
+            <button type="submit" value="submit" class="btn text-white " style="background-color: #05496c;">
               Add
             </button>
           </div>
+          <div id="alertaddaddressprofile"></div>
         </form>
       </div>
     </div>
@@ -258,16 +263,18 @@
           <p class="py-2">
             Enter your new password here and press reset to reset your password.
           </p>
-          <form method="post" action="/changePassword">
+          <form method="post" action="/changePassword" id="changeProfilePass" onsubmit="return Submitform()">
             <div class="form-outline">
-              <input type="password" name="oldpassword" class="form-control my-3" required />
+              <input type="password" name="oldpassword" id="oldprofilePassword" class="form-control my-3"  />
               <label class="form-label" for="typeEmail">Old password</label>
-              <input type="password" name="newpassword" class="form-control my-3" required />
+              <input type="password" name="newpassword" id="newprofilePassword" class="form-control my-3" />
               <label class="form-label" for="typeEmail">New password</label>
-              <input type="password" name="cnewpassword" class="form-control my-3" required />
+              <input type="password" name="cnewpassword" id="confirmnewprofilePassword" class="form-control my-3" />
               <label class="form-label" for="typeEmail">Confirm New password</label>
             </div>
-            <button type="submit" class="btn btn-primary w-100">Reset password</button>
+            <div id="alertprofilepassword"></div>
+            <button type="submit" class="btn btn text-white w-100" style="background-color: #05496c;">Reset password</button>
+            
 
           </form>
           <div class="d-flex justify-content-between mt-4">
@@ -295,13 +302,15 @@
         <div class="modal-body">
 
           <ul>
+            <% if(userProfile?.addressDetails[1]){%>
+
             <% let i=1 %>
 
               <% userProfile?.addressDetails.slice(1).forEach((address)=>{%>
 
                 <li>
-                  
-                  <form method="post" action="/editaddress/<%=address?._id%>/<%locationName%>">
+
+                  <form method="post" action="/editaddress/<%=address?._id%>/<%=locationName%>">
 
                     <div class="row mb-3">
                       <!-- <div class="col-sm-3">
@@ -311,35 +320,35 @@
                       <h6>Address:<%=i%>
                       </h6>
                       <div class="col-sm-9 text-secondary ">
-                        <input type="text" name="housename" id="housename" class="form-control my-2"
+                        <input type="text" name="housename"  class="form-control my-2"
                           placeholder="House name" value="<%= address?.housename  %> " required>
                       </div>
                       <!-- <div class="col-sm-3">
                       <p class="mt-4">Area</p>
                     </div> -->
                       <div class="col-sm-9 text-secondary mb-0 mt-3">
-                        <input type="text" placeholder="Area" name="area" id="area" class="form-control"
+                        <input type="text" placeholder="Area" name="area"  class="form-control"
                           value="<%= address?.area  %>" required>
                       </div>
                       <!-- <div class="col-sm-3">
                       <p class="mt-4">Landmark</p>
                     </div> -->
                       <div class="col-sm-9 text-secondary ml-10 mb-0 mt-3">
-                        <input type="text" placeholder="Landmark" name="landmark" id="landmark" class="form-control"
+                        <input type="text" placeholder="Landmark" name="landmark"  class="form-control"
                           value="<%= address?.landmark  %>" required>
                       </div>
                       <div class="d-flex form-outline flex-fill mb-0 mt-3">
                         <input type="text" value="<%= address?.district  %>" placeholder="District" name="district"
-                          id="district" class="form-control" required />
-                        <input type="text" value="<%= address?.state  %>" placeholder="State" name="state" id="state"
+                           class="form-control" required />
+                        <input type="text" value="<%= address?.state  %>" placeholder="State" name="state" 
                           class="form-control" required />
 
                       </div>
 
                       <div class="d-flex form-outline flex-fill mb-0 mt-3">
                         <input type="text" value="<%= address?.postoffice  %>" placeholder="Post office"
-                          name="postoffice" id="postoffice" class="form-control" required />
-                        <input type="text" value="<%= address?.pin  %>" placeholder="Pin code" name="pin" id="pin"
+                          name="postoffice" id="editpostoffice<%=address?._id%>" class="form-control" required />
+                        <input type="text" value="<%= address?.pin  %>" placeholder="Pin code" name="pin" 
                           class="form-control" required />
 
                       </div>
@@ -369,7 +378,7 @@
                               <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-                                <a href="/deleteAddress/<%=address?._id%>"><button type="button"
+                                <a href="/deleteAddress/<%=address?._id%>/<%=locationName%>"><button type="button"
                                     class="btn btn-danger">Delete</button></a>
 
                               </div>
@@ -382,7 +391,7 @@
                       </div>
                       <div class="col-sm-3"></div>
                       <div class="col-sm-5 text-secondary">
-                        <button type="submit" class="btn btn-primary px-4 mb-5">Save Changes</button>
+                        <button type="submit" class="btn text-white px-4 mb-5" style="background-color: #05496c;">Save Changes</button>
                       </div>
                     </div>
 
@@ -392,15 +401,12 @@
                 <% i++ %>
                   <% }); %>
 
+                  <% }else{ %>
+                    <h5>No Data </h5>
+                  <% } %>
+
           </ul>
         </div>
-
-
-
-
-
-
-
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <!-- <button type="button" class="btn btn-white "><a href="/logout"></a></button> -->
@@ -408,30 +414,24 @@
       </div>
     </div>
   </div>
+
+
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-xrRywqdh3PHs8keKZN+8zzc5TX0GRTLCcmivcbNJWm2rs5C8PRhcEn3czEjhAO9o"
     crossorigin="anonymous"></script>
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  <%- include ('../users/layout/footer.ejs') %>
+    
+    
+    <%- include ('../users/layout/footer.ejs') %>
 
     <%- include ('../users/layout/script.ejs') %>
+
+
+    <script src="../javascripts/changeprofilepassword.js"></script>
+    <script src="../javascripts/addaddressprofile.js"></script>
+    
+
+
+   

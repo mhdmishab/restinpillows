@@ -6,7 +6,7 @@
 
     <div class="row" style="width:1519px;">
       <div class="site-section ">
-        <div class="container">
+        <div class="container ms-5">
           <div class="col-md-6">
 
             <div class="row mb-5">
@@ -14,19 +14,10 @@
                 <h2 class="h3 mb-3 text-black"> Address</h2>
                 <div class="p-3 p-lg-5 border justify-content-center align-items-center">
 
-                  <label class="col-xs-3 control-label">Your Address</label>
+                  <label class="col-xs-3 control-label">Add or Edit your addresses here...</label>
 
                   <% if(userData){%>
 
-
-                    <select class="form-select mt-2 form-select-lg" name="address" required>
-                      <% userData?.addressDetails.forEach((address)=>{%>
-                        <option name="address" id="selectedAddress" value="<%=address._id %>">
-                          <%= address.housename%>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area %>,
-                                  <%= address.district %>,<%= address.pin %>,<%=address.state %>
-                        </option>
-                        <% }) %>
-                    </select>
                     <div class="row">
                       <div class="col-3">
                         <button type="button" style="background-color: #05496c;" class="btn  mt-3"
@@ -42,11 +33,15 @@
                         </button>
                       </div>
                     </div>
-                  <%}else{%>
+                    <%}else{%>
 
-                    <h5>Update your profile</h5>
+                      <h5 class="text text-danger">For placing order you should have atleast permanent address.</h5><br>
 
-                  <% } %>
+                      <h6 class="text text-info"><a href="/profile">Update your profile</a></h6>
+
+
+
+                      <% } %>
                 </div>
 
                 <div class="row mb-5">
@@ -74,12 +69,12 @@
                         <div class="d-block my-3">
                           <div class="form-check">
                             <input id="credit" name="paymentMethod" type="radio" value="COD" class="form-check-input"
-                               checked/>
+                              checked />
                             <label class="form-check-label" for="credit">Cash on Delivery</label>
                           </div>
                           <div class="form-check">
-                            <input id="credit" name="paymentMethod" type="radio" value="online" class="form-check-input"
-                              />
+                            <input id="credit" name="paymentMethod" type="radio" value="online"
+                              class="form-check-input" />
                             <label class="form-check-label" for="credit">Online</label>
                           </div>
                           <h2 class="h3 mb-3 text-black"></h2>
@@ -127,16 +122,17 @@
                                   <tr>
                                     <td><b>Discounted Amount</b></td>
                                     <td id="discountedAmount">
-                                        <%=sum %>
-                                      
+                                      <%=sum %>
+
                                     </td>
                                   </tr>
                             </tbody>
                           </table>
                           <% if(userData){ %>
-                          
-                          <button class="btn btn-primary btn-lg py-3 btn-block mt-5" style="background-color: #05496c;"
-                            id="placeOrder-submit" type="button" onclick="placeOrder()">Place Order</button>
+
+                            <button class="btn btn-primary btn-lg py-3 btn-block mt-5"
+                              style="background-color: #05496c;" id="placeOrder-submit" type="button"
+                              onclick="placeOrder()">Place Order</button>
 
                             <% } %>
                         </div>
@@ -167,34 +163,35 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
 
-          <form action="/addnewaddress/<%=locationName%>" method="post">
+          <form action="/addnewaddress/<%=locationName%>" method="post" id="checkoutaddAddressform"
+            onsubmit="return chkaddsubmitform()">
             <div class="modal-body">
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Housename:</label>
-                <input required type="text" class="form-control" id="housename" name="housename" />
-                <p id="houseError" style="color: red"></p>
+                <input type="text" class="form-control" id="checkoutaddhousename" name="housename" />
+
               </div>
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Area:</label>
-                <input required type="text" class="form-control" id="area" name="area" />
-                <p id="areaError" style="color: red"></p>
+                <input type="text" class="form-control" id="checkoutaddarea" name="area" />
+
               </div>
               <div class="mb-3">
                 <label for="recipient-name" class="col-form-label">Landmark:</label>
-                <input required type="text" class="form-control" id="landmark" name="landmark" />
-                <p id="landmarkError" style="color: red"></p>
+                <input type="text" class="form-control" id="checkoutaddlandmark" name="landmark" />
+
               </div>
               <div class="mb-3">
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstName">District</label>
-                    <input required type="text" class="form-control" id="district" name="district" />
-                    <p id="stateError" style="color: red"></p>
+                    <input type="text" class="form-control" id="checkoutadddistrict" name="district" />
+
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="lastName">State</label>
-                    <input required type="text" class="form-control" id="state" name="state" />
-                    <p id="pincodeError" style="color: red"></p>
+                    <input type="text" class="form-control" id="checkoutaddstate" name="state" />
+
                   </div>
                 </div>
               </div>
@@ -202,13 +199,13 @@
                 <div class="row">
                   <div class="col-md-6 mb-3">
                     <label for="firstName">Post office</label>
-                    <input required type="text" class="form-control" id="postoffice" name="postoffice" />
-                    <p id="stateError" style="color: red"></p>
+                    <input type="text" class="form-control" id="checkoutaddpostoffice" name="postoffice" />
+
                   </div>
                   <div class="col-md-6 mb-3">
                     <label for="lastName">Pincode</label>
-                    <input required type="text" class="form-control" id="pin" name="pin" />
-                    <p id="pincodeError" style="color: red"></p>
+                    <input type="text" class="form-control" id="checkoutaddpin" name="pin" />
+
                   </div>
                 </div>
               </div>
@@ -217,10 +214,11 @@
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                 Close
               </button>
-              <button type="submit" value="submit" class="btn btn-primary">
+              <button type="submit" value="submit" class="btn text-white" style="background-color: #05496c;">
                 Add
               </button>
             </div>
+            <div id="alertaddaddresscheckout"></div>
           </form>
         </div>
       </div>
@@ -238,103 +236,118 @@
           <div class="modal-body">
 
             <ul>
-              <% let i=1 %>
+              <% if(userProfile?.addressDetails[1]){%>
 
-                <% userProfile?.addressDetails.slice(1).forEach((address)=>{%>
 
-                  <li>
+                <% let i=1 %>
 
-                    <form method="post" action="/editaddress/<%=address?._id%>/<%=locationName%>">
+                  <% userProfile?.addressDetails.slice(1).forEach((address)=>{%>
 
-                      <div class="row mb-3">
-                      
-                        <h6>Address:<%=i%>
-                        </h6>
-                        <div class="col-sm-9 text-secondary ">
-                          <input type="text" name="housename" id="housename" class="form-control my-2"
-                            placeholder="House name" value="<%= address?.housename  %> " required>
-                        </div>
-                        <!-- <div class="col-sm-3">
+                    <li>
+
+
+                      <form method="post" action="/editaddress/<%=address?._id%>/<%=locationName%>">
+
+                        <div class="row mb-3">
+
+                          <h6>Address:<%=i%>
+                          </h6>
+                          <div class="col-sm-9 text-secondary ">
+                            <input type="text" name="housename" class="form-control my-2" placeholder="House name"
+                              value="<%= address?.housename  %> " required>
+                          </div>
+                          <!-- <div class="col-sm-3">
                                   <p class="mt-4">Area</p>
                                 </div> -->
-                        <div class="col-sm-9 text-secondary mb-0 mt-3">
-                          <input type="text" placeholder="Area" name="area" id="area" class="form-control"
-                            value="<%= address?.area  %>" required>
-                        </div>
-                        <!-- <div class="col-sm-3">
+                          <div class="col-sm-9 text-secondary mb-0 mt-3">
+                            <input type="text" placeholder="Area" name="area" class="form-control"
+                              value="<%= address?.area  %>" required>
+                          </div>
+                          <!-- <div class="col-sm-3">
                                   <p class="mt-4">Landmark</p>
                                 </div> -->
-                        <div class="col-sm-9 text-secondary ml-10 mb-0 mt-3">
-                          <input type="text" placeholder="Landmark" name="landmark" id="landmark" class="form-control"
-                            value="<%= address?.landmark  %>" required>
+                          <div class="col-sm-9 text-secondary ml-10 mb-0 mt-3">
+                            <input type="text" placeholder="Landmark" name="landmark" class="form-control"
+                              value="<%= address?.landmark  %>" required>
+                          </div>
+                          <div class="d-flex form-outline flex-fill mb-0 mt-3">
+                            <input type="text" value="<%= address?.district  %>" placeholder="District" name="district"
+                              class="form-control" required />
+                            <input type="text" value="<%= address?.state  %>" placeholder="State" name="state"
+                              class="form-control" required />
+
+                          </div>
+
+                          <div class="d-flex form-outline flex-fill mb-0 mt-3">
+                            <input type="text" value="<%= address?.postoffice  %>" placeholder="Post office"
+                              name="postoffice" class="form-control" required />
+                            <input type="text" value="<%= address?.pin  %>" placeholder="Pin code" name="pin"
+                              class="form-control" required />
+
+                          </div>
                         </div>
-                        <div class="d-flex form-outline flex-fill mb-0 mt-3">
-                          <input type="text" value="<%= address?.district  %>" placeholder="District" name="district"
-                            id="district" class="form-control" required />
-                          <input type="text" value="<%= address?.state  %>" placeholder="State" name="state" id="state"
-                            class="form-control" required />
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                              data-bs-target="#exampleModal-<%=address?._id%>">
+                              Delete
+                            </button>
 
-                        </div>
+                            <!-- delete modal -->
+                            <div class="modal fade" id="exampleModal-<%=address?._id%>" tabindex="-1"
+                              aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
+                              <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation
+                                    </h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                      aria-label="Close"></button>
+                                  </div>
 
-                        <div class="d-flex form-outline flex-fill mb-0 mt-3">
-                          <input type="text" value="<%= address?.postoffice  %>" placeholder="Post office"
-                            name="postoffice" id="postoffice" class="form-control" required />
-                          <input type="text" value="<%= address?.pin  %>" placeholder="Pin code" name="pin" id="pin"
-                            class="form-control" required />
+                                  <div class="modal-body">
+                                    Are you sure you want to delete this Address?
+                                  </div>
 
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-4">
-                          <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal-<%=address?._id%>">
-                            Delete
-                          </button>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                      data-bs-dismiss="modal">Close</button>
 
-                          <!-- delete modal -->
-                          <div class="modal fade" id="exampleModal-<%=address?._id%>" tabindex="-1"
-                            aria-labelledby="exampleModalLabel" aria-hidden="true" data-bs-backdrop="static">
-                            <div class="modal-dialog modal-dialog-centered">
-                              <div class="modal-content">
-                                <div class="modal-header">
-                                  <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation
-                                  </h1>
-                                  <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Close"></button>
-                                </div>
+                                    <a href="/deleteAddress/<%=address?._id%>/<%=locationName%>"><button type="button"
+                                        class="btn btn-danger">Delete</button></a>
 
-                                <div class="modal-body">
-                                  Are you sure you want to delete this Address?
-                                </div>
-
-                                <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-
-                                  <a href="/deleteAddress/<%=address?._id%>"><button type="button"
-                                      class="btn btn-danger">Delete</button></a>
-
+                                  </div>
                                 </div>
                               </div>
                             </div>
+
+
+
                           </div>
-
-
-
+                          <div class="col-sm-3"></div>
+                          <div class="col-sm-5 text-secondary">
+                            <button type="submit" class="btn  px-4 mb-5 text-white"
+                              style="background-color: #05496c;">Save Changes</button>
+                          </div>
                         </div>
-                        <div class="col-sm-3"></div>
-                        <div class="col-sm-5 text-secondary">
-                          <button type="submit" class="btn btn-primary px-4 mb-5">Save Changes</button>
-                        </div>
-                      </div>
 
-                    </form>
+                      </form>
 
-                  </li>
-                  <% i++ %>
-                    <% }); %>
+                    </li>
+                    <% i++ %>
+                      <% }); %>
+
+                        <% }else{ %>
+                          <h5>No Data </h5>
+                          <% } %>
 
             </ul>
           </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <!-- <button type="button" class="btn btn-white "><a href="/logout"></a></button> -->
+          </div>
+
         </div>
       </div>
     </div>
@@ -453,16 +466,7 @@
                 // location.reload()
               });
             }
-            // }else if (response[0].minamount) {
-            //   console.log(response.minamount)
-            //   Swal.fire({
-            //     title: `Minimum amount of ${reponse.minAmount} required`,
-            //     icon: "error",
-            //     confirmButtonText: "continue",
-            //   }).then(function () {
-            //     // location.reload()
-            //   });
-            // }
+
 
             else if (response.invalid) {
 
@@ -551,7 +555,7 @@
             console.log(newdata)
             if (newdata.success) {
               location.href = "/ordersuccess";
-             
+
             } else {
               location.href = "/";
             }
@@ -559,6 +563,8 @@
           })
       }
     </script>
+
+    <script src="/javascripts/checkoutaddaddress.js"></script>
 
 
 

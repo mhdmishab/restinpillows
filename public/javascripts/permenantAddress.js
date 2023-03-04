@@ -1,99 +1,130 @@
-const reg = document.querySelector('#PermanentAddressform');
-const fullname = reg.querySelector('#Pfullname');
-const phone = reg.querySelector('#Pphone');
-const housename = reg.querySelector('#Phousename');
-const area = reg.querySelector('#Parea');
-const landmark = reg.querySelector('#Plandmark');
-const district = reg.querySelector('#Pdistrict');
-const state = reg.querySelector('#Pstate');
-const postoffice = reg.querySelector('#Ppostoffice');
-const pin = reg.querySelector('#Ppin');
+const regPermanent = document.querySelector('#PermanentAddressform');
+const fullnamePermanent = regPermanent.querySelector('#Pfullname');
+const phonePermanent = regPermanent.querySelector('#Pphone');
+const housenamePermanent = regPermanent.querySelector('#Phousename');
+const areaPermanent = regPermanent.querySelector('#Parea');
+const landmarkPermanent = regPermanent.querySelector('#Plandmark');
+const districtPermanent = regPermanent.querySelector('#Pdistrict');
+const statePermanent = regPermanent.querySelector('#Pstate');
+const postofficePermanent = regPermanent.querySelector('#Ppostoffice');
+const pinPermanent = regPermanent.querySelector('#Ppin');
 
 
-const errorElement = reg.querySelector('#alertPermanentAddress')
+const errorElementPermanent = regPermanent.querySelector('#alertPermanentAddress')
 
 function hideErrorMessage() {
-    errorElement.innerHTML = "";
+    errorElementPermanent.innerHTML = "";
 }
 function showErrorMessage(message) {
 
-    errorElement.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
+    errorElementPermanent.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
     setTimeout(() => {
-        errorElement.innerHTML = `<div></div>`
+        errorElementPermanent.innerHTML = `<div></div>`
     }, 5000);
 
 }
 
 function submitform() {
 
-    if (fullname.value.trim() === "") {
+    if (fullnamePermanent.value.trim() === "") {
 
         showErrorMessage("Name  is Required");
         return false;
     }
 
-    if (housename.value.trim() === "") {
+    if (housenamePermanent.value.trim() === "") {
 
         showErrorMessage("Housename is Required");
         return false;
     }
-    if (isNaN(phone.value.trim())) {
+    if (!isNaN(housenamePermanent.value.trim())) {
+
+        showErrorMessage("Housename should be a string");
+        return false;
+    }
+    if (isNaN(phonePermanent.value.trim())) {
 
         showErrorMessage("Phone Number should be digits");
         return false;
     }
-    if (phone.value.length>10) {
+    if (phonePermanent.value.length>10) {
         showErrorMessage("Incorrect Phone Number");
         return false;
     }
-    if(phone.value.trim()==""){
+    if(phonePermanent.value.trim()==""){
         showErrorMessage("Phone Number is Empty");
         return false;
     }
-    if(phone.value.length <10){
+    if(phonePermanent.value.length <10){
         showErrorMessage("Phone Number must be 10 numbers");
         return false;
     }
 
 
-    if (area.value.trim() === "") {
+    if (areaPermanent.value.trim() === "") {
 
         showErrorMessage("Area is Required");
         return false;
     }
-    if (landmark.value.trim() === "") {
+    if (!isNaN(areaPermanent.value.trim())) {
+
+        showErrorMessage("Area should be a string");
+        return false;
+    }
+    if (landmarkPermanent.value.trim() === "") {
 
         showErrorMessage("Landmark is Required");
         return false;
     }
-    if (district.value.trim() === "") {
+    if (!isNaN(landmarkPermanent.value.trim())) {
+
+        showErrorMessage("Landmark should be a string");
+        return false;
+    }
+    if (districtPermanent.value.trim() === "") {
 
         showErrorMessage("District is Required");
         return false;
     }
-    if (state.value.trim() === "") {
+    if (!isNaN(districtPermanent.value.trim())) {
+
+        showErrorMessage("District should be a string");
+        return false;
+    }
+    if (statePermanent.value.trim() === "") {
 
         showErrorMessage("State is Required");
         return false;
     }
-    if (postoffice.value.trim() === "") {
+    if (!isNaN(statePermanent.value.trim())) {
+
+        showErrorMessage("State should be a string");
+        return false;
+    }
+    if (postofficePermanent.value.trim() === "") {
 
         showErrorMessage("Postoffice is Required");
         return false;
     }
-    if (pin.value.trim() === "") {
+    if (!isNaN(postofficePermanent.value.trim())) {
+
+        showErrorMessage("Postoffice should be a string");
+        return false;
+    }
+    if (pinPermanent.value.trim() === "") {
 
         showErrorMessage("Pin Number is Required");
         return false;
     }
-    if (pin.value.trim() == 6) {
+    if (isNaN(pinPermanent.value.trim())) {
 
-        showErrorMessage("Pin Number should be 6");
+        showErrorMessage("Pin should be a Number");
         return false;
     }
-    if (pin.value <= 099999) {
+    
+    if (pinPermanent.value.length !=6) {
 
-        showErrorMessage("Incorrect Pin Code");
+        showErrorMessage("Invalid Pin Code");
         return false;
     }
 

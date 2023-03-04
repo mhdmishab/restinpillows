@@ -11,7 +11,8 @@
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-    crossorigin="anonymous"></script>
+    crossorigin="anonymous">
+  </script>
 </head>
 
 <body style="background-image:url(/img/homebg.jpg);background-repeat: no-repeat; background-size: cover;">
@@ -34,25 +35,25 @@
               <h2 class="fw-bold mb-5 " style="color: #05496C;">Login</h2>
 
 
-              <form method="post" action="/userlogin" id="form" onsubmit="return submitform()">
+              <form method="post" action="/userlogin" id="formlogin" onsubmit="return loginsubmitform(event)">
                 <!-- 2 column grid layout with text inputs for the first and last names -->
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="email" class="form-control" name="email" placeholder=""
+                  <input type="email" id="emailLogin" class="form-control" name="email" placeholder=""
                     style="border-radius: 18px;" />
-                  <label class="form-label" for="form3Example3">Email address</label>
+                  <label class="form-label" for="emailLogin">Email address</label>
                 </div>
 
                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                  <input type="password" id="password" class="form-control" name="password" placeholder=""
+                  <input type="password" id="passwordLogin" class="form-control" name="password" placeholder=""
                     style="border-radius: 18px;" />
-                  <label class="form-label" for="form3Example4">Password</label>
+                  <label class="form-label" for="passwordLogin">Password</label>
                 </div>
 
 
 
-
+                <div id="errorLogin"></div>
 
                 <!-- Submit button -->
                 <button type="submit" class="btn text-white mt-1 mb-4"
@@ -71,11 +72,11 @@
                     href="/signup">Need a account.</a></small>
               </div>
 
-              <div class="alert text-danger " id="alertmsg" role="alert">
+              <div class="alert text-danger " id="alertmsglogin" role="alert">
                 <%= msg%>
               </div>
 
-              <div id="error"></div>
+              
 
 
             </div>
@@ -87,68 +88,74 @@
     </div>
     <!-- Jumbotron -->
   </section>
-</body>
 
 
 
-<!-- Section: Design Block -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
-  integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
-  integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
 
-<script>
+  <!-- Section: Design Block -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+    integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"
+    integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD"
+    crossorigin="anonymous"></script>
 
-  setTimeout(() => {
-    document.getElementById('alertmsg').innerHTML = `<div></div>`
-  }, 5000);
+  <script>
 
-</script>
-
-
-<!-- validation   -->
-<script>
-  const form = document.querySelector('#form')
-  const username = form.querySelector('#email')
-  const password = form.querySelector('#password')
-  const errorElement = form.querySelector('#error')
-
-
-  function hideErrorMessage() {
-    errorElement.innerHTML = "";
-  }
-
-  function showErrorMessage(message) {
-    errorElement.innerHTML = `<div class="alert text-danger  " role="alert">${message}</div>`
     setTimeout(() => {
-      errorElement.innerHTML = `<div></div>`
+      document.getElementById('alertmsglogin').innerHTML = `<div></div>`
     }, 5000);
 
-  }
 
-  function submitform() {
+  </script>
 
-    if (username.value.trim() == "") {
 
-      showErrorMessage("Email is Required");
-      return false;
+  <!-- validation   -->
+  <script>
+
+    const formLogin = document.querySelector('#formlogin')
+    const usernameLogin = formLogin .querySelector('#emailLogin')
+    const passwordLogin = formLogin .querySelector('#passwordLogin')
+    const errorElementLogin = formLogin .querySelector('#errorLogin')
+
+
+    function hideErrorMessage() {
+      errorElementLogin.innerHTML = "";
     }
 
-    if (password.value === "") {
+    function showErrorMessageLogin(message) {
+      errorElementLogin.innerHTML = `<div class="alert text-danger  " role="alert">${message}</div>`
+      setTimeout(() => {
+        errorElementLogin.innerHTML = `<div></div>`
+      }, 5000);
 
-      showErrorMessage("Password is Required");
-      return false;
+    }
+
+    function loginsubmitform(e) {
+
+      if (usernameLogin.value === "") {
+
+        showErrorMessageLogin("Email is Required");
+        return false;
+      }
+
+      if (passwordLogin.value === "") {
+
+        showErrorMessageLogin("Password is Required");
+        return false;
+      }
+
+
+      hideErrorMessage()
+      return true;
+
     }
 
 
-    hideErrorMessage()
-    return true;
+  </script>
+  <%- include ('../users/layout/script.ejs') %>
 
-  }
-
-
-</script>
-<%- include ('../users/layout/script.ejs') %>
+</body>
 
 
 </html>

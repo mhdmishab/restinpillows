@@ -34,23 +34,23 @@
                 <!-- 2 column grid layout with text inputs for the first and last names -->
             
                 <div class="form-outline mb-4">
-                  <input type="email" id="email" class="form-control" name="email" style="border-radius: 18px;" placeholder=""/>
+                  <input type="email" id="forgotemail" class="form-control" name="email" style="border-radius: 18px;" placeholder=""/>
                   <label class="form-label" for="form3Example3">Email address</label>
                 </div>
   
                 <!-- Password input -->
                 <div class="form-outline mb-4">
-                  <input type="password" id="password" class="form-control" name="newpassword" style="border-radius: 18px;" />
+                  <input type="password" id="forgotpassword" class="form-control" name="newpassword" style="border-radius: 18px;" />
                   <label class="form-label" for="form3Example4">New Password</label>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="Cpassword" class="form-control" name="Cnewpassword" style="border-radius: 18px;" />
+                  <input type="password" id="forgotCpassword" class="form-control" name="Cnewpassword" style="border-radius: 18px;" />
                   <label class="form-label" for="form3Example4">Confirm New Password</label>
                 </div>
 
                 
-                <div class="text-danger " id="alertmsg"  role="alert">
+                <div class="text-danger " id="forgotalertmsg"  role="alert">
                   <%= msg%>
                 </div>
                 <div id="alertforgotPass"></div>
@@ -83,26 +83,26 @@
 
 <script>
   setTimeout(() => {
-    document.getElementById('alertmsg').innerHTML = `<div></div>`
+    document.getElementById('forgotalertmsg').innerHTML = `<div></div>`
     }, 5000);
 
 </script>
 
 <script>
-    const reg = document.querySelector('#forgotpassform');
-    const email = reg.querySelector('#email');
-    const password = reg.querySelector('#password');
-    const Cpassword = reg.querySelector('#Cpassword');
-    const errorElement = reg.querySelector('#alertforgotPass')
+    const regForgetPass = document.querySelector('#forgotpassform');
+    const emailForgot = regForgetPass.querySelector('#forgotemail');
+    const passwordForgot = regForgetPass.querySelector('#forgotpassword');
+    const CpasswordForgot = regForgetPass.querySelector('#forgotCpassword');
+    const errorElementForgot = regForgetPass.querySelector('#alertforgotPass')
 
     function hideErrorMessage() {
-      errorElement.innerHTML = "";
+      errorElementForgot.innerHTML = "";
     }
     function showErrorMessage(message) {
 
-      errorElement.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
+      errorElementForgot.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
       setTimeout(() => {
-        errorElement.innerHTML = `<div></div>`
+        errorElementForgot.innerHTML = `<div></div>`
     }, 5000);
 
     }
@@ -110,49 +110,71 @@
     function submitform() {
       
 
-      if (email.value.trim() === "") {
+      if (emailForgot.value.trim() === "") {
 
         showErrorMessage("Email is Required");
         return false;
       }
 
       let validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-      if (email.value.match(validRegex)) {
+      if (emailForgot.value.match(validRegex)) {
 
       } else {
         showErrorMessage("Email is not correct");
         return false;
       }
 
-      if (password.value.trim() === "") {
+      
+      let numberRegex = /\d/;
+      let letterRegex = /[a-zA-Z]/;
+      let specialCharRegex = /[@#$!%*?&]/;
+
+
+
+
+      if (passwordForgot.value.trim() === "") {
 
         showErrorMessage("Password is Required");
         return false;
       }
-      if (Cpassword.value.trim() === "") {
 
-        showErrorMessage("Confirm your Password");
-        return false;
-      }
-      if (email.value === "" || password.value === "") {
 
-        showErrorMessage("Email and Password is Required");
-        return false;
-      }
 
-      if (password.value != Cpassword.value) {
 
-        showErrorMessage("Passwords does not match");
-        return false;
-      }
-      if (password.value.length < 6) {
+      if (passwordForgot.value.length < 6) {
 
         showErrorMessage("Password must be greater than 6 Characters");
         return false;
       }
-      if (password.value.length >=15) {
+      if (passwordForgot.value.length >= 15) {
 
         showErrorMessage("Password must be less than 15 Characters");
+        return false;
+      }
+      if (!numberRegex.test(passwordForgot.value)) {
+
+        showErrorMessage("Password must contain at least one number");
+        return false;
+      }
+      if (!letterRegex.test(passwordForgot.value)) {
+
+        showErrorMessage("Password must contain at least one letter");
+        return false;
+      }
+      if (!specialCharRegex.test(passwordForgot.value)) {
+
+        showErrorMessage("Password must contain at least one special character");
+        return false;
+      }
+
+      if (CpasswordForgot.value.trim() === "") {
+
+        showErrorMessage("Confirm your Password");
+        return false;
+      }
+      if (passwordForgot.value != CpasswordForgot.value) {
+
+        showErrorMessage("Passwords does not match");
         return false;
       }
 

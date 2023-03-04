@@ -654,6 +654,7 @@ module.exports = {
     deleteAddress: async (req, res) => {
         console.log("inside delete Address");
         const session = req.session.email;
+        const name=req.params.name;
         addressId = req.params.id;
         console.log(addressId);
 
@@ -667,7 +668,11 @@ module.exports = {
             }
           });
 
-        res.redirect('/profile');
+          if(name=="checkout"){
+            res.redirect('/checkout');
+            }else{
+                res.redirect('/profile')
+            }
 
 
     },
