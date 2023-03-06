@@ -75,7 +75,7 @@
 
                                   <%=order.orderStatus%>
                                 </option>
-                                <% if(order.orderStatus=="shipped"){ %>
+                                <% if(order.orderStatus=="shipped"||order.orderStatus=="delivered"){ %>
                                   <option value="pending" name="orderStatus" disabled>Pending</option>
                                 <option value="shipped" name="orderStatus" disabled>Shipped</option>
                                 <option value="out for Delivery" name="outForDelivery" disabled>Out For Delivery</option>
