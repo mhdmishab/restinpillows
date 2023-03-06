@@ -49,11 +49,18 @@ route.post('/editaddress/:id/:name',verifyuser,userController.editAddress);
 route.get('/deleteAddress/:id/:name',verifyuser,userController.deleteAddress);
 
 
-// route.post('/getsubcategories',verifyuser,userController.getSubcategory)
+
 
 route.post('/sortproducts',userController.sortProducts)
 route.post('/filterproducts',userController.filterProducts);
-route.use('/dosearch',userController.doSearch);
+
+
+route.use('/dosearch',(req, res, next) => {
+    res.setHeader('Cache-Control', 'no-cache');
+    next();
+  },userController.doSearch);
+
+
 
 
 

@@ -197,11 +197,18 @@
                             <td>₹<%= item.price%>
                             </td>
                             <td>
-                                <a class="text-decoration-none" href="/admin/editproduct?id=<%= item._id%>">Edit</a>
-                                <a class="text-decoration-none" href="/admin/unlistproduct?id=<%= item._id%>"
-                                    onclick="return confirm ('Do You want to Unlist <%= item.productname%>')">Unlist</a>
-                                <a class="text-decoration-none" href="/admin/listproduct?id=<%= item._id%>"
-                                    onclick="return confirm ('Do You want to list <%= item.productname%>')">list</a>
+                              <% if(item.unlist==false) { %>
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                  data-bs-target="#listModal-<%=item?._id%>">
+                                  Unlist
+                                </button>
+                                <% }else{ %>
+                                  <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#listModal-<%=item?._id%>">
+                                    Restore
+                                  </button>
+                                  <%}%>
+                                <a class="text-decoration-none text-white" href="/admin/editproduct?id=<%= item._id%>"><button type="button" class="btn btn-primary mt-1"> Edit</button></a></button>
                             </td>
                             <td>
                                 <% if( item.unlist==false){%>
@@ -210,6 +217,38 @@
                                         <button class="btn-danger">Unlisted</button>
                                         <%}%>
                             </td>
+                            <div class="modal fade" id="listModal-<%=item?._id%>" tabindex="-1"
+                              aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog">
+                                <div class="modal-content">
+                                  <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="listModal-<%=item?._id%>">List confirmation</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                      aria-label="Close"></button>
+                                  </div>
+                                  <% if(item.unlist==false) { %>
+                                    <div class="modal-body">
+                                      Are you sure you want to Unlist <%= item.productname%>?
+                                    </div>
+                                    <% }else{ %>
+                                      <div class="modal-body">
+                                        Are you sure you want to Restore <%= item.productname%>?
+                                      </div>
+                                      <%}%>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Close</button>
+                                          <% if(item.unlist==false) { %>
+                                            <a href="/admin/unlistproduct?id=<%= item._id%>"><button type="button"
+                                                class="btn btn-danger">Unlist</button></a>
+                                            <% }else{ %>
+                                              <a href="/admin/listproduct?id=<%= item._id%>"><button type="button"
+                                                  class="btn btn-primary">Restore</button></a>
+                                              <%}%>
+                                        </div>
+                                </div>
+                              </div>
+                            </div>
 
                         </tr>
 

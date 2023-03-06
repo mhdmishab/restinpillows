@@ -17,89 +17,235 @@
     <div class="container mt-5">
 
 
-        <form method="post" id="registration" action="/admin/addproducts" enctype="multipart/form-data">
+        <form method="post" id="adminAddProduct" action="/admin/addproducts" enctype="multipart/form-data"
+            onsubmit="return addProductSubmitform()">
             <div class="form-group">
                 <label for="pname">Image <span class="text-danger">*</span></label>
-                <input type="file" class="form-control" id="fname" name="myFiles" multiple placeholder="image ">
+                <input type="file" class="form-control" id="imagevalidator" name="myFiles" multiple
+                    placeholder="image ">
             </div>
             <div class="form-group">
                 <label for="pname">Product Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="fname" name="pname" placeholder="Product Name ">
+                <input type="text" class="form-control" id="addproductname" name="pname" placeholder="Product Name ">
             </div>
             <div class="form-group">
                 <label for="category">Category<span class="text-danger">*</span></label>
-                <select id="category-select" class="form-control" name="category">
+                <select id="addProductCategory" class="form-control" name="category">
                     <option selected>select</option>
                     <% category.forEach(function(category) { %>
-                        <option  value="<%= category._id %>">
+                        <option value="<%= category._id %>">
                             <%= category.categoryname %>
                         </option>
                         <% }); %>
                 </select>
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="category">Sub-category<span class="text-danger">*</span></label>
                 <select id="subcategory-select" class="form-control" name="subcategory">
                    
                 </select>
-            </div>
+            </div> -->
 
             <div class="form-group">
                 <label for="quantity">Quantity<span class="text-danger">*</span></label>
-                <input type="number" class="form-control" name="quantity" id="email" placeholder="Quantity">
+                <input type="number" class="form-control" name="quantity" id="addProductQuantity"
+                    placeholder="Quantity">
             </div>
 
             <div class="form-group">
                 <label for="discription">Description<span class="text-danger">*</span></label>
-                <input type="text" class="form-control" name="description" id="spassword" placeholder="Description">
+                <input type="text" class="form-control" name="description" id="addProductDescription"
+                    placeholder="Description">
             </div>
             <div class="form-group">
                 <label for="discription">Price<span class="text-danger">*</span></label>
-                ₹<input type="text" class="form-control" name="price" id="spassword" placeholder="Price">
+                ₹<input type="text" class="form-control" name="price" id="addProductPrice" placeholder="Price">
             </div>
 
             <div class="form-group">
                 <input type="submit" value="Add Product" class="btn btn-info btn-block">
             </div>
+            <div id="addProducterrorElement"></div>
         </form>
     </div>
 
+
+
     <script>
 
+        // document.querySelector("#category-select").addEventListener("change", function () {
+        //     const selectedCategory = this.value;
+        //     const requestOptions = {
+        //         method: 'POST',
+        //         headers: {
+        //             'Content-Type': 'application/json'
+        //         },
+        //         body: JSON.stringify(
+        //             {
+        //                 category:selectedCategory,
+        //             }
+        //         )
+        //     }
+        //     fetch(window.location.origin+'/admin/getsubcategories',requestOptions).then((res)=>res.json())
 
 
-        document.querySelector("#category-select").addEventListener("change", function () {
-            const selectedCategory = this.value;
-            const requestOptions = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(
-                    {
-                        category:selectedCategory,
-                    }
-                )
-            }
-            fetch(window.location.origin+'/admin/getsubcategories',requestOptions).then((res)=>res.json())
-            
+        //         .then(subcategories => {
+        //             const subcategoryList = document.querySelector("#subcategory-select");
+        //             subcategoryList.innerHTML = "";
+        //             console.log(subcategories);
+        //             subcategories.forEach(subcategory => {
+        //                 const option = document.createElement("option");
+        //                 option.value = subcategory._id;
+        //                 option.textContent = subcategory.subcategoryname;
+        //                 subcategoryList.appendChild(option);
+        //             });
 
-                .then(subcategories => {
-                    const subcategoryList = document.querySelector("#subcategory-select");
-                    subcategoryList.innerHTML = "";
-                    console.log(subcategories);
-                    subcategories.forEach(subcategory => {
-                        const option = document.createElement("option");
-                        option.value = subcategory._id;
-                        option.textContent = subcategory.subcategoryname;
-                        subcategoryList.appendChild(option);
+        //         }).catch((err)=>{
+        //             console.log("subcategory management error");
+        //             res(window.location.origin+'/admin/error')
+        //         })
+        // });
+
+    </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+
+        // function validateFile(input){
+        //     let fileType= input.files[2].type;
+        //     if (fileType != "image/jpeg" && fileType != "image/jpg" && fileType != "image/png" && fileType != "image/webp"){
+        //         input.value="";
+        //         Swal.fire({
+        //         title: "Invalid Fileformat",
+        //         icon: "error",
+        //         confirmButtonText: "continue",
+        //       }).then(function () {
+        //         // location.reload()
+        //       });
+        //     }
+
+        // }
+        
+
+        document.querySelector("#imagevalidator").addEventListener("change", function () {
+        let fileCount = 0;
+        let maxFiles = 3;
+            // Loop through the selected files and check their types
+            for (let i = 0; i < this.files.length; i++) {
+                let fileType = this.files[i].type;
+                if (fileType != "image/jpeg" && fileType != "image/jpg" && fileType != "image/png" && fileType != "image/webp") {
+                    this.value = "";
+                    Swal.fire({
+                        title: "Invalid Fileformat",
+                        icon: "error",
+                        confirmButtonText: "continue"
                     });
-                    
-                }).catch((err)=>{
-                    console.log("subcategory management error");
-                    res(window.location.origin+'/admin/error')
-                })
+                    return;
+                }
+                // Increment the file count if the file is an image
+                fileCount++;
+                // Check if the maximum number of files has been reached
+            }
+            if (fileCount != 3) {
+                    this.value = "";
+                    Swal.fire({
+                        title: "You should upload 3 images",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    })
+                    return;
+                }
         });
+
+        const adminAddProduct = document.querySelector('#adminAddProduct');
+        const addproductname = adminAddProduct.querySelector('#addproductname');
+        const addProductCategory = adminAddProduct.querySelector('#addProductCategory');
+        const addProductQuantity = adminAddProduct.querySelector('#addProductQuantity');
+        const addProductDescription = adminAddProduct.querySelector('#addProductDescription');
+        const addProductPrice = adminAddProduct.querySelector('#addProductPrice');
+        const addProducterrorElement = adminAddProduct.querySelector('#addProducterrorElement')
+
+        function addProducthideErrorMessagePass() {
+            addProducterrorElement.innerHTML = "";
+        }
+        function addProductshowErrorMessagePass(message) {
+
+            addProducterrorElement.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
+            setTimeout(() => {
+                addProducterrorElement.innerHTML = `<div></div>`
+            }, 5000);
+
+        }
+
+        function addProductSubmitform() {
+
+
+            if (addproductname.value.trim() === "") {
+
+                addProductshowErrorMessagePass("Product name  is Required")
+                return false;
+            }
+            if (!isNaN(addproductname.value.trim())) {
+
+                addProductshowErrorMessagePass("Product name should be a string");
+
+                return false;
+            }
+
+            if (addProductCategory.value.trim() === "select") {
+
+                addProductshowErrorMessagePass("Category name  is Required")
+                return false;
+            }
+
+            if (addProductQuantity.value.trim() === "") {
+
+                addProductshowErrorMessagePass("Quantity  is Required")
+                return false;
+            }
+            if (isNaN(addProductQuantity.value.trim())) {
+
+                addProductshowErrorMessagePass("Quantity should be a number");
+
+                return false;
+            }
+
+            if (addProductDescription.value.trim() === "") {
+
+                addProductshowErrorMessagePass("Description  is Required")
+                return false;
+            }
+            if (!isNaN(addProductDescription.value.trim())) {
+
+                addProductshowErrorMessagePass("Description should be a string");
+
+                return false;
+            }
+
+            if (addProductPrice.value.trim() === "") {
+
+                addProductshowErrorMessagePass("Price  is Required")
+                return false;
+            }
+            if (isNaN(addProductPrice.value.trim())) {
+
+                addProductshowErrorMessagePass("Price should be a number");
+
+                return false;
+            }
+
+
+
+
+
+
+
+            addProducthideErrorMessagePass();
+            return true;
+
+        }
+
+
 
 
 

@@ -37,9 +37,18 @@
                                 <td><%= element.fullname%></td>
                                 <td><%= element.email%></td>
                                 <td>
-                                 <button><a class="text-decoration-none" href="/admin/blockuser/?id=<%= element._id%>">Block</a></button>
-                                 <button><a class="text-decoration-none" href="/admin/unblockuser/?id=<%= element._id%>">Unblock</a></button>
-                                 <button><a class="text-decoration-none" href="/admin/deleteuser/?id=<%= element._id%>" onclick="return confirm ('Do You want to delete <%= element.fullname%>')">Delete</a></button>
+                                  <% if(element.unblockuser===true) { %>
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                                      data-bs-target="#blockModal-<%=element._id%>">
+                                      Block
+                                    </button>
+                                    <% }else{ %>
+                                      <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#blockModal-<%=element._id%>">
+                                        Restore
+                                      </button>
+                                      <%}%>
+                                 
                                 </td>
                                 <td>
                                     <% if( element.unblockuser == true){%>
@@ -48,6 +57,39 @@
                                         <button class="btn-danger">Blocked</button>
                                     <%}%>    
                                 </td>
+
+                                <div class="modal fade" id="blockModal-<%=element._id%>" tabindex="-1"
+                                  aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="blockModal-<%=element._id%>">Block confirmation</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                          aria-label="Close"></button>
+                                      </div>
+                                      <% if(element.unblockuser===true) { %>
+                                        <div class="modal-body">
+                                          Are you sure you want to Block this user?
+                                        </div>
+                                        <% }else{ %>
+                                          <div class="modal-body">
+                                            Are you sure you want to UnBlock this user?
+                                          </div>
+                                          <%}%>
+                                            <div class="modal-footer">
+                                              <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                              <% if(element.unblockuser===true) { %>
+                                                <a href="/admin/blockuser/?id=<%=element._id%>"><button type="button"
+                                                    class="btn btn-danger">Delete</button></a>
+                                                <% }else{ %>
+                                                  <a href="/admin/unblockuser/?id=<%=element._id%>"><button type="button"
+                                                      class="btn btn-primary">Restore</button></a>
+                                                  <%}%>
+                                            </div>
+                                    </div>
+                                  </div>
+                                </div>
                     
                             
                             

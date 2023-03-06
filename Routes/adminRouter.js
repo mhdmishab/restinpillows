@@ -6,6 +6,7 @@ const upload=require('../middlewares/multer');
 const uploadImage = require('../middlewares/multer');
 
 
+adroute.get('/adminlogin',adminController.adminLogin);
 adroute.get('/',verifyAdmin,adminController.adminIndex);
 adroute.get('/home',verifyAdmin,adminController.adminIndex);
 adroute.post('/home',adminController.adminpost);
@@ -30,6 +31,7 @@ adroute.post('/addBanner',verifyAdmin,adminController.addBanner)
 adroute.post('/editBanner/:id',verifyAdmin,adminController.editBanner)
 adroute.get('/deleteBanner/:id',verifyAdmin,adminController.deleteBanner);
 adroute.get('/restoreBanner/:id',verifyAdmin,adminController.restoreBanner);
+adroute.get('/removeBanner/:id',verifyAdmin,adminController.removeBanner);
 
 
 
@@ -43,7 +45,7 @@ adroute.get('/deleteuser',verifyAdmin,adminController.deleteUser);
 
 adroute.get('/products',verifyAdmin,adminController.products);
 adroute.get('/addproducts',verifyAdmin,adminController.addproduct);
-adroute.post('/addproducts',upload.array('myFiles',3),adminController.addproducts);
+adroute.post('/addproducts',upload.array('myFiles',3),verifyAdmin,adminController.addproducts);
 adroute.get('/editproduct',verifyAdmin,adminController.getProduct);
 
 adroute.post('/changeImage1/:id',upload.single('myFile1'),verifyAdmin,adminController.changeImage1);
@@ -57,15 +59,19 @@ adroute.get('/listproduct',verifyAdmin,adminController.listProduct);
 
 adroute.get('/category',verifyAdmin,adminController.Category);
 adroute.post('/categorypost',verifyAdmin,adminController.categoryPost);
-adroute.get('/deletecategory',verifyAdmin,adminController.deleteCategory);
+adroute.get('/deleteCategory/:id',verifyAdmin,adminController.deleteCategory);
+adroute.get('/restoreCategory/:id',verifyAdmin,adminController.restoreCategory);
 
-adroute.get('/subcategory',verifyAdmin,adminController.Subcategory);
-adroute.post('/subcategorypost',verifyAdmin,adminController.subcategoryPost);
-adroute.post('/getsubcategories',verifyAdmin,adminController.getSubcategory)
+
 
 
 
 adroute.get('/logout',verifyAdmin,adminController.adminLogout);
+adroute.get('/salesReport',verifyAdmin,adminController.salesReport);
+adroute.get('/dailyReport',verifyAdmin,adminController.dailyReport);
+adroute.get('/monthlyReport',verifyAdmin,adminController.monthlyReport)
+
+
 
 
 

@@ -7,7 +7,7 @@ const cart = require('../model/cartmodel');
 const order = require('../model/ordermodel');
 const myProduct = require('../model/productmodel');
 const myCategory = require('../model/categorymodel');
-const mySubcategory = require('../model/subcategory');
+// const mySubcategory = require('../model/subcategory');
 const coupon = require('../model/couponmodel');
 const banner = require('../model/bannermodal');
 const auth = require('../utils/auth');
@@ -73,32 +73,32 @@ module.exports = {
         try {
             let session = req.session.email;
             let products = await myProduct.find({ unlist: false }).populate("category").limit(8);
-            let bannerData = await banner.find({ isDeleted: false }).sort({ createdAt: -1 }).limit(1);
+            let bannerData = await banner.find({ isDeleted: false }).populate("couponName").sort({ createdAt: -1 }).limit(1);
+           
             console.log(bannerData);
 
 
             res.render('users/home', { session, products, bannerData });
         } catch (err) {
-            console.log("inside home error");
+
             console.log(err.message);
             res.redirect('/error');
 
         }
     },
 
-
-
-
-
-
     userLogin: (req, res) => {
-        if (req.session.email) {
-            res.redirect('userprofile');
-        } else {
+        try {
+            if (req.session.email) {
+                res.redirect('userprofile');
+            } else {
 
-            res.render('users/login', { msg });
-            msg = "";
+                res.render('users/login', { msg });
+                msg = "";
 
+            }
+        } catch (err) {
+            res.redirect('/error');
         }
     },
 
@@ -170,11 +170,18 @@ module.exports = {
     },
 
     userSignup: (req, res) => {
-        if (req.session.email) {
-            res.redirect('/userprofile');
-        } else {
-            res.render('users/signup', { msg });
-            msg = "";
+        try {
+            if (req.session.email) {
+                res.redirect('/userprofile');
+            } else {
+                res.render('users/signup', { msg });
+                msg = "";
+            }
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
         }
     },
 
@@ -264,15 +271,29 @@ module.exports = {
     },
 
     otpIndex: (req, res) => {
-        const userInfo = req.query;
-        console.log(userInfo);
-        res.render('users/otp', { userInfo });
+        try {
+            const userInfo = req.query;
+            console.log(userInfo);
+            res.render('users/otp', { userInfo });
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
 
 
     userLogout: (req, res) => {
-        req.session.email = null;
-        res.redirect('/');
+        try {
+            req.session.email = null;
+            res.redirect('/');
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
 
     errorPage: (req, res) => {
@@ -280,45 +301,65 @@ module.exports = {
     },
 
     forgotPassword: (req, res) => {
-      
+        try {
+            res.render('users/forgetpass', { msg });
+            msg = "";
+        } catch (err) {
 
-        res.render('users/forgetpass',{msg});
-        msg="";
-        
-      
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
+
+
 
     },
 
     forgotPass: async (req, res) => {
         console.log(req.body);
-        let user = await myDb.users.findOne({ email: req.body.email });
-        if (user) {
-            authen.otp(req.body.email);
-            let passwords = await bcrypt.hash(req.body.newpassword, 10);
-            res.redirect(`/otpforgot?email=${req.body.email}&newpassword=${passwords}`);
-        } else {
-            console.log('invalid email');
-            msg="Invalid mail";
-            res.redirect('/forgotpassword');
+        try {
+            let user = await myDb.users.findOne({ email: req.body.email });
+            if (user) {
+                authen.otp(req.body.email);
+                let passwords = await bcrypt.hash(req.body.newpassword, 10);
+                res.redirect(`/otpforgot?email=${req.body.email}&newpassword=${passwords}`);
+            } else {
+                console.log('invalid email');
+                msg = "Invalid mail";
+                res.redirect('/forgotpassword');
+            }
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
         }
     },
 
     otpForgot: (req, res) => {
-        const userInfo = req.query;
-        console.log(userInfo);
-        res.render('users/otpforgot', { userInfo });
+        try {
+            const userInfo = req.query;
+            console.log(userInfo);
+            res.render('users/otpforgot', { userInfo });
 
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
+
 
     otpForgotpost: async (req, res) => {
         try {
-            
+
             var myDetails = await myDb.users.findOne({ email: req.body.email });
             console.log(myDetails);
             const otp = req.body.emailOtp;
             console.log(typeof (otp));
             console.log(otp);
-            newOtp.findOne({ otp: otp },async(err, otpDetails) => {
+            newOtp.findOne({ otp: otp }, async (err, otpDetails) => {
                 if (err) {
                     console.log(otpDetails);
                     console.log("ERROE1");
@@ -359,8 +400,10 @@ module.exports = {
             });
 
         } catch (err) {
-            console.log("big error");
+
+            console.log(err.message);
             res.redirect('/error');
+
         }
     },
 
@@ -441,78 +484,92 @@ module.exports = {
         console.log("helooooooooooooo");
         const session = req.session.email;
         console.log(session)
-        const userData = await myDb.users.findOne({ email: session });
+        try {
+            const userData = await myDb.users.findOne({ email: session });
 
-        const productData = await cart
-            .aggregate([
-                {
-                    $match: { userId: userData.id },
-                },
-                {
-                    $unwind: "$product",
-                },
+            const productData = await cart
+                .aggregate([
+                    {
+                        $match: { userId: userData.id },
+                    },
+                    {
+                        $unwind: "$product",
+                    },
 
-                {
-                    $project: {
-                        productItem: "$product.productId",
-                        productQuantity: "$product.quantity",
-                    },
-                },
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "productItem",
-                        foreignField: "_id",
-                        as: "productDetail",
-                    },
-                },
-                {
-                    $project: {
-                        productItem: 1,
-                        productQuantity: 1,
-                        productDetail: { $arrayElemAt: ["$productDetail", 0] },
-                    },
-                },
-                {
-                    $addFields: {
-                        productPrice: {
-                            $multiply: ["$productQuantity", "$productDetail.price"],
+                    {
+                        $project: {
+                            productItem: "$product.productId",
+                            productQuantity: "$product.quantity",
                         },
-                    }
-                },
-            ])
-            .exec();
-        console.log(productData);
-        const sum = productData.reduce((accumulator, object) => {
-            return accumulator + object.productPrice;
-        }, 0);
-        let countCart = productData.length;
+                    },
+                    {
+                        $lookup: {
+                            from: "products",
+                            localField: "productItem",
+                            foreignField: "_id",
+                            as: "productDetail",
+                        },
+                    },
+                    {
+                        $project: {
+                            productItem: 1,
+                            productQuantity: 1,
+                            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                        },
+                    },
+                    {
+                        $addFields: {
+                            productPrice: {
+                                $multiply: ["$productQuantity", "$productDetail.price"],
+                            },
+                        }
+                    },
+                ])
+                .exec();
+            console.log(productData);
+            const sum = productData.reduce((accumulator, object) => {
+                return accumulator + object.productPrice;
+            }, 0);
+            let countCart = productData.length;
 
 
-        // let id = req.params.id;
-        // let product = await myProduct.findOne({ _id: id });
-        res.render("users/cart", {
-            session,
-            productData,
+            // let id = req.params.id;
+            // let product = await myProduct.findOne({ _id: id });
+            res.render("users/cart", {
+                session,
+                productData,
 
-            sum, countCart,
-            // product:product,
-            // countlnWishlist,
+                sum, countCart,
+                // product:product,
+                // countlnWishlist,
 
-        });
+            });
 
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
 
     userProfile: async (req, res) => {
-        const session = req.session.email;
-        let userData = await myDb.users.findOne({ email: session })
-        let userProfile = await profile.findOne({ email: session });
+        try {
+            const session = req.session.email;
+            let userData = await myDb.users.findOne({ email: session })
+            let userProfile = await profile.findOne({ email: session });
 
-        res.render('users/profile', { session, userData, userProfile, msg });
-        msg = "";
+            res.render('users/profile', { session, userData, userProfile, msg });
+            msg = "";
 
 
 
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
 
     changeProfilePass: async (req, res) => {
@@ -544,264 +601,286 @@ module.exports = {
             console.error('change password error');
             res.redirect('/error')
         }
-
-
-
-
-
-
-
-
-
-
     },
 
     editProfile: async (req, res) => {
         const session = req.session.email;
-        let userData = await myDb.users.findOne({ email: session })
-        let userProfile = await profile.findOne({ email: session });
+        try {
+            let userData = await myDb.users.findOne({ email: session })
+            let userProfile = await profile.findOne({ email: session });
 
-        if (userProfile) {
-            res.render('users/editprofile', { session, userData, userProfile });
-        } else {
+            if (userProfile) {
+                res.render('users/editprofile', { session, userData, userProfile });
+            } else {
 
-            res.render('users/editprofile', { session, userData, userProfile });
+                res.render('users/editprofile', { session, userData, userProfile });
+            }
+
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
         }
-
     },
 
     postEditProfile: async (req, res) => {
-        const session = req.session.email;
-        let userProfile = await profile.findOne({ email: session });
-        if (userProfile) {
-            console.log("iam inside profile");
-            await profile.updateOne(
-                { email: session },
-                {
-                    $set: {
-                        fullname: req.body.fullname,
-                        phone: req.body.phone,
-                        'addressDetails.0': [
-                            {
-                                housename: req.body.housename,
-                                area: req.body.area,
-                                landmark: req.body.landmark,
-                                district: req.body.district,
-                                state: req.body.state,
-                                postoffice: req.body.postoffice,
-                                pin: req.body.pin
-                            }
-                        ]
-
-                    }
-                }
-            );
-            await myDb.users.updateOne(
-                { email: session },
-                {
-                    $set: {
-                        fullname: req.body.fullname,
-                        email: req.body.email,
-
-
-                    }
-                }
-            )
-        } else {
-            console.log("iam new profile");
-            const nwprofile = new profile({
-
-
-
-                fullname: req.body.fullname,
-                email: req.body.email,
-                phone: req.body.phone,
-                'addressDetails.0': [
+        try {
+            const session = req.session.email;
+            let userProfile = await profile.findOne({ email: session });
+            if (userProfile) {
+                console.log("iam inside profile");
+                await profile.updateOne(
+                    { email: session },
                     {
-                        housename: req.body.housename,
-                        area: req.body.area,
-                        landmark: req.body.landmark,
-                        district: req.body.district,
-                        state: req.body.state,
-                        postoffice: req.body.postoffice,
-                        pin: req.body.pin
+                        $set: {
+                            fullname: req.body.fullname,
+                            phone: req.body.phone,
+                            'addressDetails.0': [
+                                {
+                                    housename: req.body.housename,
+                                    area: req.body.area,
+                                    landmark: req.body.landmark,
+                                    district: req.body.district,
+                                    state: req.body.state,
+                                    postoffice: req.body.postoffice,
+                                    pin: req.body.pin
+                                }
+                            ]
+
+                        }
                     }
-                ]
+                );
+                await myDb.users.updateOne(
+                    { email: session },
+                    {
+                        $set: {
+                            fullname: req.body.fullname,
+                            email: req.body.email,
 
 
-
-            });
-            nwprofile.save();
-
-
-            console.log("iam here");
-            await myDb.users.updateOne(
-                { email: session },
-                {
-                    $set: {
-                        fullname: req.body.fullname,
-                        email: req.body.email,
-
-
+                        }
                     }
-                }
-            )
+                )
+            } else {
+                console.log("iam new profile");
+                const nwprofile = new profile({
+
+
+
+                    fullname: req.body.fullname,
+                    email: req.body.email,
+                    phone: req.body.phone,
+                    'addressDetails.0': [
+                        {
+                            housename: req.body.housename,
+                            area: req.body.area,
+                            landmark: req.body.landmark,
+                            district: req.body.district,
+                            state: req.body.state,
+                            postoffice: req.body.postoffice,
+                            pin: req.body.pin
+                        }
+                    ]
+
+
+
+                });
+                nwprofile.save();
+
+
+                console.log("iam here");
+                await myDb.users.updateOne(
+                    { email: session },
+                    {
+                        $set: {
+                            fullname: req.body.fullname,
+                            email: req.body.email,
+
+
+                        }
+                    }
+                )
+
+            }
+            res.redirect('/profile')
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
 
         }
-        res.redirect('/profile')
     },
 
     deleteAddress: async (req, res) => {
-        console.log("inside delete Address");
-        const session = req.session.email;
-        const name=req.params.name;
-        addressId = req.params.id;
-        console.log(addressId);
+        try {
+            console.log("inside delete Address");
+            const session = req.session.email;
+            const name = req.params.name;
+            addressId = req.params.id;
+            console.log(addressId);
 
-        await profile.updateOne({
-            email: session
-          }, {
-            $pull: {
-              addressDetails: {
-                _id: addressId
-              }
-            }
-          });
+            await profile.updateOne({
+                email: session
+            }, {
+                $pull: {
+                    addressDetails: {
+                        _id: addressId
+                    }
+                }
+            });
 
-          if(name=="checkout"){
-            res.redirect('/checkout');
-            }else{
+            if (name == "checkout") {
+                res.redirect('/checkout');
+            } else {
                 res.redirect('/profile')
             }
 
 
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
 
     changeQuantity: async (req, res) => {
-        let session = req.session.email;
-        const userData = await myDb.users.find({ email: session });
+        try {
+            let session = req.session.email;
+            const userData = await myDb.users.find({ email: session });
 
-        console.log(111);
-        const data = req.body;
-        console.log(data);
-        const objId = data.product;
-        let zeroQuantity = false;
-        const cartData = await cart.find({ _id: data.cart });
+            console.log(111);
+            const data = req.body;
+            console.log(data);
+            const objId = data.product;
+            let zeroQuantity = false;
+            const cartData = await cart.find({ _id: data.cart });
 
-        let newdata;
+            let newdata;
 
-        cart.updateOne(
-            { _id: data.cart, "product.productId": objId },
-            { $inc: { "product.$.quantity": data.count } }
-        ).then(async () => {
-            newdata = await cart.findOne({ _id: data.cart }, { product: { $elemMatch: { productId: objId } } });
-            if (newdata == null) {
-                console.log("newdata is here" + newdata);
-                res.redirect('/home');
-            }
-            if (newdata.product[0].quantity == 0 || newdata.product[0].quantity < 0) {
-                await cart
-                    .updateOne(
-                        { _id: data.cart, "product.productId": objId },
-                        { $pull: { product: { productId: objId } } }
-                    )
-                zeroQuantity = true;
-            }
-            const userid = userData[0]._id;
-            const cartuserid = mongoose.Types.ObjectId(cartData[0].userId);
-            console.log(cartuserid)
-            console.log(userid)
-            let productData = await cart.aggregate([
-                {
-                    $match: { userId: cartData[0].userId },
-                },
-                {
-                    $unwind: "$product",
-                },
-                {
-                    $project: {
-                        productItem: "$product.productId",
-                        productQuantity: "$product.quantity",
+            cart.updateOne(
+                { _id: data.cart, "product.productId": objId },
+                { $inc: { "product.$.quantity": data.count } }
+            ).then(async () => {
+                newdata = await cart.findOne({ _id: data.cart }, { product: { $elemMatch: { productId: objId } } });
+                if (newdata == null) {
+                    console.log("newdata is here" + newdata);
+                    res.redirect('/home');
+                }
+                if (newdata.product[0].quantity == 0 || newdata.product[0].quantity < 0) {
+                    await cart
+                        .updateOne(
+                            { _id: data.cart, "product.productId": objId },
+                            { $pull: { product: { productId: objId } } }
+                        )
+                    zeroQuantity = true;
+                }
+                const userid = userData[0]._id;
+                const cartuserid = mongoose.Types.ObjectId(cartData[0].userId);
+                console.log(cartuserid)
+                console.log(userid)
+                let productData = await cart.aggregate([
+                    {
+                        $match: { userId: cartData[0].userId },
                     },
-                },
-                {
-                    $lookup: {
-                        from: "products",
-                        localField: "productItem",
-                        foreignField: "_id",
-                        as: "productDetail",
+                    {
+                        $unwind: "$product",
                     },
-                },
-                {
-                    $project: {
-                        productItem: 1,
-                        productQuantity: 1,
-                        productDetail: { $arrayElemAt: ["$productDetail", 0] },
-                    },
-                },
-                {
-                    $addFields: {
-                        productPrice: {
-                            $multiply: ["$productQuantity", "$productDetail.price"],
+                    {
+                        $project: {
+                            productItem: "$product.productId",
+                            productQuantity: "$product.quantity",
                         },
                     },
-                },
-            ]);
+                    {
+                        $lookup: {
+                            from: "products",
+                            localField: "productItem",
+                            foreignField: "_id",
+                            as: "productDetail",
+                        },
+                    },
+                    {
+                        $project: {
+                            productItem: 1,
+                            productQuantity: 1,
+                            productDetail: { $arrayElemAt: ["$productDetail", 0] },
+                        },
+                    },
+                    {
+                        $addFields: {
+                            productPrice: {
+                                $multiply: ["$productQuantity", "$productDetail.price"],
+                            },
+                        },
+                    },
+                ]);
 
-            console.log("productData", productData);
-            const sum = productData.reduce((accumulator, object) => {
-                return accumulator + object.productPrice;
-            }, 0);
-            console.log("helooo sum", sum);
-            const countCart = await cart.aggregate([
-                { $match: { userId: cartData[0].userId } },
-                { $project: { count: { $size: "$product" } } }
-            ]);
-            res.status(200).send({ data: "this is data", newdata, zeroQuantity, sum, countCart });
+                console.log("productData", productData);
+                const sum = productData.reduce((accumulator, object) => {
+                    return accumulator + object.productPrice;
+                }, 0);
+                console.log("helooo sum", sum);
+                const countCart = await cart.aggregate([
+                    { $match: { userId: cartData[0].userId } },
+                    { $project: { count: { $size: "$product" } } }
+                ]);
+                res.status(200).send({ data: "this is data", newdata, zeroQuantity, sum, countCart });
 
-
-        });
-
-
-
-
-
-    },
-
-    deleteCartProd: async (req, res) => {
-
-        const cartid = req.body.cartId;
-        const cartId = mongoose.Types.ObjectId(cartid);
-        const productid = req.body.productId;
-        console.log(cartId);
-        console.log(productid);
-
-        await cart.aggregate([
-            {
-                $unwind: "$product",
-            }
-        ]);
-        await cart
-            .updateOne(
-                { _id: cartid, "product.productId": productid },
-                { $pull: { product: { productId: productid } } }
-            )
-            .then(async () => {
-                const Cart = await cart.findOne({ _id: cartId });
-                const countCart = Cart.product.length;
-                res.json({ countCart });
-                // res.redirect('/viewcart');
 
             });
 
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
+    },
+
+    deleteCartProd: async (req, res) => {
+        try {
+
+            const cartid = req.body.cartId;
+            const cartId = mongoose.Types.ObjectId(cartid);
+            const productid = req.body.productId;
+            console.log(cartId);
+            console.log(productid);
+
+            await cart.aggregate([
+                {
+                    $unwind: "$product",
+                }
+            ]);
+            await cart
+                .updateOne(
+                    { _id: cartid, "product.productId": productid },
+                    { $pull: { product: { productId: productid } } }
+                )
+                .then(async () => {
+                    const Cart = await cart.findOne({ _id: cartId });
+                    const countCart = Cart.product.length;
+                    res.json({ countCart });
+                    // res.redirect('/viewcart');
+
+                });
 
 
 
 
 
+
+        } catch (err) {
+
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
     },
 
     checkOut: async (req, res) => {
+    try{
         let session = req.session.email;
         let userProfile = await profile.findOne({ email: session });
         const userdata = await myDb.users.findOne({ email: session });
@@ -857,12 +936,19 @@ module.exports = {
         const query = req.query
         console.log(query);
         // await order.deleteOne({_id:query.orderId})
-        res.render("users/checkout", { session, productData, userData, sum,userProfile });
+        res.render("users/checkout", { session, productData, userData, sum, userProfile });
 
 
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
     },
 
     postEditAddress: async (req, res) => {
+    try{
         const session = req.session.email;
         let userProfile = await profile.findOne({ email: session });
         if (userProfile) {
@@ -910,12 +996,19 @@ module.exports = {
         }
         res.redirect('/checkout')
 
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     editAddress: async (req, res) => {
+    try{
         console.log("inside edit adress")
 
-        const name=req.params.name;
+        const name = req.params.name;
 
         const session = req.session.email;
         const addressId = req.params.id;
@@ -972,17 +1065,24 @@ module.exports = {
 
             nwprofile.save();
         }
-        if(name=="checkout"){
+        if (name == "checkout") {
             res.redirect('/checkout');
-            }else{
-                res.redirect('/profile')
-            }
+        } else {
+            res.redirect('/profile')
+        }
 
 
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     addNewAddress: async (req, res) => {
-        const name=req.params.name;
+    try{
+        const name = req.params.name;
         const session = req.session.email;
         console.log("hellooooo" + session);
         const addObj = {
@@ -996,13 +1096,19 @@ module.exports = {
         }
         console.log("hellooooo" + addObj);
         await profile.updateOne({ email: session }, { $push: { addressDetails: addObj } });
-        if(name=="checkout"){
-        res.redirect('/checkout');
-        }else{
+        if (name == "checkout") {
+            res.redirect('/checkout');
+        } else {
             res.redirect('/profile')
         }
-        
-    },
+
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     getShop: async (req, res) => {
         // const session = req.session.email;
@@ -1010,6 +1116,7 @@ module.exports = {
         // const product = await myProduct.find({ unlist: false }).populate('category');
         // let productCount = await myProduct.find({ unlist: false }).count();
         // res.render('users/shop', { session, product, category, productCount });
+    try{
 
 
         const session = req.session.email;
@@ -1044,19 +1151,15 @@ module.exports = {
 
         res.render('users/shop', { session, product, category, results });
 
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
 
-    getSubcategory: async (req, res) => {
+    }
+},
 
-        const categoryID = req.body.category;
-        const categoryId = mongoose.Types.ObjectId(categoryID);
-        console.log(categoryId);
-        const subcategories = await mySubcategory.find({ categoryid: categoryId });
-        console.log(subcategories);
-        res.json(subcategories);
-    },
 
-    // shop
 
     sortProducts: async (req, res) => {
 
@@ -1119,18 +1222,37 @@ module.exports = {
     },
 
     doSearch: async (req, res) => {
-        let session = req.session.email;
-        console.log(req.body.searchtext);
-        const category = await myCategory.find({});
-        let product = await myProduct.find({ productname: new RegExp(req.body.searchtext) }).populate('category');
-        console.log(product);
-        let results;
-        if (product) {
-            res.json({ product })
+        console.log("inside search")
+        try {
+            const session = req.session.email;
+            if(req.body.searchtext!=""){
+            console.log("seacrh text is here ", req.body.searchtext);
+            const category = await myCategory.find({});
+            let product = await myProduct.find({
+                productname: { $regex: new RegExp(req.body.searchtext, 'i') }
+            }).populate('category').catch((err) => {
+                console.log("search error");
+                res.redirect('/');
+            })
+            console.log(product);
+            let results;
+            res.render('users/shop', { session, product, category, results });
+        }else{
+            
+            res.redirect('/getshop');
         }
+        }  catch (err) {
+            
+            console.log(err.message);
+            res.redirect('/error');
+
+        }
+
+        
     },
 
     placeOrder: async (req, res) => {
+    try{
         console.log("Inside place order")
 
 
@@ -1207,9 +1329,16 @@ module.exports = {
         // }
         // }
         // }
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     orderSuccess: async (req, res) => {
+    try{
         let session = req.session.email;
         const query = req.query
         const orderId = query.orderId
@@ -1217,7 +1346,13 @@ module.exports = {
         await cart.deleteOne({ userId: query.cartId });
 
         res.render('users/ordersuccess', { session })
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     verifyPayment: async (req, res, next) => {
         try {
@@ -1236,7 +1371,7 @@ module.exports = {
 
             if (hmac == details.payment.razorpay_signature) {
                 const objId = mongoose.Types.ObjectId(details.order.receipt);
-                order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid", orderStatus: 'placed' } }).then(async() => {
+                order.updateOne({ _id: objId }, { $set: { paymentStatus: "paid", orderStatus: 'placed' } }).then(async () => {
 
 
                     res.json({ success: true });
@@ -1255,12 +1390,16 @@ module.exports = {
             }
 
 
-        } catch (err) {
-            next(err)
+        }  catch (err) {
+            
+            console.log(err.message);
+            res.redirect('/error');
+
         }
     },
 
     applyCoupon: async (req, res) => {
+    try{
         console.log("inside APPLYCOUPON");
         let invalid;
         let couponDeleted;
@@ -1368,9 +1507,16 @@ module.exports = {
 
         }
 
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     productDetail: async (req, res) => {
+    try{
         let session = req.session.email;
         const productId = req.params.id;
         console.log(productId);
@@ -1381,9 +1527,16 @@ module.exports = {
 
         res.render('users/productDetail', { session, product })
 
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     orderDetails: async (req, res) => {
+    try{
         const session = req.session.email;
         const userData = await myDb.users.findOne({ email: session });
         const userId = userData._id
@@ -1454,9 +1607,16 @@ module.exports = {
         const orderDetails = await order.find({ userId: userData._id }).sort({ createdAt: -1 });
         console.log(productData.length)
         res.render('users/orderdetails', { session, productData, orderDetails });
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     orderedProduct: async (req, res) => {
+    try{
         const id = req.params.id;
         const session = req.session.email;
         const userData = await myDb.users.findOne({ email: session });
@@ -1516,47 +1676,27 @@ module.exports = {
         console.log("Order details", productData);
 
         res.render('users/orderedProduct', { session, productData, orderDetails });
-    },
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
+    }
+},
 
     cancelOrder: async (req, res) => {
+    try{
         const data = req.params.id;
         await order.updateOne({ _id: data }, { $set: { orderStatus: "cancelled" } })
         res.redirect("/orderDetails");
 
+    } catch (err) {
+            
+        console.log(err.message);
+        res.redirect('/error');
+
     }
-
-
-
-
-
-
-
-
-
-
-
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 

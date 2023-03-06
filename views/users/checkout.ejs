@@ -61,7 +61,7 @@
                           <% userData?.addressDetails.forEach((address)=>{%>
                             <option value="<%= address._id %>">
                               <%= address.housename %>,<%= address.postoffice%>,<%= address.landmark %>,<%=address.area
-                                      %>,<%= address.district %>,<%= address.pin %>,<%=address.state %>
+                                      %>,<%= address.district %>,<%=address.state %>,<%= address.pin %>
                             </option>
                             <% }) %>
                         </select>

@@ -23,9 +23,6 @@ const productSchema=new mongoose.Schema({
     category:
         {type:mongoose.SchemaTypes.ObjectId,
         ref:"categorys"},
-    subcategory:
-        {type:mongoose.SchemaTypes.ObjectId,
-        ref:"subcategorys"},
     quantity:
         {type:Number,
         required:true},

@@ -1,195 +1,362 @@
 <%- include ('../admin/layout/adminheader.ejs') %>
 
-<div style="margin-top: 5rem;" class="col py-3">
+  <div style="margin-top: 5rem;" class="col py-3">
     <section class="container">
-        <div class="d-flex align-items-center justify-content-center">
-            <h3 class="text-decoration-underline">Banner management</h3>
+      <div class="d-flex align-items-center justify-content-center">
+        <h3 class="text-decoration-underline">Banner management</h3>
 
+      </div>
+
+      <div class="container mb-5 border border-dark">
+        <div class=" d-flex align-items-center justify-content-center">
+          <h5 class="text-decoration-underline">Add banner</h5>
         </div>
 
-        <div class="container mb-5 border border-dark">
-            <div class=" d-flex align-items-center justify-content-center">
-                <h5 class="text-decoration-underline">Add banner</h5>
+        <form class="mt-3 mb-3" action="/admin/addBanner" method="post" id="bannervalidation"
+          onsubmit="return bannerSubmitform()">
+          <div class="d-flex flex-wrap justify-content-between">
+
+            <div class="d-flex flex-column">
+              <label>Offer type</label>
+              <input class="rounded-2" name="offerType" style="width: 189px; height: 38px;" id="bannertypevalidation"
+                type="text">
             </div>
 
-            <form class="mt-3 mb-3" action="/admin/addBanner" method="post">
-                <div class="d-flex flex-wrap justify-content-between">
+            <div class="d-flex flex-column">
+              <label>Banner text</label>
+              <input name="bannerText" class="rounded-2" style="width: 189px; height: 38px;" id="bannertextvalidation"
+                type="text">
+            </div>
 
-                    <div class="d-flex flex-column">
-                        <label>Offer type</label>
-                        <input class="rounded-2" required name="offerType" style="width: 189px; height: 38px;"
-                            type="text">
-                    </div>
-
-                    <div class="d-flex flex-column">
-                        <label>Banner text</label>
-                        <input name="bannerText" required class="rounded-2" style="width: 189px; height: 38px;"
-                            type="text">
-                    </div>
-
-                    <div class="d-flex flex-column">
-                        <label>Coupon code</label>
-                        <input name="couponName" required class="rounded-2" style="width: 189px; height: 38px;"
-                            type="text">
-                    </div>
-                    
-
-
-                    <button class="btn btn-success mt-4" style="width: 75px; height: 38px;"
-                        type="submit">Submit</button>
-                </div>
-            </form>
-        </div>
-        <table class="table table-success table-striped" id="table">
-            <thead>
+            <div class="d-flex flex-column">
+              <label>Coupon code</label>
+              <!-- <input name="couponName"  class="rounded-2" style="width: 189px; height: 38px;" id="bannercodevalidation"
+                            type="text"> -->
+              <select id="bannercodevalidation" class="form-control" name="couponName">
+                <option selected>select</option>
+                <% couponBanner.forEach(function(item) { %>
+                  <option value="<%=item?._id%>">
+                    <%=item?.couponName %>
+                  </option>
+                  <% }); %>
+              </select>
+            </div>
+              <button class="btn btn-success mt-4" style="width: 75px; height: 38px;" type="submit">Submit</button>
+          </div>
+          <div id="bannervalidationErrorMsg"></div>
+        </form>
+      </div>
+      <table class="table table-success table-striped" id="table">
+        <thead>
+          <tr>
+            <th scope="col">No</th>
+            <th scope="col">Offer Type</th>
+            <th scope="col">Banner Text</th>
+            <th scope="col">Coupon Code</th>
+            <th scope="col">controlls</th>
+            <th scope="col">remove</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% let count=1 %>
+            <% bannerData.forEach(element=> { %>
               <tr>
-                <th scope="col">No</th>
-                <th scope="col">Offer Type</th>
-                <th scope="col">Banner Text</th>
-                <th scope="col">Coupon Code</th>
-                <th scope="col">controlls</th>
-            </tr>
-            </thead>
-       <tbody>
-              <% let count=1 %>
-                <% bannerData.forEach(element=> { %>
-                  <tr>
-                    <td>
-                      <%=count %>
-                    </td>
-                    <td>
-                        <%=element.offerType %>
+                <td>
+                  <%=count %>
+                </td>
+                <td>
+                  <%=element.offerType %>
 
-                    </td>
-                    <td>
-                      <%=element.bannerText %>
-                    </td>
-                    <td>
+                </td>
+                <td>
+                  <%=element.bannerText %>
+                </td>
+                <td>
+
+                  <%=element.couponName.couponName %>
+                </td>
+
+                <td>
+                  <!-- <a href="" class="btn btn-success">Edit</a> -->
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#exampleModa-<%= element._id %>">
+                    Edit
+                  </button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="exampleModa-<%= element._id %>" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
                         
-                      <%=element.couponName %>
-                      </td>
-                    
-                    <td>
-                      <!-- <a href="" class="btn btn-success">Edit</a> -->
-                      <!-- Button trigger modal -->
-                      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModa-<%= element._id %>">
-                        Edit
-                      </button>
-                      <!-- Modal -->
-                      <div class="modal fade" id="exampleModa-<%= element._id %>" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          <div class="modal-body">
+                            <form action="/admin/editbanner/<%= element._id %>" method="post" class="editAdminBannerreg"
+                              onsubmit="return editbannerSubmitform(event)">
+                            <div class="d-flex justify-content-between">
+
+                              <div class="d-flex flex-column">
+                                <label>offer Type</label>
+                                <input   value="<%= element?.offerType%>" required name="offerType"
+                                  class="editAdminBannertype" style="width: 189px; height: 38px;" type="text">
+                              </div>
+
+                              <div class="d-flex flex-column">
+                                <label>banner Text</label>
+                                <input name="bannerText" required  value="<%=element?.bannerText%>" 
+                                  class="editAdminBannertext" style="width: 189px; height: 38px;" type="text">
+                              </div>
+
                             </div>
-                            <form  action="/admin/editbanner/<%= element._id %>" method="post">
-                              <div class="modal-body">
-                                <div class="d-flex justify-content-between" >
-    
-                                  <div class="d-flex flex-column">
-                                    <label>offer Type</label>
-                                    <input class="rounded-2" required   value="<%= element.offerType%>" name="offerType" style="width: 189px; height: 38px;"
-                                      type="text">
-                                  </div>
-    
-                                  <div class="d-flex flex-column">
-                                    <label>banner Text</label>
-                                    <input name="bannerText" required  value="<%=element.bannerText%>" class="rounded-2" style="width: 189px; height: 38px;"
-                                      type="text">
-                                  </div>
-    
-                                </div>
-    
-                                <div class="d-flex justify-content-between" >
-                                  <div class="d-flex flex-column">
-                                    <label>Copon Code</label>
-                                    <input name="couponName" required  value="<%= element.couponName%>" class="rounded-2" style="width: 189px; height: 38px;"
-                                      type="text">
-                                  </div>
-    
-                                </div>
+
+                            <div class="d-flex justify-content-between">
+                              <div class="d-flex flex-column">
+                                <label>Coupon Code</label>
+                                <input name="couponName"   value="<%=element?.couponName.couponName%> " 
+                                  class="editAdminBannercode" style="width: 189px; height: 38px;" type="text" readonly>
+                                
                               </div>
-                              <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" id="submit" value="submit" class="btn btn-primary">Submit</button>
+
+
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" id="submit" value="submit" class="btn btn-primary">Submit</button>
+                          </div>
+                          <div id="editAdminBannereerrormsg"></div>
+                        </form>
+
+
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <!-- Button trigger modal -->
+                  <% if(element.isDeleted===false) { %>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                      data-bs-target="#bannerDelete-<%=element._id%>">
+                      Delete
+                    </button>
+                    <% }else{ %>
+                      <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                        data-bs-target="#bannerDelete-<%=element._id%>">
+                        Restore
+                      </button>
+                      <%}%>
+                        <!-- Modal -->
+                        <div class="modal fade" id="bannerDelete-<%=element._id%>" tabindex="-1"
+                          aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="bannerDelete">Delete confirmation</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
                               </div>
-                            </form>
-                            
-                           
+                              <% if(element.isDeleted===false) { %>
+                                <div class="modal-body">
+                                  Are you sure you want to delete this banner details?
+                                </div>
+                                <% }else{ %>
+                                  <div class="modal-body">
+                                    Are you sure you want to restore banner details?
+                                  </div>
+                                  <%}%>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                      <% if(element.isDeleted===false) { %>
+                                        <a href="/admin/deleteBanner/<%=element._id%>"><button type="button"
+                                            class="btn btn-danger">Delete</button></a>
+                                        <% }else{ %>
+                                          <a href="/admin/restoreBanner/<%=element._id%>"><button type="button"
+                                              class="btn btn-primary">Restore</button></a>
+                                          <%}%>
+                                    </div>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    
-                     
-                      <!-- Button trigger modal -->
-                      <% if(element.isDeleted===false) { %>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal"
-                          data-bs-target="#exampleModal-<%=element._id%>">
-                          Delete
-                        </button>
-                        <% }else{ %>
-                          <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                            data-bs-target="#exampleModal-<%=element._id%>">
-                            Restore
+                </td>
+                <td>
+                  <button type="button" class="btn btn-outline-danger border-0" data-bs-toggle="modal"
+                    data-bs-target="#BannerRemove-<%= element._id %>">
+                    <i class="material-symbols-outlined">
+                      delete_forever
+                    </i>
+                  </button>
+                  <!-- Modal -->
+                  <div class="modal fade" id="BannerRemove-<%= element._id %>" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Remove</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
                           </button>
-                          <%}%>
-                            <!-- Modal -->
-                            <div class="modal fade" id="exampleModal-<%=element._id%>" tabindex="-1"
-                              aria-labelledby="exampleModalLabel" aria-hidden="true">
-                              <div class="modal-dialog">
-                                <div class="modal-content">
-                                  <div class="modal-header">
-                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Delete confirmation</h1>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                      aria-label="Close"></button>
-                                  </div>
-                                  <% if(element.isDeleted===false) { %>
-                                    <div class="modal-body">
-                                      Are you sure you want to delete this banner details?
-                                    </div>
-                                    <% }else{ %>
-                                      <div class="modal-body">
-                                        Are you sure you want to restore banner details?
-                                      </div>
-                                      <%}%>
-                                        <div class="modal-footer">
-                                          <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Close</button>
-                                          <% if(element.isDeleted===false) { %>
-                                            <a href="/admin/deleteBanner/<%=element._id%>"><button type="button"
-                                                class="btn btn-danger">Delete</button></a>
-                                            <% }else{ %>
-                                              <a href="/admin/restoreBanner/<%=element._id%>"><button type="button"
-                                                  class="btn btn-primary">Restore</button></a>
-                                              <%}%>
-                                        </div>
-                                </div>
-                              </div>
-                            </div>
-                    </td>
-                  </tr>
-                  <% count++ %>
-                    <% }) %>
-            </tbody>
-          </table>
+                        </div>
+                        <div class="modal-body">
+                          Remove Permenently?
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                          <a href="/admin/removeBanner/<%=element._id%>"><button type="button"
+                              class="btn btn-danger">Remove</button></a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <% count++ %>
+                <% }) %>
+        </tbody>
+      </table>
     </section>
-</div>
+  </div>
 
-</div>
-</div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+  </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
     crossorigin="anonymous"></script>
-    <script>
-      $("#menu-btn").click(function () {
-        $("#menu").toggleClass("active");
-      });
-    </script>
-<!-- data table -->
-<!--end data table -->
-</body>
+  <script>
+    $("#menu-btn").click(function () {
+      $("#menu").toggleClass("active");
+    });
+  </script>
+
+  <script>
+    const bannervalidationreg = document.querySelector('#bannervalidation');
+    const bannertypevalidation = bannervalidationreg.querySelector('#bannertypevalidation');
+    const bannertextvalidation = bannervalidationreg.querySelector('#bannertextvalidation');
+    const bannercodevalidation = bannervalidationreg.querySelector('#bannercodevalidation');
+
+    const bannervalidationErrorMsg = bannervalidationreg.querySelector('#bannervalidationErrorMsg');
+
+    function bannerhideErrorMessage() {
+      bannervalidationErrorMsg.innerHTML = "";
+    }
+
+    function bannerShowerrormsg(message) {
+      bannervalidationErrorMsg.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`
+      setTimeout(() => {
+        bannervalidationErrorMsg.innerHTML = `<div></div>`
+      }, 5000);
+    }
+
+    function bannerSubmitform() {
+
+      if (bannertypevalidation.value.trim() === "") {
+
+        bannerShowerrormsg("Offer type is Required")
+        return false;
+      }
+      if (!isNaN(bannertypevalidation.value.trim())) {
+
+        bannerShowerrormsg("Offer type should be a string");
+
+        return false;
+      }
+
+      if (bannertextvalidation.value.trim() === "") {
+
+        bannerShowerrormsg("text  is Required")
+        return false;
+      }
+      if (!isNaN(bannertextvalidation.value.trim())) {
+
+        bannerShowerrormsg("text should be a String");
+
+        return false;
+      }
+      if (bannercodevalidation.value.trim() === "select") {
+
+        bannerShowerrormsg("Select a  Coupon")
+        return false;
+      }
+
+
+
+
+
+      bannerhideErrorMessage();
+      return true;
+    }
+
+
+
+
+
+
+
+  </script>
+
+<!-- <script>
+  const editAdminBannerreg = document.querySelector('.editAdminBannerreg');
+  const editAdminBannertype = document.querySelector('.editAdminBannertype');
+  const editAdminBannertext = document.querySelector('.editAdminBannertext');
+  const editAdminBannercode = document.querySelector('.editAdminBannercode');
+
+  const editAdminBannereerrormsg = document.getElementById('editAdminBannereerrormsg');
+
+  setTimeout(() => {
+    editAdminBannereerrormsg.innerHTML = '';
+  }, 5000);
+
+  function editbannerhideErrorMessage() {
+    editAdminBannereerrormsg.innerHTML = '';
+  }
+
+  function editbannerShowerrormsg(message) {
+    editAdminBannereerrormsg.innerHTML = `<div class="alert text-danger " role="alert">${message}</div>`;
+    setTimeout(() => {
+      editAdminBannereerrormsg.innerHTML = '';
+    }, 5000);
+  }
+
+  function editbannerSubmitform(e) {
+    e.preventDefault();
+    console.log("heree")
+
+    if (!editAdminBannertype || editAdminBannertype.value.trim() === '') {
+      editbannerShowerrormsg('Offer type is required');
+      return false;
+    }
+    if (!isNaN(editAdminBannertype.value.trim())) {
+      editbannerShowerrormsg('Offer type should be a string');
+      return false;
+    }
+
+    if (!editAdminBannertext || editAdminBannertext.value.trim() === '') {
+      editbannerShowerrormsg('Text is required');
+      return false;
+    }
+    if (!isNaN(editAdminBannertext.value.trim())) {
+      editbannerShowerrormsg('Text should be a string');
+      return false;
+    }
+    if (!editAdminBannercode || editAdminBannercode.value.trim() === 'select') {
+      editbannerShowerrormsg('Select a coupon');
+      return false;
+    }
+
+    editbannerhideErrorMessage();
+    return true;
+  }
+</script> -->
+
+
+
+
+  <!-- data table -->
+  <!--end data table -->
+  </body>
 
 
 
@@ -208,5 +375,5 @@
 
 
 
-<%- include('../admin/layout/adminfooter.ejs') %>
-<%- include('../admin/layout/adminscripts.ejs') %>
+  <%- include('../admin/layout/adminfooter.ejs') %>
+    <%- include('../admin/layout/adminscripts.ejs') %>

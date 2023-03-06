@@ -11,7 +11,8 @@ const bannerSchema = new Schema({
         required:true
     },
     couponName:{
-        type:String,
+        type:mongoose.Types.ObjectId,
+        ref:'coupon',
         required:true
     },
     isDeleted:{

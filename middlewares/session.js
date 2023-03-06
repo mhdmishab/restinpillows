@@ -7,7 +7,8 @@ module.exports={
             next();
 
         }else{
-            res.render("admin/adminlogin");
+          
+            res.redirect("/admin/adminlogin");
         }
     },
 
@@ -36,4 +37,4 @@ module.exports={
         }
     }
 
-}
+}  

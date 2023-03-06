@@ -71,13 +71,24 @@
                               <select class="form-select" name="orderStatus" aria-label="Default select example" id="">
 
                                 <option selected>
-                                  <%= order.orderStatus %>
+                                  
+
+                                  <%=order.orderStatus%>
                                 </option>
+                                <% if(order.orderStatus=="shipped"){ %>
+                                  <option value="pending" name="orderStatus" disabled>Pending</option>
+                                <option value="shipped" name="orderStatus" disabled>Shipped</option>
+                                <option value="out for Delivery" name="outForDelivery" disabled>Out For Delivery</option>
+                                <option value="delivered" name="orderStatus" disabled>Delivered</option>
+                                <option value="cancelled" name="orderStatus" disabled>Cancel</option>
+
+                                  <% }else{ %>
                                 <option value="pending" name="orderStatus">Pending</option>
                                 <option value="shipped" name="orderStatus">Shipped</option>
                                 <option value="out for Delivery" name="outForDelivery">Out For Delivery</option>
                                 <option value="delivered" name="orderStatus">Delivered</option>
                                 <option value="cancelled" name="orderStatus">Cancel</option>
+                                <%}%>
 
                               </select>
                             </div>

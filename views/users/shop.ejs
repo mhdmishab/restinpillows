@@ -95,7 +95,7 @@
                                         </a>
                                         <a href="/viewProduct/<%=products._id%>"
                                             class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-                                            <%= products.category.categoryname %>
+                                            <%= products.category?.categoryname %>
                                         </a>
 
                                         <span class="stext-105 cl3">
@@ -123,9 +123,9 @@
                         <% }) %>
                 </div>
 
-                <% if (results.previous || results.next) { %>
+                <% if (results?.previous || results?.next) { %>
                     <div class="d-flex justify-content-around">
-                        <% if (results.previous) { %>
+                        <% if (results?.previous) { %>
                             <a class=" me-4" style="color: black;"
                                 href="/getshop?page=<%= results.previous.page %>&limit=<%= results.previous.limit %>">Previous</a>
                             <% } %>
