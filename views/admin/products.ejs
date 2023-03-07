@@ -6,6 +6,7 @@
     <!-- End of Topbar -->
 
 
+    <body>
 
     <!-- content -->
     <nav class="navbar navbar-light  justify-content-between mt-0 ">
@@ -106,7 +107,7 @@
                                     
                                       <div class="form-outline mb-1">
                                         <label class="form-label">Change Image 1</label>
-                                        <input type="file" id="myFile1" class="form-control form-control-lg" name="myFile1">
+                                        <input type="file" id="imagevalidatorimage1" class="form-control form-control-lg" name="myFile1">
                                         <input type="hidden" name="image1" value="/<%= item.image1%>">
                                       </div>
                                     
@@ -134,7 +135,7 @@
                                         
                                           <div class="form-outline mb-1">
                                             <label class="form-label">Change Image 2</label>
-                                            <input type="file" id="myFile2" class="form-control form-control-lg" name="myFile2">
+                                            <input type="file" id="imagevalidatorimage2" class="form-control form-control-lg" name="myFile2">
                                             <input type="hidden" name="image1" value="/<%= item.image2%>">
                                           </div>
                                         
@@ -162,7 +163,7 @@
                                         
                                           <div class="form-outline mb-1">
                                             <label class="form-label">Change Image 3</label>
-                                            <input type="file" id="myFile3" class="form-control form-control-lg" name="myFile3">
+                                            <input type="file" id="imagevalidatorimage3" class="form-control form-control-lg" name="myFile3">
                                             <input type="hidden" name="image1" value="/<%= item.image3%>">
                                           </div>
                                         
@@ -261,8 +262,112 @@
             </tbody>
         </table>
     </div>
+    <%- include('../admin/layout/adminscripts.ejs') %>
 
-    <!-- Modal -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      document.querySelector("#imagevalidatorimage1").addEventListener("change", function () {
+        let fileCount = 0;
+        let maxFiles = 3;
+            // Loop through the selected files and check their types
+            for (let i = 0; i < this.files.length; i++) {
+                let fileType = this.files[i].type;
+                if (fileType != "image/jpeg" && fileType != "image/jpg" && fileType != "image/png" && fileType != "image/webp") {
+                    this.value = "";
+                    Swal.fire({
+                        title: "Invalid Fileformat",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    });
+                    return;
+                }
+                // Increment the file count if the file is an image
+                fileCount++;
+                // Check if the maximum number of files has been reached
+            }
+            if (fileCount != 1) {
+                    this.value = "";
+                    Swal.fire({
+                        title: "You should upload only one image here",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    })
+                    return;
+                }
+        });
+
+
+
+        document.querySelector("#imagevalidatorimage2").addEventListener("change", function () {
+        let fileCount = 0;
+        let maxFiles = 3;
+            // Loop through the selected files and check their types
+            for (let i = 0; i < this.files.length; i++) {
+                let fileType = this.files[i].type;
+                if (fileType != "image/jpeg" && fileType != "image/jpg" && fileType != "image/png" && fileType != "image/webp") {
+                    this.value = "";
+                    Swal.fire({
+                        title: "Invalid Fileformat",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    });
+                    return;
+                }
+                // Increment the file count if the file is an image
+                fileCount++;
+                // Check if the maximum number of files has been reached
+            }
+            if (fileCount != 1) {
+                    this.value = "";
+                    Swal.fire({
+                        title: "You should upload only one image here",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    })
+                    return;
+                }
+        });
+
+
+
+        document.querySelector("#imagevalidatorimage3").addEventListener("change", function () {
+        let fileCount = 0;
+        let maxFiles = 3;
+            // Loop through the selected files and check their types
+            for (let i = 0; i < this.files.length; i++) {
+                let fileType = this.files[i].type;
+                if (fileType != "image/jpeg" && fileType != "image/jpg" && fileType != "image/png" && fileType != "image/webp") {
+                    this.value = "";
+                    Swal.fire({
+                        title: "Invalid Fileformat",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    });
+                    return;
+                }
+                // Increment the file count if the file is an image
+                fileCount++;
+                // Check if the maximum number of files has been reached
+            }
+            if (fileCount != 1) {
+                    this.value = "";
+                    Swal.fire({
+                        title: "You should upload only one image here",
+                        icon: "error",
+                        confirmButtonText: "continue"
+                    })
+                    return;
+                }
+        });
+
+
+
+
+
+
+    </script>
+  </body>
   
 
 
@@ -270,4 +375,4 @@
 
     <!-- Footer -->
     <%- include('../admin/layout/adminfooter.ejs') %>
-        <%- include('../admin/layout/adminscripts.ejs') %>
+      
