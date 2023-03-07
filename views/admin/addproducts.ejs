@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label for="pname">Image <span class="text-danger">*</span></label>
                 <input type="file" class="form-control" id="imagevalidator" name="myFiles" multiple
-                    placeholder="image ">
+                    placeholder="image " required>
             </div>
             <div class="form-group">
                 <label for="pname">Product Name <span class="text-danger">*</span></label>
@@ -166,6 +166,8 @@
         function addProductSubmitform() {
 
 
+
+            
             if (addproductname.value.trim() === "") {
 
                 addProductshowErrorMessagePass("Product name  is Required")
