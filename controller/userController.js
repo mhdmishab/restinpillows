@@ -1,6 +1,8 @@
 //
 const { render } = require('ejs');
 const db = require('../config/connection');
+var bcrypt = require('bcrypt');
+const { default: mongoose } = require('mongoose');
 const { findOne } = require('../model/usermodel');
 const myDb = require('../model/usermodel');
 const cart = require('../model/cartmodel');
@@ -17,6 +19,8 @@ const authen = require('../utils/auth');
 const profile = require('../model/profile');
 const moment = require('moment');
 const dotenv = require("dotenv");
+
+const { setFlagsFromString } = require('v8');
 dotenv.config();
 const instance = require('../middlewares/razorpay');
 const crypto = require('crypto');
@@ -52,9 +56,7 @@ function checkCoupon(data, id) {
     });
 }
 
-var bcrypt = require('bcrypt');
-const { default: mongoose } = require('mongoose');
-const { setFlagsFromString } = require('v8');
+
 
 db.dbConnect();
 function generateOTP() {
