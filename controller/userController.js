@@ -1295,8 +1295,14 @@ module.exports = {
             await cart.deleteOne({ userId: userData._id });
             let session = req.session.email;
 
+            console.log("coupon data",data.coupon);
+            const appliedCouponName=data.coupon.toUpperCase();
+
             if (data.coupon && data.coupon != '') {
-                await coupon.updateOne({ couponName: data.coupon }, { $push: { users: { userId: objId } } });
+                await coupon.updateOne({ couponName: appliedCouponName }, { $push: { users: { userId: objId } } }).catch((err)=>{
+                    console.err("coupon user Id error",message);
+                    console.error(err);
+                })
             }
 
             res.json({ success: true })
