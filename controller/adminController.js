@@ -45,8 +45,8 @@ module.exports = {
                 const shipped = await order.find({ orderStatus: "shipped" }).count();
                 const placed = await order.find({ orderStatus: "placed" }).count();
                 const cancelled = await order.find({ orderStatus: "cancelled" }).count();
-                const cod = await order.find({ paymentStatus: "COD" }).count();
-                const online = await order.find({ paymentStatus: "online" }).count();
+                const cod = await order.find({ paymentMethod: "COD" }).count();
+                const online = await order.find({ paymentMethod: "online" }).count();
                 const activeUsers = await myDbs.users.find({ unblockuser: true }).count();
                 const product = await products.find({ unlist: false }).count();
 
@@ -681,7 +681,7 @@ module.exports = {
 
     deleteorder: async () => {
 
-        console.log("delete order allllllllll")
+        console.log("delete order al")
         await order.deleteMany({});
     },
 

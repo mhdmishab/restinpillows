@@ -1122,7 +1122,7 @@ module.exports = {
 
 
         const session = req.session.email;
-        const category = await myCategory.find({});
+        const category = await myCategory.find({isDeleted:false});
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 10;
         const startIndex = (page - 1) * limit;
@@ -1348,10 +1348,12 @@ module.exports = {
     orderSuccess: async (req, res) => {
     try{
         let session = req.session.email;
-        const query = req.query
+        const userData = await myDb.users.findOne({ email: session });
+        const query = req.query;
+        console.log(query);
         const orderId = query.orderId
         await order.updateOne({ _id: orderId }, { $set: { orderStatus: 'placed', paymentStatus: 'paid' } })
-        await cart.deleteOne({ userId: query.cartId });
+        await cart.deleteOne({ userId: userData._id });
 
         res.render('users/ordersuccess', { session })
     } catch (err) {

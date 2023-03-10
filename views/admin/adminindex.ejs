@@ -23,7 +23,7 @@
               <h6 class="text-info">Today's Revenue</h6>
             </div>
             <div class="d-flex align-items-center justify-content-center">
-              <h2 class="">₹ <%=todayRevenue %>
+              <h2 id="todayRevenue"><%=todayRevenue %>
               </h2>
             </div>
 
@@ -35,7 +35,7 @@
               <h6 class="text-info">monthly Revenue</h6>
             </div>
             <div class="d-flex align-items-center justify-content-center">
-              <h2 class="">₹ <%=monthlyRevenue %>
+              <h2 id="monthlyRevenue"><%=monthlyRevenue %>
               </h2>
             </div>
 
@@ -47,7 +47,7 @@
               <h6 class="text-info">Total Revenue</h6>
             </div>
             <div class="d-flex align-items-center justify-content-center">
-              <h2 class="">₹ <%=totalRevenue %>
+              <h2 id="totalRevenue"><%=totalRevenue %>
               </h2>
             </div>
 
@@ -128,13 +128,6 @@
 
           </div>
 
-          <div class=" shadow p-3 m-2   rounded bg-white" style="height: 90px;width: 244px;">
-            <h6 class="text-info">Cancelled orders </h6>
-            <h4 id="cancelled">
-              <%= cancelled %>
-            </h4>
-
-          </div>
 
           <div class=" shadow p-3 m-2   rounded bg-white" style="height: 90px;width: 244px;">
             <h6 class="text-info">Cancelled orders </h6>
@@ -144,7 +137,7 @@
 
           </div>
 
-          <!-- <div class=" shadow p-3 m-2   rounded bg-white" style="height: 90px;width: 244px;">
+          <div class=" shadow p-3 m-2   rounded bg-white" style="height: 90px;width: 244px;">
             <h6 class="text-info">Online orders </h6>
             <h4 id="online">
               <%= online %>
@@ -157,23 +150,25 @@
               <%= cod %>
             </h4>
 
-          </div> -->
+          </div>
 
         </div>
 
 
       </div>
-      <input type="hidden" value="<%= online %>" id="">
-      <input type="hidden" value="<%= cod %>" id="cod">
+
 
       <div class="mt-5">
         <div class="row">
 
           <div class="col-xl-6 col-12 ms-5">
-            <canvas id="myChart"></canvas>
+            <canvas id="salesRevenue"></canvas>
           </div>
-          <div class="col-xl-6 col-12">
-            <canvas id="salse-revenue"></canvas>
+          <div class="col-xl-6 col-12 ms-5">
+            <canvas id="TypesofOrders"></canvas>
+          </div>
+          <div class="col-xl-6 col-12 ms-5">
+            <canvas id="paymentMethod"></canvas>
           </div>
 
         </div>
@@ -199,12 +194,13 @@
       let cancelled = parseInt(document.getElementById("cancelled").innerHTML);
 
 
-      var myChart5 = new Chart("myChart", {
+      var myChart5 = new Chart("TypesofOrders", {
         type: "bar",
         data: {
           labels: ["Pending", "Shipped", "placed", 'cancelled'],
           datasets: [
             {
+              label: "Types Of Orders",
               backgroundColor: ["#C2C9C8", "#0B6464", "#515454", "#3E5A5A"],
               data: [pending, shipped, placed, cancelled],
             },
@@ -216,44 +212,82 @@
             yAxes: [{
               ticks: {
                 beginAtZero: true, // start Y-axis from zero
-                stepSize: 1, // set the step size for the Y-axis values
+                 // set the step size for the Y-axis values
               },
             }],
           },
         },
       });
 
-      myChart.options.scales.yAxes.ticks.stepSize = 1;
+      // myChart5.options.scales.yAxes.ticks.stepSize = 1;
+
+      let todayRevenue = parseInt(document.getElementById("todayRevenue").innerHTML);
+      let monthlyRevenue = parseInt(document.getElementById("monthlyRevenue").innerHTML);
+      let totalRevenue = parseInt(document.getElementById("totalRevenue").innerHTML);
 
 
-  //   let cod = document.getElementById("cod").value;
-  //   let online = document.getElementById("online").value;
-  //   var myChart6 = new Chart('salse-revenue', {
-  //     type: "bar",
-  //     data: {
-  //       labels: ["COD", "Online"],
-  //       datasets: [
-  //         {
-  //           backgroundColor: ["#C2C9C8", "#515454"],
-  //           data: [cod, online],
-  //         },
-  //       ],
-  //     },
-  //     options: {
-  //       responsive: true,
-  //     },
-  //   });
-  // </script>
+      var ctx = document.getElementById('salesRevenue').getContext('2d');
+      var myChart3 = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["Today Revenue", "Monthly Revenue", "Total Revenue"],
+          datasets: [{
+            label: 'Sales Revenue',
+            data: [todayRevenue, monthlyRevenue, totalRevenue],
+            backgroundColor: ["#C2C9C8", "#515454", "#0B6464"]
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+               
+              }
+            }],
+            
+          }
+        }
+      });
 
-  
+
+
+      let cod = parseInt(document.getElementById("cod").innerHTML);
+      let online = parseInt(document.getElementById("online").innerHTML);
+
+
+      var ctx = document.getElementById('paymentMethod').getContext('2d');
+      var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ["COD", "Online"],
+          datasets: [{
+            label: 'Payment Method',
+            data: [cod, online],
+            backgroundColor: ["#C2C9C8", "#515454"]
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true,
+                stepSize: 1
+              }
+            }]
+          }
+        }
+      });
+    </script>
+
+
     <script>
-  //   $("#menu-btn").click(function () {
-  //     $("#menu").toggleClass("active");
-  //   });
-  // </script>
+      $("#menu-btn").click(function () {
+        $("#menu").toggleClass("active");
+      });
+    </script>
     <%- include('../admin/layout/adminscripts.ejs') %>
 
   </body>
 
   <!-- Footer -->
- 
